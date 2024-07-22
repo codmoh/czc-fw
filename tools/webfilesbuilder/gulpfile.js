@@ -12,8 +12,27 @@ var cssnano = require('gulp-cssnano');
 const jsonminify = require('gulp-jsonminify');
 const rename = require('gulp-rename');
 
-function stylesConcat() {
-    return gulp.src(['../../src/websrc/css/custom.css', '../../src/websrc/css/bootstrap.min.css'])
+function stylesConcatXZG() {
+    return gulp.src(['../../src/websrc/css/custom_xzg.css', '../../src/websrc/css/bootstrap.min.css'])
+        .pipe(concat({
+            path: 'style.css',
+            stat: {
+                mode: 0666
+            }
+        }))
+        //.pipe(purgecss({
+        //    content: ['../../src/websrc/html/*.html', '../../src/websrc/js/*.js']
+        //}))
+        .pipe(cssnano({preset: 'advanced'}))
+        .pipe(gulp.dest('../../src/websrc/min/css/'))
+        .pipe(gzip({
+            append: true
+        }))
+        .pipe(gulp.dest('../../src/websrc/gzipped/css/'));
+}
+
+function stylesConcatCZC() {
+    return gulp.src(['../../src/websrc/css/custom_czc.css', '../../src/websrc/css/bootstrap.min.css'])
         .pipe(concat({
             path: 'style.css',
             stat: {
@@ -226,11 +245,13 @@ function jsons() {
 }
 
 
-const styleTasks = gulp.series(stylesConcat, styles);
+const styleTasksXZG = gulp.series(stylesConcatXZG, styles);
+const styleTasksCZC = gulp.series(stylesConcatCZC, styles);
 const scriptTasks = gulp.series(scriptsgz, scripts);
 const fontTasks = gulp.series(fontgz, fonts);
 const imgTasks = gulp.series(imggz, imgs);
 const htmlTasks = gulp.series(htmlgz, htmls);
 const jsonTasks = gulp.series(jsongz, jsons);
 
-exports.xzg = gulp.parallel(styleTasks, scriptTasks, fontTasks, imgTasks, htmlTasks, jsonTasks);
+exports.xzg = gulp.parallel(styleTasksXZG, scriptTasks, fontTasks, imgTasks, htmlTasks, jsonTasks);
+exports.czc = gulp.parallel(styleTasksCZC, scriptTasks, fontTasks, imgTasks, htmlTasks, jsonTasks);
