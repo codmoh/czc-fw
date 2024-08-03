@@ -2043,7 +2043,7 @@ String fetchLatestEspFw()
 {
     checkDNS();
     HTTPClient http;
-    http.begin("https://api.github.com/repos/xyzroe/XZG/releases");
+    http.begin("https://api.github.com/repos/codm/XZG/releases");
     int httpCode = http.GET();
 
     String browser_download_url = "";
@@ -2075,7 +2075,7 @@ String fetchLatestZbFw()
 {
     checkDNS();
     HTTPClient http;
-    http.begin("https://raw.githubusercontent.com/xyzroe/XZG/zb_fws/ti/manifest.json");
+    http.begin("https://raw.githubusercontent.com/codm/XZG/zb_fws/ti/manifest.json");
     int httpCode = http.GET();
 
     String browser_download_url = "";
