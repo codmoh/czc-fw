@@ -28,7 +28,7 @@ const modalBtns = ".modal-footer";
 const pages = {
 	API_PAGE_ROOT: { num: 0, str: "/" },
 	API_PAGE_GENERAL: { num: 1, str: "/general" },
-	//	API_PAGE_ETHERNET: { num: 2, str: "/ethernet" },
+		// API_PAGE_ETHERNET: { num: 2, str: "/ethernet" },
 	API_PAGE_NETWORK: { num: 2, str: "/network" },
 	API_PAGE_ZIGBEE: { num: 3, str: "/zigbee" },
 	API_PAGE_SECURITY: { num: 4, str: "/security" },
@@ -121,15 +121,6 @@ function handleResize() {
 }
 
 window.addEventListener('resize', handleResize);
-document.addEventListener("scroll", function () {
-	var credits = document.getElementById("credits");
-	if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-		credits.style.display = "block";
-	} else {
-		credits.style.display = "none";
-	}
-});
-
 document.addEventListener('DOMContentLoaded', function () {
 	setTimeout(connectEvents(), 300);
 	const savedLang = localStorage.getItem("selected-lang");
@@ -182,38 +173,20 @@ function identifyLed(event, element, led) {
 	}).fail(function () {
 		alert(i18next.t('c.ercn'));
 	});
-
-
-
-
-
-
 }
 
 $(document).ready(function () { //handle active nav
-	$("a[href='" + document.location.pathname + "']").parent().addClass('nav-active'); //handle sidenav page selection on first load
+	$("a[href='" + document.location.pathname + "']").addClass('active');
 	loadPage(document.location.pathname);
 
 	if (isMobile()) {
-		if (!(localStorage.getItem('shv_sdnv_frst_t') == 1)) {//show sidenav first time
-			$("#sidenav").addClass("sidenav-active");
-			localStorage.setItem('shv_sdnv_frst_t', 1);
-			//setTimeout(() => { $("#sidenav").removeClass("sidenav-active"); }, 2000);
-		}
-		setupSwipeHandler();
-		$("#pageContent").removeClass("container");//no containers for mobile 
+		$("#pageContent").removeClass("container");//no containers for mobile
 	}
 
 	handleResize();
-
 	handleClicks();
-
 	handleMsg();
 });
-
-function name(params) {
-
-}
 
 function zbOta() {
 	let file = $("#zbFirmware")[0].files[0];
@@ -935,8 +908,6 @@ function extractTime(dateStr) {
 }
 
 function dataReplace(values, navOnly = false) {
-
-	//Object.assign(values, new_values);
 	var clockButton = document.getElementById('clock');
 	if (clockButton) {
 		clockButton.textContent = extractTime(values.localTime);
@@ -1350,7 +1321,6 @@ const maxRetries = 30;
 var sourceEvents;
 
 function connectEvents() {
-
 	if (window.location.pathname.startsWith('/login')) {
 		return;
 	}
@@ -1392,13 +1362,11 @@ function connectEvents() {
 	});
 
 	sourceEvents.addEventListener('zb.fp', function (e) {
-		//console.log(e.data);
 		$('#zbFlshPgsTxt').html(i18next.t('md.esp.fu.prgs', { per: e.data }));
 		$("#zbFlshPrgs").css("width", e.data + '%');
 	}, false);
 
 	sourceEvents.addEventListener('zb.nv', function (e) {
-		//console.log(e.data);
 		let currentContent = $("#console").val();
 		let newContent = currentContent + "\n" + e.data;
 		$("#console").val(newContent);
@@ -1470,15 +1438,11 @@ function connectEvents() {
 		if (Math.round(e.data) > 99) {
 			setTimeout(function () {
 				$('#bar').html(i18next.t('md.esp.fu.ucr')).css("color", "green");
-
 				setTimeout(function () {
-					//localStorage.setItem('update_notify', 0);
 					restartWait();
-
 				}, 1000);
 			}, 500);
 		}
-
 	}, false);
 }
 
@@ -1733,19 +1697,16 @@ function createReleaseBlock(file, deviceType) {
 		$(`#${uniqueId}-description`).toggle();
 	});
 
-
 	return releaseBlock;
 }
 
 
 function modalConstructor(type, params) {
 	const headerText = ".modal-title";
-	const headerBtnClose = ".modal-btn-close";
 	const modalBody = ".modal-body";
 	const modalBtns = ".modal-footer";
-	//$(".modal").css("display", "");
+
 	$(headerText).text("").css("color", "");
-	//$(modalBody).text("").css("color", "");
 	$(modalBody).empty().css({ color: "", maxHeight: "400px", overflowY: "auto" });
 
 	$(modalBtns).html("");
@@ -1753,10 +1714,8 @@ function modalConstructor(type, params) {
 		case "multiCfg":
 			$(headerText).text(i18next.t('md.esp.mc.tt')).css("color", "yellow");
 			$(modalBody).html(i18next.t("md.esp.mc.mi"));
-			console.log(params)
 
 			const optionsArray = JSON.parse(params);
-
 			const selectElement = document.createElement('select');
 			selectElement.className = "form-select mt-2";
 
@@ -2228,40 +2187,6 @@ function isMobile() {
 	return (((window.innerWidth <= 767)) && ('ontouchstart' in document.documentElement));
 }
 
-function sidenavAutoclose(now) {
-	if (now) {
-		$("#sidenav").removeClass("sidenav-active");
-	} else {
-		setTimeout(() => { $("#sidenav").removeClass("sidenav-active"); }, 5000);//timeout hide sidenaw
-	}
-}
-
-function setupSwipeHandler() {
-	document.addEventListener("touchstart", handleSwipe, false);
-	document.addEventListener("touchend", handleSwipe, false);
-	var startPoint;
-	let touchedElement;
-
-	function handleSwipe(event) {
-		if (event.type == "touchstart") {
-			startPoint = event.touches[0].clientX;
-			touchedElement = $(event.target);
-		} else if (event.type == "touchend") {
-			let endPoint = event.changedTouches[0].clientX;
-
-			if ((endPoint - startPoint) > 80) {
-				$("#sidenav").addClass("sidenav-active");
-			} else if ((endPoint === startPoint) && !touchedElement.closest('.ui_set').length) {
-				$("#sidenav").removeClass("sidenav-active");
-			}
-		}
-	}
-}
-
-/*function KeepWebDsbl(state) {
-	$("#keepWeb").prop(disbl, state);
-}*/
-
 function EthEnbl(state) {
 	state = !state;
 	var dhcpEnabled = $("#ethDhcp").is(":checked");
@@ -2383,7 +2308,7 @@ function delFile(event, file) {
 }
 
 function logRefresh(ms) {
-	var logUpd = setInterval(() => {
+	var logUpd= setInterval(() => {
 		$.get(apiLink + api.actions.API_GET_LOG, function (data) {
 			if ($("#console").length) {
 				$("#console").val(data);
@@ -2393,129 +2318,6 @@ function logRefresh(ms) {
 		});
 	}, ms);
 }
-/*
-async function fetchData(url, isJson = true) {
-	if (isJson) {
-		return await $.getJSON(url);
-	} else {
-		return await $.get(url);
-	}
-}
-
-async function processResponses() {
-	try {
-		let jsonUrl = 'https://api.github.com/repos/xyzroe/XZG/releases/latest';
-		let textUrl = '/api?action=1&param=espVer';
-
-		let [jsonData, textData] = await Promise.all([
-			fetchData(jsonUrl, true),
-			fetchData(textUrl, false)
-		]);
-
-		return { jsonData, textData };
-	} catch (error) {
-		console.error('Error while getting versions:', error);
-	}
-}
-
-function compareDates(dateStr1, dateStr2) {
-
-	dateStr1 = String(dateStr1);
-	dateStr2 = String(dateStr2);
-	// Преобразуем строки в объекты Date
-	const date1 = new Date(dateStr1.substr(0, 4), // Год
-		parseInt(dateStr1.substr(4, 2)) - 1, // Месяц (начиная с 0)
-		dateStr1.substr(6, 2)); // День
-	const date2 = new Date(dateStr2.substr(0, 4),
-		parseInt(dateStr2.substr(4, 2)) - 1,
-		dateStr2.substr(6, 2));
-
-	// Выполняем сравнение дат
-	if (date1 < date2) {
-		return -1; // date1 меньше date2
-	} else if (date1 > date2) {
-		return 1; // date1 больше date2
-	} else {
-		return 0; // даты равны
-	}
-}
-*/
-/*
-function checkLatestESPrelease() {
-
-
-	processResponses().then(combinedData => {
-
-		var gitVer = Number(combinedData.jsonData.tag_name);
-		var localVer = Number(combinedData.textData);
-
-		//console.log(gitVer);
-		//console.log(localVer);
-
-		var asset = combinedData.jsonData.assets[0];
-		var downloadCount = 0;
-		for (var i = 0; i < combinedData.jsonData.assets.length; i++) {
-			downloadCount += combinedData.jsonData.assets[i].download_count;
-		}
-		//var localVer = Number(0);
-
-		var releaseInfo = i18next.t('ts.esp.upd.msg', { ver: combinedData.jsonData.tag_name, count: downloadCount.toLocaleString() });
-
-		if (compareDates(gitVer, localVer) == 1) {
-
-			setTimeout(function () {
-
-				if (!(localStorage.getItem('update_notify') == 1)) {
-					//modalConstructor("espGitUpdate", releaseInfo);
-					toastConstructor("espUpdAvail", releaseInfo);
-
-				}
-				console.log(releaseInfo)
-			}, 500);
-		}
-		else if (compareDates(gitVer, localVer) == -1) {
-			if (!(localStorage.getItem('beta_feedback') == 1)) {
-				//modalConstructor("espBetaFeedback");
-				toastConstructor("espBetaFb");
-			}
-			console.log("betaInfo")
-		}
-	});
-
-}
-*/
-
-// CSS class name for dark theme
-const darkTheme = "dark-theme";
-
-// Add dark theme change here
-const darkThemeSetUp = () => {
-	if (getCurrentTheme() === "dark") {
-		document.getElementById("toggleBtn").checked = true;
-	} else {
-		document.getElementById("toggleBtn").checked = false;
-	}
-};
-
-const getCurrentTheme = () =>
-	document.body.classList.contains(darkTheme) ? "dark" : "light";
-
-//   Get user's theme preference from local storage
-const selectedTheme = localStorage.getItem("selected-theme");
-if (selectedTheme === "dark") {
-	document.body.classList[selectedTheme === "dark" ? "add" : "remove"](
-		darkTheme
-	);
-	darkThemeSetUp();
-}
-
-const themeButton = document.getElementById("toggleBtn");
-themeButton.addEventListener("change", () => {
-	document.body.classList.toggle(darkTheme);
-	localStorage.setItem("selected-theme", getCurrentTheme());
-	darkThemeSetUp();
-});
-
 
 let languages = [
 	{ value: "en", text: "🇬🇧 English" },
@@ -2648,23 +2450,8 @@ function handleClicks() {
 			return;
 		}
 		loadPage(url);
-		$(".nav-active").removeClass("nav-active");
-		$(this).parent().addClass("nav-active");
-		if (isMobile()) sidenavAutoclose(true);
-	});
-
-	$('#logo').click(function () {
-		$('#sidenav').toggleClass('sidenav-active');
-	});
-
-	$('#pageContent').click(function () {
-		$('#sidenav').removeClass('sidenav-active');
-	});
-
-	$('#sidenav').click(function (e) {
-		if (!$(e.target).closest('.ui_set').length) {
-			$('#sidenav').removeClass('sidenav-active');
-		}
+		$(".offcanvas-body  a.active").removeClass("active");
+		$(this).addClass("active");
 	});
 
 	$(document).on('submit', '#esp_upload_form', function (e) {

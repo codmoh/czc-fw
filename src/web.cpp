@@ -42,6 +42,7 @@
 #include "webh/css/style.css.gz.h"
 #include "webh/img/icons.svg.gz.h"
 #include "webh/img/logo.svg.gz.h"
+#include "webh/img/logo-dark.svg.gz.h"
 
 #include "webh/json/en.json.gz.h"
 #include "webh/json/uk.json.gz.h"
@@ -256,6 +257,8 @@ void initWebServer()
     /* ----- SVG FILES | START -----*/
     serverWeb.on("/logo.svg", []()
                  { sendGzip(contTypeTextSvg, logo_svg_gz, logo_svg_gz_len); });
+    serverWeb.on("/logo-dark.svg", []()
+                 { sendGzip(contTypeTextSvg, logo_dark_svg_gz, logo_dark_svg_gz_len); });
     serverWeb.on("/icons.svg", []()
                  { sendGzip(contTypeTextSvg, icons_svg_gz, icons_svg_gz_len); });
 

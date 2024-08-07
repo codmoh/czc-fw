@@ -54,164 +54,152 @@
             </div>
         </div>
     </div>
-    <nav class="navbar shadow sticky-top bg-top">
-        <div class="container">
-            <div class='d-flex align-items-center'>
-                <img src="logo.svg" width="32" height="32" class="d-inline-block align-text-middle" alt="XZG logo"
-                    id="logo">
-                <span class='fs-3 px-2 fw-bold d-none d-sm-inline'>XZG</span>
-            </div>
-            <h2 data-r2v="pageName" id="pageName" class="position-absolute top-50 start-50 translate-middle"></h2>
 
-            <div class="icon-container d-flex align-items-center">
-                <div>
-                    <button id="clock" class="btn btn-sm mx-3" data-r2v="clock" data-bs-toggle="tooltip"
-                        data-bs-html="true"></button>
+    <header class="navbar sticky-top bg-nav flex-md-nowrap shadow" data-bs-theme="dark">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">
+            <img src="logo.svg" width="90" class="d-inline-block align-text-middle" alt="CZC logo"
+                 id="logo">
+            CZC
+        </a>
+
+        <ul class="navbar-nav flex-row">
+            <li class="nav-item text-nowrap d-none d-md-flex">
+                <div class="icon-container align-items-center">
+                    <button id="clock" class="btn btn-sm mx-3" data-r2v="clock" data-bs-toggle="tooltip" data-bs-html="true"></button>
+                    <svg id="ethIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-html="true">
+                        <use xlink:href="icons.svg#ethernet"></use>
+                    </svg>
+                    <svg id="wifiIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-html="true">
+                        <use xlink:href="icons.svg#wifi"></use>
+                    </svg>
+                    <svg id="vpnIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-html="true">
+                        <use xlink:href="icons.svg#vpn"></use>
+                    </svg>
+                    <svg id="mqttIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-html="true">
+                        <use xlink:href="icons.svg#mqtt"></use>
+                    </svg>
+                    <svg id="socketIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
+                         data-bs-html="true">
+                        <use xlink:href="icons.svg#activity"></use>
+                    </svg>
                 </div>
-                <svg id="ethIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                    data-bs-html="true">
-                    <use xlink:href="icons.svg#ethernet"></use>
-                </svg>
-                <svg id="wifiIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                    data-bs-html="true">
-                    <use xlink:href="icons.svg#wifi"></use>
-                </svg>
-                <svg id="vpnIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                    data-bs-html="true">
-                    <use xlink:href="icons.svg#vpn"></use>
-                </svg>
-                <svg id="mqttIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                    data-bs-html="true">
-                    <use xlink:href="icons.svg#mqtt"></use>
-                </svg>
-                <svg id="socketIcon" class="status_icon visually-hidden" viewBox="0 0 16 16" data-bs-toggle="tooltip"
-                    data-bs-html="true">
-                    <use xlink:href="icons.svg#activity"></use>
-                </svg>
-
-            </div>
-        </div>
-    </nav>
+            </li>
+            <li class="nav-item text-nowrap d-md-none">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </header>
     <div class='container-fluid'>
-        <div class='row flex-nowrap'>
-            <div id="sidenav" class='col-auto nav-container px-0 col-md-3 col-xl-2 bg-dark-grey nav-shadow'>
-                <div class='d-flex flex-column align-items-center align-items-sm-start text-white min-vh-100'>
-
-                    <ul class='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start'
-                        id='menu'>
-                        <li class='nav-item'>
-                            <a href='/' class='nav-link align-middle' onclick=''>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#house"></use>
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.st"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/general' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#hdd-stack" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.ge"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/network' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#ethernet" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.ne"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/zigbee' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#activity" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.zi"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/mqtt' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#mqtt" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.mq"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/vpn' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#vpn" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.vp"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/security' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#lock" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.se"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/tools' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#cpu" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.to"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item'>
-                            <a href='/about' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#info-square" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.ab"></span>
-                            </a>
-                        </li>
-                        <li class='nav-item logoutLink visually-hidden'>
-                            <a href='/logout' class='nav-link align-middle'>
-                                <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                    <use xlink:href="icons.svg#door-open" />
-                                </svg>
-                                <span class='ms-1 d-none d-sm-inline' data-i18n="l.lo"></span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item class ui_set hstack">
-                            <div class="switch-container">
-                                <input type="checkbox" class="checkbox" id="toggleBtn">
-                                <label class="switch" for="toggleBtn">
-                                    <svg class="bi bi-moon" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#moon" />
+        <div class='row'>
+            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-nav">
+                <div class="offcanvas-md offcanvas-end bg-nav" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                    <div class="offcanvas-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#house"></use>
                                     </svg>
-                                    <svg class="bi bi-sun" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#sun" />
+                                    <span class='ms-1 d-inline' data-i18n="l.st"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/general">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#hdd-stack" />
                                     </svg>
-                                    <div class="ball"></div>
-                                </label>
-                            </div>
-                            <div>
-                                <select class="form-select rounded-pill lang_select" id="langSel" aria-label="Language">
-
-                                </select>
-                            </div>
-                        </li>
-                    </ul>
-                    <hr>
-
+                                    <span class='ms-1 d-inline' data-i18n="l.ge"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/network">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#ethernet" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.ne"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/zigbee">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#activity" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.zi"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/mqtt">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#mqtt" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.mq"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/vpn">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#vpn" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.vp"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/security">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#lock" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.se"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/tools">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#cpu" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.to"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="/about">
+                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#info-square" />
+                                    </svg>
+                                    <span class='ms-1 d-inline' data-i18n="l.ab"></span>
+                                </a>
+                            </li>
+<!--                            <li class="nav-item">-->
+<!--                                <a class="nav-link d-flex align-items-center gap-2" href="/logout">-->
+<!--                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">-->
+<!--                                        <use xlink:href="icons.svg#door-open" />-->
+<!--                                    </svg>-->
+<!--                                    <span class='ms-1 d-inline' data-i18n="l.lo"></span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+                            <li class="nav-item d-flex justify-content-center">
+                                <select class="form-select rounded-pill lang_select" id="langSel" aria-label="Language"></select>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class='col py-4'>
-                <div id="pageContent" class="container">
-
-                </div>
-                <h6 class="fixed-bottom" id="credits">
+                <div class="fixed-credits d-none d-md-block">
                     <span data-i18n="c.proj"></span> <a href="https://xyzroe.cc/" target="_blank">xyzroe</a> © 2024
-                </h6>
+                </div>
             </div>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+                <div id="pageContent" class="container"></div>
+            </main>
         </div>
     </div>
 </body>

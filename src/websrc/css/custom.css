@@ -69,16 +69,6 @@ label.swFx {
     display: flex !important;
     z-index: 99;
   }
-
-  /*#pagenamePC {
-    display: none;
-  }*/
-}
-
-@media (min-width: 767px) {
-  .navbar-toggler-icon {
-    display: none !important;
-  }
 }
 
 .navbar>.container {
@@ -151,10 +141,6 @@ label.swFx {
   padding-bottom: 20px;
 }
 
-.nav-active {
-  background-color: #0000003d;
-}
-
 .nav-item span {
   vertical-align: inherit;
 }
@@ -165,15 +151,19 @@ label.swFx {
   padding-right: 8px;
 }
 
-.nav-item a {
-  border-bottom: white 1px solid !important;
-  border-radius: 0 !important;
+.nav-link {
+  display: flex !important;
 }
 
-.nav-item:last-child a {
-  border-bottom: none !important;
+.offcanvas-body .nav-link.active,
+.offcanvas-body .nav-item a {
+  color: var(--nav-link-color) !important;
 }
 
+.offcanvas-body .nav-link.active,
+.offcanvas-body .nav-item a:hover {
+  color: var(--nav-link-color-active) !important;
+}
 
 .file-inputFW {
   padding: 0;
@@ -223,8 +213,9 @@ div#main {
   margin-right: auto;
 }
 
-.bg-top {
-  background-color: var(--link-color) !important;
+.bg-nav {
+  background-color: var(--header-color) !important;
+  color: white;
 }
 
 .nav {
@@ -279,17 +270,6 @@ body {
   margin-right: 0.5em !important;
 }
 
-.about_icon {
-  width: 1.75em;
-  height: 1.75em;
-  fill: var(--link-color);
-  margin-right: 1rem !important;
-}
-
-.about_link {
-  color: var(--link-color) !important;
-}
-
 .file_icon {
   height: 2em !important;
   width: 2em !important;
@@ -320,16 +300,7 @@ body {
   display: flex !important;
   align-items: center !important;
   justify-content: start !important;
-  color: var(--link-color) !important;
-}
-
-.fixed-bottom {
-  text-align: right;
-  margin-bottom: 0;
-  font-weight: 100;
-  font-size: 80%;
-  margin-right: 6px;
-  display: none;
+  color: var(--header-color) !important;
 }
 
 .lang_select {
@@ -394,23 +365,12 @@ body {
   --table-text-color: #000;
   --modal-background-color: #adadad;
   --form-disabled-background-color: #e9ecef;
+  --nav-link-color: white;
+  --nav-link-color-active: #F67E2C;
   --link-color: #047cc3;
   --link-hover-color: #04d5ec;
+  --header-color: #212227;
 }
-
-/*========== Variables Dark theme ==========*/
-.dark-theme {
-  --background-color: #121212;
-  --text-color: #686868;
-  --card-background-color: #1e1e1e;
-  --table-text-color: #9c9c9c;
-  --modal-background-color: #212529;
-  --form-disabled-background-color: #303030;
-  --link-color: #ff9200;
-  --link-hover-color: #ffc33c;
-}
-
-/*==================== Dark Light Button Implementation ====================*/
 
 .checkbox {
   display: none;
@@ -626,20 +586,58 @@ body {
 }
 
 .zfs_thread {
-  background-color: rgba(var(--thread-color), var(--default-opacity)) !important; 
+  background-color: rgba(var(--thread-color), var(--default-opacity)) !important;
 }
 .zfs_thread.selected, .zfs_thread:hover {
   background-color: rgba(var(--thread-color), var(--selected-opacity)) !important;
 }
 .zfs_router {
-  background-color: rgba(var(--router-color), var(--default-opacity)) !important; 
+  background-color: rgba(var(--router-color), var(--default-opacity)) !important;
 }
 .zfs_router.selected, .zfs_router:hover {
-  background-color: rgba(var(--router-color), var(--selected-opacity)) !important; 
+  background-color: rgba(var(--router-color), var(--selected-opacity)) !important;
 }
 .zfs_coordinator {
-  background-color: rgba(var(--coordinator-color), var(--default-opacity)) !important; 
+  background-color: rgba(var(--coordinator-color), var(--default-opacity)) !important;
 }
 .zfs_coordinator.selected, .zfs_coordinator:hover {
-  background-color: rgba(var(--coordinator-color), var(--selected-opacity)) !important; 
+  background-color: rgba(var(--coordinator-color), var(--selected-opacity)) !important;
+}
+
+.navbar-toggler svg {
+  background-color: var(--header-color);
+}
+
+.nav-brand {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+main {
+  min-height: calc(100vh - 50px)
+}
+
+.fixed-credits {
+  top: calc(100vh - 30px);
+  left: 10px;
+  font-weight: 100;
+  font-size: 80%;
+  position: sticky;
+  text-align: center;
+}
+
+a {
+  color: var(--nav-link-color-active) !important;
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+.about_icon {
+  width: 1.75em;
+  height: 1.75em;
+  fill: var(--nav-link-color-active);
+  margin-right: 1rem !important;
 }
