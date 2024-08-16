@@ -154,7 +154,6 @@ static void apiCmdZbLedToggle     (String &result);
 static void apiCmdFactoryReset    (String &result);
 static void apiCmdDnsCheck        (String &result);
 static void apiCmdBoardName       (String &result);
-static void apiCmdHostName        (String &result);
 
 // functions called exactly once each
 // from getRootData():
@@ -658,11 +657,6 @@ static void apiCmdBoardName(String &result)
     }
 }
 
-static void apiCmdHostName(String &result)
-{
-    serverWeb.send(HTTP_CODE_OK, contTypeText, "a_cool_hostname");
-}
-
 static void apiCmdDefault(String &result)
 {
     serverWeb.send(HTTP_CODE_BAD_REQUEST, contTypeText, result);
@@ -741,8 +735,7 @@ static void apiCmd()
         apiCmdFactoryReset,
         apiCmdEraseNvram,
         apiCmdDnsCheck,
-        apiCmdBoardName,
-        apiCmdHostName
+        apiCmdBoardName
     };
     constexpr int numFunctions = sizeof(apiCmdFunctions) / sizeof(apiCmdFunctions[0]);
     String result = apiWrongArgs;
