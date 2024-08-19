@@ -171,7 +171,6 @@ static inline void getRootVpnHusarnet  (DynamicJsonDocument &doc);
 static inline void getRootUptime       (DynamicJsonDocument &doc);
 static inline void getRootCpuTemp      (DynamicJsonDocument &doc);
 static inline void getRootOneWireTemp  (DynamicJsonDocument &doc);
-static inline void getRootHeapsize     (DynamicJsonDocument &doc);
 static inline void getRootNvsStats     (DynamicJsonDocument &doc);
 static inline void getRootSockets      (DynamicJsonDocument &doc);
 static inline void getRootTime         (DynamicJsonDocument &doc);
@@ -1772,15 +1771,6 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc["zigbeeFwSaved"] = systemCfg.zbFw;
 }
 
-static inline void getRootHeapsize(DynamicJsonDocument &doc)
-{
-    int heapSize = ESP.getHeapSize() / 1024;
-    int heapFree = ESP.getFreeHeap() / 1024;
-
-    doc["espHeapSize"] = heapSize;
-    doc["espHeapUsed"] = heapSize - heapFree;
-}
-
 static inline void getRootNvsStats(DynamicJsonDocument &doc)
 {
     int total, used;
@@ -1819,7 +1809,6 @@ String getRootData(bool update)
     getRootUptime       (doc);
     getRootCpuTemp      (doc);
     getRootOneWireTemp  (doc);
-    getRootHeapsize     (doc);
     getRootNvsStats     (doc);
     getRootMqtt         (doc);
     getRootVpnWireGuard (doc);

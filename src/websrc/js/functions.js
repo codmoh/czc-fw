@@ -902,9 +902,6 @@ function dataReplace(values, navOnly = false) {
 						valueToSet = i18next.t('p.st.zbc.sccn');
 					}
 					break;
-				case "espHeapSize":
-					updateProgressBar("prgHeap", values.espHeapUsed, 1, valueToSet)
-					break;
 				case "espNvsSize":
 					updateProgressBar("prgNvs", values.espNvsUsed, 0, valueToSet)
 					break;
