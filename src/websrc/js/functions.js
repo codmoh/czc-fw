@@ -153,20 +153,6 @@ function identifyLed(event, element, led) {
 		}
 	}
 
-	//const item = $(this);
-	//const led = item.attr("data-led");
-
-
-	console.log(led);
-	//14&led=1&act=2"
-	//let led = -1;
-	/*if (event.target.href == "power") {
-		led = 0;
-	}
-	else if (event.target.href == "mode") {
-		led = 1;
-	}
-	if (led > -1) {*/
 	$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_LED_ACT + "&act=3&led=" + led, function (data) {
 		blinkingText.textContent = i18next.t('p.to.lb');
 		toggleEmoji();
@@ -195,22 +181,18 @@ function zbOta() {
 	let hex;
 	reader.onload = function (e) {
 		if (isHex(reader.result)) {
-			console.log("Starting parse .hex file");
 			text = reader.result;
 
 			text.split("\n").forEach(function (line, index, arr) {
 				if (index === arr.length - 1 && line === "") return;
-				console.log("index:" + index);
 				hex += text.slice(-(text.length - 9), -2).toUpperCase();
 				let hexSize = hex.split(" ").length;
 				$.get(apiLink + api.actions.API_SEND_HEX + "&hex=" + hex + "&size=" + hexSize, function (data) {
 				});
 			});
-			console.log("hex len: " + hex.length);
 			const hmax = 248;
 			let pos = hmax;
 			for (let index = 0; index < (hex.length / hmax); index++) {
-				console.log(hex.slice(pos, hmax));
 				pos += hmax;
 			}
 		} else {
@@ -234,16 +216,10 @@ function copyCode() {
 		try {
 			let successful = document.execCommand('copy');
 			let msg = successful ? 'successful' : 'unsuccessful';
-			console.log('Fallback: Copying text command was ' + msg);
 		} catch (err) {
-			console.error('Fallback: Oops, unable to copy', err);
 		}
 	} else {
-		navigator.clipboard.writeText(textArea.val()).then(function () {
-			console.log('Async: Copying to clipboard was successful!');
-		}, function (err) {
-			console.error('Async: Could not copy text: ', err);
-		});
+		navigator.clipboard.writeText(textArea.val());
 	}
 	$("#clipIco").attr("xlink:href", "icons.svg#clipboard2-check");
 }
@@ -339,30 +315,11 @@ function setIconGlow(iconId, state, show = true) {
 }
 
 function loadPage(url) {
-
 	delete updateValues.zbRole;
 
 	if (window.location.pathname !== url) {
 		window.history.pushState("", document.title, url);
 	}
-	//console.log("[loadPage] url: " + url);
-
-
-	/*if (url == "/") {
-		$.get(apiLink + api.actions.API_GET_PARAM + "&param=refreshLogs", function (data) {
-			if (parseInt(data) >= 1) {
-				intervalTimeUpdateRoot = parseInt(data) * 1000;
-			} else {
-				intervalTimeUpdateRoot = 1000;
-			}
-		});
-		//intervalIdUpdateRoot = setInterval(updateRoot, 1000);
-		intervalIdUpdateRoot = setTimeout(updateRoot, intervalTimeUpdateRoot);
-	}*/
-
-	//else {
-	//	clearInterval(intervalIdUpdateRoot);
-	//}
 
 	switch (url) {
 		case api.pages.API_PAGE_ROOT.str:
@@ -370,10 +327,6 @@ function loadPage(url) {
 			break;
 		case api.pages.API_PAGE_GENERAL.str:
 			apiGetPage(api.pages.API_PAGE_GENERAL);//, () => {
-			//if (!$("#usbMode").prop(chck)) {
-			//	KeepWebDsbl(true);
-			//}
-			//});
 			break;
 		case api.pages.API_PAGE_MQTT.str:
 			apiGetPage(api.pages.API_PAGE_MQTT, () => {
@@ -483,7 +436,6 @@ function espReboot() {
 
 function localizeTitle(url) {
 	let page_title = "";
-	//console.log(url);
 	switch (url) {
 		case api.pages.API_PAGE_ROOT.str:
 			page_title = i18next.t('l.st');
@@ -526,9 +478,6 @@ function apiGetPage(page, doneCall, loader = true) {
 	}
 	$("#pageContent").fadeOut(animDuration).load(apiLink + api.actions.API_GET_PAGE + "&page=" + page.num, function (response, status, xhr) {
 		if (status == "error") {
-			const msg = "Page load error: ";
-			console.log(msg + xhr.status + " " + xhr.statusText);
-			//alert(msg + xhr.status + " " + xhr.statusText); //popup error
 		} else {
 			if (loader) {
 				showPreloader(false);
@@ -603,18 +552,14 @@ function apiGetPage(page, doneCall, loader = true) {
 						setTimeout(function (jbtn) {
 							statusFail.remove();
 						}, 2000, jbtn);
-						//alert(i18next.t('c.ercn'));
 					});
 				}
 			});
 
 
 			let selectedTimeZone = null;
-			//if (xhr.getResponseHeader("respValuesArr") === null) return;
 			if (xhr.getResponseHeader("respValuesArr") !== null) {
-				//console.log("[apiGetPage] starting parse values");
 				const values = JSON.parse(xhr.getResponseHeader("respValuesArr"));
-
 				for (const property in values) {
 					if (property === "timeZoneName") {
 						selectedTimeZone = values[property];
@@ -676,9 +621,7 @@ function showDivById(divId) {
 }
 
 function getReadableTime(beginTime) {
-	//let currentTime = Date.now(); // Текущее время в миллисекундах
 	let elapsedTime = beginTime; // Прошедшее время в миллисекундах
-
 	let seconds = Math.floor(elapsedTime / 1000); // Конвертируем в секунды
 	let minutes = Math.floor(seconds / 60); // Конвертируем в минуты
 	let hours = Math.floor(minutes / 60); // Конвертируем в часы
@@ -705,7 +648,6 @@ function setTitleAndActivateTooltip(element, newTitle) {
 		if (tooltipInstance) {
 			tooltipInstance.update();
 		} else {
-
 			new bootstrap.Tooltip(element, {
 				placement: 'bottom',
 				boundary: 'viewport'
@@ -715,7 +657,6 @@ function setTitleAndActivateTooltip(element, newTitle) {
 }
 
 function showCardDrawIcon(property, values) {
-
 	if (property === "ethConn") {
 		showDivById("ttEt");
 		let status;
@@ -818,8 +759,6 @@ function showCardDrawIcon(property, values) {
 }
 
 function updateTooltips() {
-	//console.log("updateTooltips");
-	//title = i18next.t("p.st.zbc.scc");
 	let valueToSet = "";
 	if (updateValues.connectedSocketStatus > 0) {
 		valueToSet = i18next.t('p.st.zbc.sccy', { count: updateValues.connectedSocketStatus });
@@ -949,7 +888,7 @@ function dataReplace(values, navOnly = false) {
 		if (property == "no_eth" && values[property] == 1) {
 			$('#ethCfg').hide();
 		}
-		//console.log($elements);
+
 		$elements.map(function () {
 			const elemType = $(this).prop('nodeName').toLowerCase();
 			let valueToSet = values[property];
@@ -1159,16 +1098,6 @@ function toastConstructor(params, text) {
 		case "espUpdAvail":
 			$("#toastHeaderText").text(i18next.t("ts.esp.upd.tt"));
 			$("#toastBody").text("ESP32 UPD text");
-			//$("#toastBody").text(text);
-			/*$('<button>', {
-				type: "button",
-				"class": "btn btn-outline-danger",
-				text: i18next.t("c.drm"),
-				click: function () {
-					$('.toast').toast('hide');
-					localStorage.setItem('update_notify', 1);
-				}
-			}).appendTo("#toastButtons");*/
 			$('<button>', {
 				type: "button",
 				"class": "btn btn-warning",
@@ -1191,15 +1120,6 @@ function toastConstructor(params, text) {
 		case "zbUpdAvail":
 			$("#toastHeaderText").text(i18next.t("ts.zb.upd.tt"));
 			$("#toastBody").text("ZB UPD text");
-			/*$('<button>', {
-				type: "button",
-				"class": "btn btn-outline-danger",
-				text: i18next.t("c.drm"),
-				click: function () {
-					$('.toast').toast('hide');
-					localStorage.setItem('update_notify_zb', 1);
-				}
-			}).appendTo("#toastButtons");*/
 			$('<button>', {
 				type: "button",
 				"class": "btn btn-warning",
@@ -1282,7 +1202,6 @@ function closeModal() {
 function restartWait() {
 	setTimeout(function () {
 		modalConstructor("restartWait");
-		//console.log("[restartWait] start");
 	}, 1000);
 }
 
@@ -1297,8 +1216,6 @@ function extractVersionFromReleaseTag(url) {
 }
 
 function espFlashGitWait(params) {
-	//ESPfwStartEvents();
-
 	setTimeout(function () {
 		if (typeof params !== 'undefined' && params !== null && typeof params.link !== 'undefined') {
 			let version = extractVersionFromReleaseTag(params.link);
@@ -1309,11 +1226,7 @@ function espFlashGitWait(params) {
 			$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_ESP_UPD_URL, function (data) { });
 			$('#bar').html(i18next.t('md.esp.fu.lgds'));
 		}
-		console.log("[git_flash] start");
-
 	}, 500);
-
-
 }
 
 let retryCount = 0;
@@ -1326,23 +1239,17 @@ function connectEvents() {
 	}
 
 	if (retryCount >= maxRetries) {
-		console.log(i18next.t('c.cerp'));
 		alert(i18next.t('c.cerp'));
 		return;
 	}
 
 	sourceEvents = new EventSource('/events', { withCredentials: false, timeout: 200 });
-	console.log("Events try to open");
-
 	sourceEvents.addEventListener('open', function (e) {
-		console.log("Events Connected");
-		//callback(true);
 		retryCount = 0;
 	}, false);
 
 	sourceEvents.addEventListener('error', function (e) {
 		if (e.target.readyState != EventSource.OPEN) {
-			console.log("Events Err. Reconnecting...");
 			retryCount++;
 			setTimeout(function () {
 				sourceEvents.close();
@@ -1374,7 +1281,6 @@ function connectEvents() {
 
 	sourceEvents.addEventListener('zb.fi', function (e) {
 		let data = e.data.replaceAll("`", "<br>");
-		console.log(data);
 
 		if (e.data == "start") {
 			$("#zbFlshPrgs").removeClass("progress-bar-animated");
@@ -1430,7 +1336,6 @@ function connectEvents() {
 
 
 	sourceEvents.addEventListener('esp.fp', function (e) {
-
 		$('#prg').css('width', e.data + '%');
 		$('#bar').html(i18next.t('md.esp.fu.prgs', { per: e.data }));
 		$("#prg").removeClass("progress-bar-animated");
@@ -1467,12 +1372,10 @@ function modalAddSpiner() {
 function reconnectEvents() {
 	if (sourceEvents) {
 		sourceEvents.close();
-		console.log('Connection closed by client, reconnecting...');
 		setTimeout(function () {
 			connectEvents();
 		}, 100);
 	} else {
-		console.log('NO connection, reconnecting...');
 		connectEvents();
 	}
 }
@@ -1583,10 +1486,6 @@ function updateProgressBar(id, current, min, max) {
 	} else {
 		progressBar.style.backgroundColor = cssVarColorErr;
 	}
-
-
-	//progressBar.setAttribute("aria-valuenow", current);
-	//progressBar.textContent = width.toFixed(0) + '%';  // Отображаем проценты внутри прогресс бара
 }
 
 
@@ -1708,7 +1607,6 @@ function modalConstructor(type, params) {
 
 	$(headerText).text("").css("color", "");
 	$(modalBody).empty().css({ color: "", maxHeight: "400px", overflowY: "auto" });
-
 	$(modalBtns).html("");
 	switch (type) {
 		case "multiCfg":
@@ -1743,7 +1641,6 @@ function modalConstructor(type, params) {
 					}).appendTo(modalBody);
 					const selectedBoard = selectElement.value;
 					$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_BRD_NAME + "&board=" + selectedBoard, function () {
-						console.log("board: " + selectedBoard);
 						location.reload();
 					});
 				}
@@ -1756,17 +1653,14 @@ function modalConstructor(type, params) {
 			$(headerText).text(i18next.t('md.esp.fu.tt')).css("color", "red");
 			let action = 0;
 			if (params instanceof FormData) {
-				console.log("FormData received:", params);
 				action = 1
 				$(modalBody).html(i18next.t("md.esp.fu.lfm"));
 			}
 			else if (params && 'link' in params && typeof params.link === 'string' && /^https?:\/\/.*/.test(params.link)) {
-				console.log("URL received:", params.link);
 				action = 2;
 				$(modalBody).html(i18next.t("md.esp.fu.gvm", { ver: params.ver }));
 			} else {
 				action = 3
-				console.log("Else ? received:", params);
 				$(modalBody).html(i18next.t("md.esp.fu.glm"));
 			}
 			$("<div>", {
@@ -1806,12 +1700,6 @@ function modalConstructor(type, params) {
 							processData: false,
 							xhr: function () {
 								return new window.XMLHttpRequest();
-							},
-							success: function (data, textStatus, jqXHR) {
-								console.log("Success!");
-							},
-							error: function (jqXHR, textStatus, errorThrown) {
-								console.log("Error:", errorThrown);
 							}
 						});
 					}
@@ -1938,23 +1826,12 @@ function modalConstructor(type, params) {
 				$("<hr>").appendTo(releaseBlock);
 				releaseBlock.appendTo(".modal-body");
 			});
-			/*$('<button>', {
-				type: "button",
-				"class": "btn btn-primary",
-				text: i18next.t('c.cl'),
-				click: function () {
-					closeModal();
-				}
-			}).appendTo(modalBtns);*/
 			modalAddClose();
 			$('<button>', {
 				type: "button",
 				"class": "btn btn-warning",
 				text: i18next.t('p.to.ilfg'),
 				click: function () {
-					//closeModal();
-					//localStorage.setItem('update_notify', 0);
-					//espFlashGitWait();
 					modalConstructor("flashESP");
 				}
 			}).appendTo(modalBtns);
@@ -1980,13 +1857,6 @@ function modalConstructor(type, params) {
 						clearTimeout(timeoutTmr);
 						closeModal();
 						window.location = "/";
-					},
-					error: function (jqXHR, textStatus) {
-						if (textStatus === "timeout") {
-							console.log("Request timed out.");
-						} else {
-							console.log("Error:", textStatus);
-						}
 					}
 				});
 			}, 3000);
@@ -2056,18 +1926,6 @@ function modalConstructor(type, params) {
 				} else {
 					let body = i18next.t('md.ss.msg');
 					$(headerText).text(i18next.t('md.ss.tt'));
-					/*if ($("#wifiMode").prop(chck)) {
-						body += "You will be redirected to the Wi-Fi network selection page.";
-						$('<button>', {
-							type: "button",
-							"class": "btn btn-success",
-							text: "Select Wi-Fi network",
-							click: function () {
-								closeModal();
-								loadPage("/network");
-							}
-						}).appendTo(modalBtns);
-					} else {*/
 					body += i18next.t('md.ss.rr');
 					$('<button>', {
 						type: "button",
@@ -2092,19 +1950,6 @@ function modalConstructor(type, params) {
 				}
 			});
 			break;
-		/*case "keepWeb":
-			$(headerText).text(i18next.t('p.ge.kw'));
-			$(modalBody).text(i18next.t('md.kw.msg'));
-			$('<button>', {
-				type: "button",
-				"class": "btn btn-primary",
-				text: i18next.t('c.ok'),
-				click: function () {
-					closeModal();
-				}
-			}).appendTo(modalBtns);
-			break;*/
-
 		default:
 			break;
 	}
@@ -2346,21 +2191,15 @@ $(document).ready(() => {
 	let preferredLang = savedLang || (languages.some(lang => lang.value === browserLang) ? browserLang : 'en'); // 'en' как fallback
 
 	$dropdown.val(preferredLang);
-	//changeLanguage(preferredLang);
-	//console.log("Selected language set to:", preferredLang);
-
-
 	$dropdown.on("change", function () {
 		let selectedLang = $(this).val();
 		localStorage.setItem("selected-lang", selectedLang);
 		changeLanguage(selectedLang);
-		//console.log("Language changed to:", selectedLang);
 	});
 });
 
 
 function localize() {
-	//console.log("localize");
 	const elements = document.querySelectorAll('[data-i18n]');
 	elements.forEach(element => {
 		const keys = element.getAttribute('data-i18n').split(';');
@@ -2401,7 +2240,6 @@ i18next
 	});
 
 function updateLocalizedContent() {
-	//console.log("update content");
 	localizeTitle(window.location.pathname);
 	localize();
 }
@@ -2461,8 +2299,6 @@ function handleClicks() {
 	});
 
 	$(document).on('click', '#upd_esp_git', function () {
-		console.log("Update from Git started... Just be patient!");
-		//localStorage.setItem("update_notify", 0);
 		modalConstructor("flashESP");
 	});
 
@@ -2474,36 +2310,6 @@ function handleClicks() {
 		modalConstructor("flashZB");
 	});
 
-	$(document).on('submit', '#upload_form_zb', function (e) {
-		e.preventDefault();
-		var formData = new FormData(this);
-		/*ZBfwStartEvents(), $.ajax({
-			url: "/updateZB",
-			type: "POST",
-			data: formData,
-			contentType: false,
-			processData: false,
-			xhr: function () {
-				var xhr = new window.XMLHttpRequest();
-				xhr.upload.addEventListener("progress", function (event) {
-					if (event.lengthComputable) {
-						var percentComplete = event.loaded / event.total;
-						$("#prg_zb").html("upload: " + Math.round(100 * percentComplete) + "%");
-						$("#bar_zb").css("width", Math.round(100 * percentComplete) + "%");
-					}
-				}, false);
-				return xhr;
-			},
-			success: function (data, textStatus) {
-				console.log("success!"), $("#prg_zb").html("Upload completed! <br>Start validating...");
-				$("#bar_zb").css("width", "0%");
-			},
-			error: function (xhr, textStatus, errorThrown) {
-				console.log("Error:", errorThrown);
-			}
-		});*/
-	});
-
 	var lastEscTime = 0;
 	var doublePressInterval = 300;
 
@@ -2511,7 +2317,6 @@ function handleClicks() {
 		if (e.keyCode === 27) { // 27 - Esc
 			var currentTime = new Date().getTime();
 			if (currentTime - lastEscTime < doublePressInterval) {
-				console.log("Double ESC press detected.");
 				closeModal();
 				lastEscTime = 0;
 			} else {
@@ -2521,12 +2326,10 @@ function handleClicks() {
 	});
 
 	const clockButton = document.getElementById('clock');
-
 	clockButton.addEventListener('click', function () {
 		const currentFormat = localStorage.getItem('clock_format_12h');
 		const is12HourFormat = currentFormat === 'true';
 		localStorage.setItem('clock_format_12h', !is12HourFormat);
-		console.log('Clock format set to:', !is12HourFormat ? '12-hour' : '24-hour');
 	});
 }
 

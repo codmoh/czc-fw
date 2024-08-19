@@ -234,9 +234,6 @@ div#main {
   /*min-width: 125px !important;*/
 }
 
-.card {
-  background-color: var(--card-background-color) !important;
-}
 
 .modal-content {
   background-color: var(--modal-background-color) !important;
@@ -245,7 +242,7 @@ div#main {
 body {
   color: var(--text-color) !important;
   background-color: var(--background-color) !important;
-  margin: -1 !important;
+
 }
 
 .table {
@@ -294,13 +291,6 @@ body {
   box-shadow: none;
   background-color: transparent;
   border-color: transparent;
-}
-
-.card-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: start !important;
-  color: var(--header-color) !important;
 }
 
 .lang_select {

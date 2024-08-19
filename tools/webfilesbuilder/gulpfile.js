@@ -6,11 +6,8 @@ var flatmap = require('gulp-flatmap');
 var path = require('path');
 var htmlmin = require('gulp-htmlmin');
 var uglify = require('gulp-uglify');
-var pump = require('pump');
-var purgecss = require('gulp-purgecss');
-var cssnano = require('gulp-cssnano');
+const cleanCSS = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
-const rename = require('gulp-rename');
 
 function stylesConcat() {
     return gulp.src(['../../src/websrc/css/custom.css', '../../src/websrc/css/bootstrap.min.css'])
@@ -20,10 +17,7 @@ function stylesConcat() {
                 mode: 0666
             }
         }))
-        //.pipe(purgecss({
-        //    content: ['../../src/websrc/html/*.html', '../../src/websrc/js/*.js']
-        //}))
-        .pipe(cssnano({preset: 'advanced'}))
+        .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(gulp.dest('../../src/websrc/min/css/'))
         .pipe(gzip({
             append: true
