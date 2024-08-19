@@ -42,6 +42,7 @@
 #include "webh/css/style.css.gz.h"
 #include "webh/img/icons.svg.gz.h"
 #include "webh/img/logo.svg.gz.h"
+#include "webh/img/logo-dark.svg.gz.h"
 
 #include "webh/json/en.json.gz.h"
 #include "webh/json/uk.json.gz.h"
@@ -170,7 +171,6 @@ static inline void getRootVpnHusarnet  (DynamicJsonDocument &doc);
 static inline void getRootUptime       (DynamicJsonDocument &doc);
 static inline void getRootCpuTemp      (DynamicJsonDocument &doc);
 static inline void getRootOneWireTemp  (DynamicJsonDocument &doc);
-static inline void getRootHeapsize     (DynamicJsonDocument &doc);
 static inline void getRootNvsStats     (DynamicJsonDocument &doc);
 static inline void getRootSockets      (DynamicJsonDocument &doc);
 static inline void getRootTime         (DynamicJsonDocument &doc);
@@ -256,6 +256,8 @@ void initWebServer()
     /* ----- SVG FILES | START -----*/
     serverWeb.on("/logo.svg", []()
                  { sendGzip(contTypeTextSvg, logo_svg_gz, logo_svg_gz_len); });
+    serverWeb.on("/logo-dark.svg", []()
+                 { sendGzip(contTypeTextSvg, logo_dark_svg_gz, logo_dark_svg_gz_len); });
     serverWeb.on("/icons.svg", []()
                  { sendGzip(contTypeTextSvg, icons_svg_gz, icons_svg_gz_len); });
 
@@ -1725,6 +1727,7 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc[espUpdAvailKey] = vars.updateEspAvail;
     doc[zbUpdAvailKey]  = vars.updateZbAvail;
 
+    doc[hostnameKey] = systemCfg.hostname;
     doc["hwRev"]    = hwConfig.board;
     doc["espModel"] = String(ESP.getChipModel());
     doc["espCores"] = ESP.getChipCores();
@@ -1769,15 +1772,6 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc["zigbeeFwSaved"] = systemCfg.zbFw;
 }
 
-static inline void getRootHeapsize(DynamicJsonDocument &doc)
-{
-    int heapSize = ESP.getHeapSize() / 1024;
-    int heapFree = ESP.getFreeHeap() / 1024;
-
-    doc["espHeapSize"] = heapSize;
-    doc["espHeapUsed"] = heapSize - heapFree;
-}
-
 static inline void getRootNvsStats(DynamicJsonDocument &doc)
 {
     int total, used;
@@ -1816,7 +1810,6 @@ String getRootData(bool update)
     getRootUptime       (doc);
     getRootCpuTemp      (doc);
     getRootOneWireTemp  (doc);
-    getRootHeapsize     (doc);
     getRootNvsStats     (doc);
     getRootMqtt         (doc);
     getRootVpnWireGuard (doc);

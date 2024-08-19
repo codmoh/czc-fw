@@ -1,6 +1,7 @@
 **/.DS_Store
 .pio
 .vscode
+.idea
 commit*
 test.html
 gzipped
