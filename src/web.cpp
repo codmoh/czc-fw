@@ -1727,6 +1727,7 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc[espUpdAvailKey] = vars.updateEspAvail;
     doc[zbUpdAvailKey]  = vars.updateZbAvail;
 
+    doc[hostnameKey] = systemCfg.hostname;
     doc["hwRev"]    = hwConfig.board;
     doc["espModel"] = String(ESP.getChipModel());
     doc["espCores"] = ESP.getChipCores();
