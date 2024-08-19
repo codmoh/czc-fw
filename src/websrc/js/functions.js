@@ -893,13 +893,6 @@ function dataReplace(values, navOnly = false) {
 			const elemType = $(this).prop('nodeName').toLowerCase();
 			let valueToSet = values[property];
 
-			const isIpValue = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(valueToSet);
-			const isMaskInPropertyName = property.toLowerCase().includes('mask');
-
-			if (isIpValue && !isMaskInPropertyName) {
-				valueToSet = '<a href="http://' + valueToSet + '">' + valueToSet + '</a>';
-			}
-
 			switch (property) {
 				case "connectedSocketStatus": //clients
 					if (valueToSet) {
@@ -1059,11 +1052,7 @@ function dataReplace(values, navOnly = false) {
 					$(this).prop("selected", true);
 					break;
 				default:
-					if (isIpValue && !isMaskInPropertyName) {
-						$(this).html(valueToSet);
-					} else {
-						$(this).text(valueToSet);
-					}
+					$(this).text(valueToSet);
 					break;
 			}
 		});
