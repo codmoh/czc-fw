@@ -234,11 +234,6 @@ div#main {
   /*min-width: 125px !important;*/
 }
 
-
-.modal-content {
-  background-color: var(--modal-background-color) !important;
-}
-
 body {
   color: var(--text-color) !important;
   background-color: var(--background-color) !important;
@@ -630,4 +625,12 @@ a {
   height: 1.75em;
   fill: var(--nav-link-color-active);
   margin-right: 1rem !important;
+}
+
+.navbar-brand span {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  font-size: 16pt;
+  margin-left: 5px;
 }
