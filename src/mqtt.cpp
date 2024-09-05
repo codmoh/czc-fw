@@ -504,7 +504,7 @@ void mqttPublishDiscovery()
     DynamicJsonDocument devInfo(256);
     devInfo["ids"] = vars.deviceId;
     devInfo["name"] = systemCfg.hostname;
-    devInfo["mf"] = "XZG";
+    devInfo["mf"] = "CZC";
     devInfo["mdl"] = hwConfig.board;
     char verArr[25];
     const char *env = STRINGIFY(BUILD_ENV_NAME);

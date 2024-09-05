@@ -461,7 +461,7 @@ void connectWifi()
 
 void mDNS_start()
 {
-  const char *host = "_xzg";
+  const char *host = "_czc";
   const char *http = "_http";
   const char *tcp = "_tcp";
   if (!mDNS.begin(systemCfg.hostname))
