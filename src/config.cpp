@@ -961,19 +961,13 @@ bool loadFileConfigHW()
     else
     {
         LOGI("Load HW - ERROR");
-
-        int searchId = 0;
-        if (config["searchId"])
-        {
-            searchId = config["searchId"];
-        }
         String chipId = ESP.getChipModel();
         LOGW("%s", chipId);
         //if (chipId == "ESP32-D0WDQ6")
         //{
         //    searchId = 12;
         //}
-        ThisConfigStruct *newConfig = findBrdConfig(searchId);
+        ThisConfigStruct *newConfig = getBrdConfig();
         if (newConfig)
         {
             LOGD("Find. Saving config");
