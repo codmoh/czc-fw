@@ -282,11 +282,12 @@ void usbModeSet(usbMode mode)
   //}
 }
 
-uint64_t getMacLastBytes(size_t num)
+uint64_t getMacLastBytes()
 {
+    const size_t mac_size = 6;
     uint64_t mac = ESP.getEfuseMac();
     uint64_t ret_mac = 0;
-    size_t loop_count = ((8*(num-1))+1);
+    size_t loop_count = ((8*(mac_size-1))+1);
     for (int i = 0; i < loop_count; i = i + 8) {
         ret_mac |= ((mac >> (40 - i)) & 0xff) << i;
     }
@@ -301,7 +302,7 @@ void getDeviceID(char *arr)
     snprintf(&id_str[id_str_len],
              MAX_DEV_ID_LONG - id_str_len,
              "%04X",
-             (uint16_t)getMacLastBytes(2)); // Output the reversed bytes in hex
+             (uint16_t)getMacLastBytes()); // Output the reversed bytes in hex
     memcpy(arr, id_str, MAX_DEV_ID_LONG);
 }
 

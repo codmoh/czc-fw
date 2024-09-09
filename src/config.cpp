@@ -308,7 +308,7 @@ static String defaultHostname()
     snprintf(&id_str[id_str_len],
              MAX_DEV_ID_LONG - id_str_len,
              "%04X",
-             (uint16_t)getMacLastBytes(2)); // Output the reversed bytes in hex
+             (uint16_t)getMacLastBytes()); // Output the reversed bytes in hex
 
     return String(id_str);
 }
