@@ -691,11 +691,11 @@ ThisConfigStruct *getBrdConfig()
   bool btnOk = false;
   bool zbOk = false;
 
-  static ThisConfigStruct bestConfig;
-  bestConfig.eth = ethConfigs[2];
-  bestConfig.zb = zbConfigs[0];
-  bestConfig.mist = mistConfigs[1];
-  strlcpy(bestConfig.board, "CZC-01", sizeof(bestConfig.board));
+  static ThisConfigStruct bestConfig = {};
+  bestConfig.eth = ethConfigs[CZC_1_ETH_CONFIG];
+  bestConfig.zb = zbConfigs[CZC_1_ZB_CONFIG];
+  bestConfig.mist = mistConfigs[CZC_1_MIST_CONFIG];
+  strlcpy(bestConfig.board, czc_board_name, sizeof(bestConfig.board));
 
   return &bestConfig;
 }
@@ -705,7 +705,6 @@ void wgBegin()
   checkDNS();
   if (!wg.is_initialized())
   {
-
     const char *wg_preshared_key = nullptr;
     if (vpnCfg.wgPreSharedKey[0] != '\0')
     {

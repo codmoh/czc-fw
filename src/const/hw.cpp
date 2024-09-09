@@ -1,5 +1,6 @@
 #include "const/hw.h"
 
+const char *czc_board_name = "CZC-01";
 // Ethernet configurations
 // Don't forget to edit ETH_CFG_CNT !
 EthConfig ethConfigs[] = {
