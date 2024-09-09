@@ -685,144 +685,19 @@ char *convertTimeToCron(const String &time)
   return formattedTime;
 }
 
-ThisConfigStruct *findBrdConfig(int searchId = 0)
+ThisConfigStruct *getBrdConfig()
 {
-
   bool ethOk = false;
   bool btnOk = false;
   bool zbOk = false;
 
-  static ThisConfigStruct bestConfig;
-  bestConfig.eth = {.addr = -1, .pwrPin = -1, .mdcPin = -1, .mdiPin = -1, .phyType = ETH_PHY_LAN8720, .clkMode = ETH_CLOCK_GPIO17_OUT}; // .pwrAltPin = -1};
-  bestConfig.zb = {.txPin = -1, .rxPin = -1, .rstPin = -1, .bslPin = -1};
-  memset(&bestConfig.mist, -1, sizeof(bestConfig.mist));
-  strlcpy(bestConfig.board, "Unknown", sizeof(bestConfig.board));
+  static ThisConfigStruct bestConfig = {};
+  bestConfig.eth = ethConfigs[CZC_1_ETH_CONFIG];
+  bestConfig.zb = zbConfigs[CZC_1_ZB_CONFIG];
+  bestConfig.mist = mistConfigs[CZC_1_MIST_CONFIG];
+  strlcpy(bestConfig.board, czc_board_name, sizeof(bestConfig.board));
 
-  for (int brdIdx = searchId; brdIdx < BOARD_CFG_CNT; ++brdIdx)
-  {
-    int ethIdx = brdConfigs[brdIdx].ethConfigIndex;
-    int zbIdx = brdConfigs[brdIdx].zbConfigIndex;
-    int mistIdx = brdConfigs[brdIdx].mistConfigIndex;
-
-    LOGI("Try brd: %d - %s", brdIdx, brdConfigs[brdIdx].board);
-
-    if (ethIdx == -1)
-    {
-      ethOk = true;
-      LOGD("NO ethernet OK: %d", ethIdx);
-    }
-    else if (ETH.begin(ethConfigs[ethIdx].addr, ethConfigs[ethIdx].pwrPin, ethConfigs[ethIdx].mdcPin, ethConfigs[ethIdx].mdiPin, ethConfigs[ethIdx].phyType, ethConfigs[ethIdx].clkMode)) // ethConfigs[ethIdx].pwrAltPin))
-    {
-      ethOk = true;
-      bestConfig.eth = ethConfigs[ethIdx];
-      LOGD("Ethernet config OK: %d", ethIdx);
-    }
-
-    if (mistConfigs[mistIdx].btnPin > 0)
-    {
-      pinMode(mistConfigs[mistIdx].btnPin, INPUT);
-      int press = 0;
-      for (int y = 0; y < 10; y++)
-      {
-        int state = digitalRead(mistConfigs[mistIdx].btnPin);
-        if (state != mistConfigs[mistIdx].btnPlr)
-        {
-          press++;
-        }
-        delay(100);
-      }
-      btnOk = (press <= 5);
-
-      if (!btnOk)
-      {
-        LOGD("Button pin ERROR");
-        ethOk = false;
-      }
-      else
-      {
-        LOGD("Button pin OK");
-      }
-    }
-    else
-    {
-      btnOk = true;
-    }
-
-    if (btnOk)
-    {
-      LOGD("Trying Zigbee: %d", zbIdx);
-      esp_task_wdt_reset();
-      Serial2.begin(systemCfg.serialSpeed, SERIAL_8N1, zbConfigs[zbIdx].rxPin, zbConfigs[zbIdx].txPin);
-
-      int BSL_PIN_MODE = 0;
-      if (CCTool.begin(zbConfigs[zbIdx].rstPin, zbConfigs[zbIdx].bslPin, BSL_PIN_MODE))
-      {
-        if (CCTool.detectChipInfo())
-        {
-          zbOk = true;
-          LOGD("Zigbee config OK: %d", zbIdx);
-
-          bestConfig.zb = zbConfigs[zbIdx];
-          bestConfig.mist = mistConfigs[mistIdx];
-
-          bool multiCfg = false;
-          int brdNewId = -1;
-          for (int brdNewIdx = 0; brdNewIdx < BOARD_CFG_CNT; brdNewIdx++)
-          {
-            LOGD("%d %d", brdIdx, brdNewIdx);
-            if (brdIdx != brdNewIdx && brdConfigs[brdNewIdx].ethConfigIndex == ethIdx && brdConfigs[brdNewIdx].zbConfigIndex == zbIdx && brdConfigs[brdNewIdx].mistConfigIndex == mistIdx)
-            {
-              multiCfg = true;
-              brdNewId = brdNewIdx;
-              break;
-            }
-          }
-          const char *nameBrd;
-          if (!multiCfg)
-          {
-            nameBrd = brdConfigs[brdIdx].board;
-            strlcpy(bestConfig.board, nameBrd, sizeof(bestConfig.board));
-          }
-          else
-          {
-            String nameBrdStr = ("Multi_" + String(brdNewId));
-            nameBrd = nameBrdStr.c_str();
-            // LOGW("%s", nameBrdStr);
-            strlcpy(bestConfig.board, nameBrd, sizeof(bestConfig.board));
-          }
-
-          return &bestConfig;
-        }
-        else
-        {
-          zbOk = false;
-          LOGD("Zigbee config ERROR");
-        }
-      }
-    }
-
-    LOGI("Config error with: %s", brdConfigs[brdIdx].board);
-    DynamicJsonDocument config(300);
-    config["searchId"] = brdIdx + 1;
-    writeDefaultConfig(configFileHw, config);
-
-    LOGD("Restarting...");
-    delay(500);
-    ESP.restart();
-
-    return nullptr;
-  }
-
-  if (bestConfig.eth.addr != -1)
-  {
-    LOGI("Returning best partial config");
-    return &bestConfig;
-  }
-  else
-  {
-    LOGI("No valid config found, returning default");
-    return &bestConfig;
-  }
+  return &bestConfig;
 }
 
 void wgBegin()
@@ -830,7 +705,6 @@ void wgBegin()
   checkDNS();
   if (!wg.is_initialized())
   {
-
     const char *wg_preshared_key = nullptr;
     if (vpnCfg.wgPreSharedKey[0] != '\0')
     {

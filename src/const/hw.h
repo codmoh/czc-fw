@@ -1,5 +1,11 @@
 #include <ETH.h>
 
+#define CZC_1_ETH_CONFIG 2
+#define CZC_1_ZB_CONFIG 0
+#define CZC_1_MIST_CONFIG 1
+
+extern const char *czc_board_name;
+
 // Ethernet settings structure
 struct EthConfig
 {

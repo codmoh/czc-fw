@@ -54,8 +54,7 @@ const commands = {
 	CMD_ZB_LED_TOG: 12,
 	CMD_ESP_FAC_RES: 13,
 	CMD_ZB_ERASE_NVRAM: 14,
-	CMD_DNS_CHECK: 15,
-	CMD_BRD_NAME: 16
+	CMD_DNS_CHECK: 15
 }
 
 const api = {
@@ -882,9 +881,6 @@ function dataReplace(values, navOnly = false) {
 		if (property == "zbFwSaved" && values[property] == 1) {
 			$('td[data-r2v="zigbeeFwRev"]').addClass('fst-italic');
 		}
-		if (property == "boardArray") { // && values[property].startsWith("Multi")) {
-			modalConstructor("multiCfg", values[property]);
-		}
 		if (property == "no_eth" && values[property] == 1) {
 			$('#ethCfg').hide();
 		}
@@ -1595,45 +1591,6 @@ function modalConstructor(type, params) {
 	$(modalBody).empty().css({ color: "", maxHeight: "400px", overflowY: "auto" });
 	$(modalBtns).html("");
 	switch (type) {
-		case "multiCfg":
-			$(headerText).text(i18next.t('md.esp.mc.tt')).css("color", "yellow");
-			$(modalBody).html(i18next.t("md.esp.mc.mi"));
-
-			const optionsArray = JSON.parse(params);
-			const selectElement = document.createElement('select');
-			selectElement.className = "form-select mt-2";
-
-			optionsArray.forEach(option => {
-				const optionElement = document.createElement('option');
-				optionElement.value = option;
-				optionElement.textContent = option;
-				selectElement.appendChild(optionElement);
-			});
-
-			$(modalBody).append(selectElement);
-
-			$('<button>', {
-				type: "button",
-				"class": "btn btn-warning",
-				text: i18next.t('c.sure'),
-				click: function () {
-					$(modalBtns).html("");
-					modalAddSpiner();
-					$(modalBody).html("");
-					$("<div>", {
-						id: "bar",
-						text: i18next.t("md.esp.fu.wdm"),
-						class: "mb-2 text-sm-center"
-					}).appendTo(modalBody);
-					const selectedBoard = selectElement.value;
-					$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_BRD_NAME + "&board=" + selectedBoard, function () {
-						location.reload();
-					});
-				}
-			}).appendTo(modalBtns);
-
-			modalAddCancel();
-			break;
 		case "flashESP":
 			$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_DNS_CHECK);
 			$(headerText).text(i18next.t('md.esp.fu.tt')).css("color", "red");

@@ -11,7 +11,7 @@ float get1wire();
 
 extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
-ThisConfigStruct *findBrdConfig(int searchId);
+ThisConfigStruct *getBrdConfig();
 
 float getCPUtemp(bool clear = false);
 

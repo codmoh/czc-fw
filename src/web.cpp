@@ -154,7 +154,6 @@ static void apiCmdZbCheckFirmware (String &result);
 static void apiCmdZbLedToggle     (String &result);
 static void apiCmdFactoryReset    (String &result);
 static void apiCmdDnsCheck        (String &result);
-static void apiCmdBoardName       (String &result);
 
 // functions called exactly once each
 // from getRootData():
@@ -624,41 +623,6 @@ static void apiCmdZbFlash(String &result)
     }
 }
 
-static void apiCmdBoardName(String &result)
-{
-    if (serverWeb.hasArg("board"))
-    {
-        String brdName = serverWeb.arg("board");
-        brdName.toCharArray(hwConfig.board, sizeof(hwConfig.board));
-
-        File configFile = LittleFS.open(configFileHw, FILE_READ);
-        if (!configFile)
-        {
-            Serial.println("Failed to open config file for reading");
-            return;
-        }
-
-        DynamicJsonDocument config(1024);
-        DeserializationError error = deserializeJson(config, configFile);
-        if (error)
-        {
-            Serial.println("Failed to parse config file");
-            configFile.close();
-            return;
-        }
-
-        configFile.close();
-        config["board"] = hwConfig.board;
-
-        writeDefaultConfig(configFileHw, config);
-        serverWeb.send(HTTP_CODE_OK, contTypeText, result);
-    }
-    else
-    {
-        serverWeb.send(HTTP_CODE_BAD_REQUEST, contTypeText, result);
-    }
-}
-
 static void apiCmdDefault(String &result)
 {
     serverWeb.send(HTTP_CODE_BAD_REQUEST, contTypeText, result);
@@ -736,8 +700,7 @@ static void apiCmd()
         apiCmdZbLedToggle,
         apiCmdFactoryReset,
         apiCmdEraseNvram,
-        apiCmdDnsCheck,
-        apiCmdBoardName
+        apiCmdDnsCheck
     };
     constexpr int numFunctions = sizeof(apiCmdFunctions) / sizeof(apiCmdFunctions[0]);
     String result = apiWrongArgs;
