@@ -302,13 +302,15 @@ void saveSystemConfig(const SystemConfigStruct &config)
 
 static String defaultHostname()
 {
-    uint64_t mac = ESP.getEfuseMac(); 
-    char     macStr[5];
-    snprintf(macStr,
-             sizeof(macStr),
+    char id_str[MAX_DEV_ID_LONG] = "CZC-";
+    const size_t id_str_len = strlen(id_str);
+
+    snprintf(&id_str[id_str_len],
+             MAX_DEV_ID_LONG - id_str_len,
              "%04X",
-             (uint16_t)(mac & 0xFFFF)); // Extract the last two bytes
-    return "CZC-" + String(macStr);
+             (uint16_t)getMacLastBytes(2)); // Output the reversed bytes in hex
+
+    return String(id_str);
 }
 
 void loadSystemConfig(SystemConfigStruct &config)

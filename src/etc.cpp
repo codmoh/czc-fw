@@ -282,11 +282,27 @@ void usbModeSet(usbMode mode)
   //}
 }
 
+uint64_t getMacLastBytes(size_t num)
+{
+    uint64_t mac = ESP.getEfuseMac();
+    uint64_t ret_mac = 0;
+    size_t loop_count = ((8*(num-1))+1);
+    for (int i = 0; i < loop_count; i = i + 8) {
+        ret_mac |= ((mac >> (40 - i)) & 0xff) << i;
+    }
+    return ret_mac;
+}
+
 void getDeviceID(char *arr)
 {
-    assert(MAX_DEV_ID_LONG <= MAX_CONF_STR_LEN);
-    assert(systemCfg.hostname[0]);
-    memcpy(arr, systemCfg.hostname, MAX_DEV_ID_LONG);
+    char id_str[MAX_DEV_ID_LONG] = "CZC-";
+    const size_t id_str_len = strlen(id_str);
+
+    snprintf(&id_str[id_str_len],
+             MAX_DEV_ID_LONG - id_str_len,
+             "%04X",
+             (uint16_t)getMacLastBytes(2)); // Output the reversed bytes in hex
+    memcpy(arr, id_str, MAX_DEV_ID_LONG);
 }
 
 void writeDefaultConfig(const char *path, DynamicJsonDocument &doc)
