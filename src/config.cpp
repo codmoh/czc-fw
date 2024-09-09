@@ -303,12 +303,11 @@ void saveSystemConfig(const SystemConfigStruct &config)
 static String defaultHostname()
 {
     uint64_t mac = ESP.getEfuseMac(); 
-    char     macStr[5]; // 4 characters + null terminator
+    char     macStr[5];
     snprintf(macStr,
              sizeof(macStr),
              "%04X",
              (uint16_t)(mac & 0xFFFF)); // Extract the last two bytes
-
     return "CZC-" + String(macStr);
 }
 

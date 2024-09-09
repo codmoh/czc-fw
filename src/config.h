@@ -10,7 +10,8 @@
 #include <WebServer.h>
 
 #define DEBOUNCE_TIME 70
-#define MAX_DEV_ID_LONG 50
+#define MAX_DEV_ID_LONG 32
+#define MAX_CONF_STR_LEN 64
 
 #define ZB_TCP_PORT 6638 // any port ever. later setup from config file
 #define ZB_SERIAL_SPEED 115200
@@ -201,8 +202,8 @@ struct SystemConfigStruct
 
   bool disableWeb; // when socket connected
   bool webAuth;
-  char webUser[50];
-  char webPass[50];
+  char webUser[MAX_CONF_STR_LEN];
+  char webPass[MAX_CONF_STR_LEN];
 
   bool fwEnabled; // firewall for socket connection
   IPAddress fwIp; // allowed IP
@@ -216,11 +217,11 @@ struct SystemConfigStruct
   bool disableLedPwr;
 
   int refreshLogs;
-  char hostname[50];
+  char hostname[MAX_CONF_STR_LEN];
 
-  char timeZone[50];
-  char ntpServ1[50];
-  char ntpServ2[50];
+  char timeZone[MAX_CONF_STR_LEN];
+  char ntpServ1[MAX_CONF_STR_LEN];
+  char ntpServ2[MAX_CONF_STR_LEN];
 
   bool nmEnable;
   char nmStart[6];
