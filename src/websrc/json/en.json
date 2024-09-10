@@ -141,6 +141,11 @@
         "nnf": "WiFi networks not found",
         "mode": "Mode",
         "power": "Tx Power"
+      },
+      "wvi": {
+        "title": "Attention",
+        "1": "We strongly advise against using Wi-Fi in ZigBee operation. Serial communication over Wi-Fi is not robust enough and does not contain any error correction mechanisms to compensate for fluctuating connections or packet loss. The same applies to WAN and VPN connections. See also:",
+        "2": "When used as a Thread Border Router (currently under development), this problem does not occur."
       }
     },
     "zi": {

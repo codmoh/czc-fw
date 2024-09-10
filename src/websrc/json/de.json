@@ -243,6 +243,11 @@
         "nnf": "WLAN-Netzwerke nicht gefunden",
         "mode": "Modus",
         "power": "Sendeleistung"
+      },
+      "wvi": {
+        "title": "Achtung",
+        "1": "Im ZigBee-Betrieb raten wir dringend von der WLAN-Nutzung ab. Die serielle Kommunikation über WLAN ist nicht robust genug und enthält keine Fehlerkorrekturmechanismen um schwankende Verbindungen oder Packetverluste ausgleichen zu können. Gleiches gilt für WAN- und VPN-Verbindungen. Siehe auch:",
+        "2": "Bei der Nutzung als Thread Border Router (aktuell in Entwicklung) kommt dieses Problem nicht zum Tragen."
       }
     },
     "st": {
