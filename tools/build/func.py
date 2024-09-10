@@ -10,18 +10,19 @@ def print_colored(text, color):
         "blue": "\033[34m",
         "magenta": "\033[35m",
         "cyan": "\033[36m",
-        "reset": "\033[0m"  
+        "reset": "\033[0m",
+        "orange": "\033[38;5;208m"
     }
     print(colors[color] + text + colors["reset"])
 
 def print_logo():
     print("")
-    print_colored("██╗░░██╗███████╗░██████╗░", "red")
-    print_colored("╚██╗██╔╝╚════██║██╔════╝░", "red")
-    print_colored("░╚███╔╝░░░███╔═╝██║░░██╗░", "yellow")
-    print_colored("░██╔██╗░██╔══╝░░██║░░╚██╗", "yellow")
-    print_colored("██╔╝╚██╗███████╗╚██████╔╝", "green")
-    print_colored("╚═╝░░╚═╝╚══════╝░╚═════╝░", "green")
+    print_colored(" ██████╗███████╗ ██████╗", "orange")
+    print_colored("██╔════╝╚══███╔╝██╔════╝", "orange")
+    print_colored("██║       ███╔╝ ██║     ", "orange")
+    print_colored("██║      ███╔╝  ██║     ", "orange")
+    print_colored("╚██████╗███████╗╚██████╗", "orange")
+    print_colored(" ╚═════╝╚══════╝ ╚═════╝", "orange")
     print_colored("", "reset")
     time.sleep(1)
     
