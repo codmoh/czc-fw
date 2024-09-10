@@ -603,12 +603,35 @@ main {
 }
 
 .fixed-credits {
-  top: calc(100vh - 30px);
   left: 10px;
   font-weight: 100;
   font-size: 80%;
   position: sticky;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .fixed-credits {
+    top: calc(100vh - 62px);
+  }
+}
+
+@media (min-width: 836px) {
+  .fixed-credits {
+    top: calc(100vh - 62px);
+  }
+}
+
+@media (min-width: 992px) {
+  .fixed-credits {
+    top: calc(100vh - 62px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .fixed-credits {
+    top: calc(100vh - 45px);
+  }
 }
 
 a {
