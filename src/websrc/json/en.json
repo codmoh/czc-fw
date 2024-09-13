@@ -457,5 +457,10 @@
         "tt": "New Zigbee firmware found 🌟"
       }
     }
+  },
+  "cl": {
+    "d": "Documentation",
+    "g": "Github",
+    "c": "Contact"
   }
 }
