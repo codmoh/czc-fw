@@ -537,6 +537,14 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.small-icon {
+  width: 25px;
+}
+
+.card-icon {
+  width: 25px;
+}
+
 .large-icon {
   width: 3em;
   height: 3em;
