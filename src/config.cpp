@@ -658,7 +658,7 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             saveSystemConfig(configSys);
         }
         break;
-        case API_PAGE_SECURITY:
+        case API_PAGE_TOOLS:
         {
             configSys.disableWeb = serverWeb.hasArg(disableWebKey) == true;
 

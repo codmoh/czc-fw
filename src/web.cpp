@@ -25,7 +25,6 @@
 #include "webh/html/PAGE_GENERAL.html.gz.h"
 #include "webh/html/PAGE_LOADER.html.gz.h"
 #include "webh/html/PAGE_ROOT.html.gz.h"
-#include "webh/html/PAGE_SECURITY.html.gz.h"
 #include "webh/html/PAGE_ZIGBEE.html.gz.h"
 #include "webh/html/PAGE_TOOLS.html.gz.h"
 #include "webh/html/PAGE_NETWORK.html.gz.h"
@@ -266,7 +265,6 @@ void initWebServer()
     serverWeb.on("/", handleLoader);
     serverWeb.on("/generate_204", handleLoader);
     serverWeb.on("/general", handleLoader);
-    serverWeb.on("/security", handleLoader);
     serverWeb.on("/network", handleLoader);
     serverWeb.on("/ethernet", handleLoader);
     serverWeb.on("/zigbee", handleLoader);
@@ -908,10 +906,6 @@ static void apiGetPage()
         handleSerial();
         sendGzip(contTypeTextHtml, PAGE_ZIGBEE_html_gz, PAGE_ZIGBEE_html_gz_len);
         break;
-    case API_PAGE_SECURITY:
-        handleSecurity();
-        sendGzip(contTypeTextHtml, PAGE_SECURITY_html_gz, PAGE_SECURITY_html_gz_len);
-        break;
     case API_PAGE_TOOLS:
         handleTools();
         sendGzip(contTypeTextHtml, PAGE_TOOLS_html_gz, PAGE_TOOLS_html_gz_len);
@@ -1213,32 +1207,6 @@ void handleGeneral()
 
     serializeJson(zones, results);
     serverWeb.sendHeader(respTimeZonesName, results);
-}
-
-void handleSecurity()
-{
-    String result;
-    DynamicJsonDocument doc(1024);
-
-    if (systemCfg.disableWeb)
-    {
-        doc[disableWebKey] = checked;
-    }
-
-    if (systemCfg.webAuth)
-    {
-        doc[webAuthKey] = checked;
-    }
-    doc[webUserKey] = (String)systemCfg.webUser;
-    doc[webPassKey] = (String)systemCfg.webPass;
-    if (systemCfg.fwEnabled)
-    {
-        doc[fwEnabledKey] = checked;
-    }
-    doc[fwIpKey] = systemCfg.fwIp; //.toString();
-
-    serializeJson(doc, result);
-    serverWeb.sendHeader(respHeaderName, result);
 }
 
 void handleNetwork()
@@ -1786,6 +1754,24 @@ void handleTools()
     // doc[hwUartSelIsKey] = vars.hwUartSelIs;
     // doc["hostname"]     = systemCfg.hostname;
     // doc["refreshLogs"]  = systemCfg.refreshLogs;
+
+    // handle security stuff
+    if (systemCfg.disableWeb)
+    {
+        doc[disableWebKey] = checked;
+    }
+
+    if (systemCfg.webAuth)
+    {
+        doc[webAuthKey] = checked;
+    }
+    doc[webUserKey] = (String)systemCfg.webUser;
+    doc[webPassKey] = (String)systemCfg.webPass;
+    if (systemCfg.fwEnabled)
+    {
+        doc[fwEnabledKey] = checked;
+    }
+    doc[fwIpKey] = systemCfg.fwIp;
 
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);

@@ -31,7 +31,6 @@ const pages = {
 		// API_PAGE_ETHERNET: { num: 2, str: "/ethernet" },
 	API_PAGE_NETWORK: { num: 2, str: "/network" },
 	API_PAGE_ZIGBEE: { num: 3, str: "/zigbee" },
-	API_PAGE_SECURITY: { num: 4, str: "/security" },
 	API_PAGE_TOOLS: { num: 5, str: "/tools" },
 	API_PAGE_ABOUT: { num: 6, str: "/about" },
 	API_PAGE_MQTT: { num: 7, str: "/mqtt" }
@@ -382,18 +381,15 @@ function loadPage(url) {
 				generateConfig("z2m");
 			});
 			break;
-		case api.pages.API_PAGE_SECURITY.str:
-			apiGetPage(api.pages.API_PAGE_SECURITY, () => {
+		case api.pages.API_PAGE_TOOLS.str:
+			apiGetPage(api.pages.API_PAGE_TOOLS, () => {
 				if ($("#webAuth").prop(chck)) {
 					SeqInputDsbl(false);
 				}
 				if ($("#fwEnabled").prop(chck)) {
 					SeqInputDsblFw(false);
 				}
-			});
-			break;
-		case api.pages.API_PAGE_TOOLS.str:
-			apiGetPage(api.pages.API_PAGE_TOOLS, () => {
+
 				$.get(apiLink + api.actions.API_GET_FILELIST, function (data) {
 					fillFileTable(data.files);
 				});
@@ -441,9 +437,6 @@ function localizeTitle(url) {
 			break;
 		case api.pages.API_PAGE_MQTT.str:
 			page_title = i18next.t('l.mq');
-			break;
-		case api.pages.API_PAGE_SECURITY.str:
-			page_title = i18next.t('l.se');
 			break;
 		case api.pages.API_PAGE_TOOLS.str:
 			page_title = i18next.t('l.to');
