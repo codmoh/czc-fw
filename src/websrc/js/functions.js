@@ -32,7 +32,6 @@ const pages = {
 	API_PAGE_NETWORK: { num: 2, str: "/network" },
 	API_PAGE_ZIGBEE: { num: 3, str: "/zigbee" },
 	API_PAGE_TOOLS: { num: 5, str: "/tools" },
-	API_PAGE_ABOUT: { num: 6, str: "/about" },
 	API_PAGE_MQTT: { num: 7, str: "/mqtt" }
 }
 
@@ -402,9 +401,6 @@ function loadPage(url) {
 				});
 			});
 			break;
-		case api.pages.API_PAGE_ABOUT.str:
-			apiGetPage(api.pages.API_PAGE_ABOUT);
-			break;
 		default:
 			apiGetPage(api.pages.API_PAGE_ROOT);
 			break;
@@ -440,9 +436,6 @@ function localizeTitle(url) {
 			break;
 		case api.pages.API_PAGE_TOOLS.str:
 			page_title = i18next.t('l.to');
-			break;
-		case api.pages.API_PAGE_ABOUT.str:
-			page_title = i18next.t('l.ab');
 			break;
 	}
 	$("[data-r2v='pageName']").text(page_title);//update page name

@@ -21,7 +21,6 @@
 // #include "const/hw.h"
 
 #include "webh/html/PAGE_MQTT.html.gz.h"
-#include "webh/html/PAGE_ABOUT.html.gz.h"
 #include "webh/html/PAGE_GENERAL.html.gz.h"
 #include "webh/html/PAGE_LOADER.html.gz.h"
 #include "webh/html/PAGE_ROOT.html.gz.h"
@@ -268,7 +267,6 @@ void initWebServer()
     serverWeb.on("/network", handleLoader);
     serverWeb.on("/ethernet", handleLoader);
     serverWeb.on("/zigbee", handleLoader);
-    serverWeb.on("/about", handleLoader);
     serverWeb.on("/tools", handleLoader);
     serverWeb.on("/mqtt", handleLoader);
     serverWeb.on("/login", []()
@@ -909,10 +907,6 @@ static void apiGetPage()
     case API_PAGE_TOOLS:
         handleTools();
         sendGzip(contTypeTextHtml, PAGE_TOOLS_html_gz, PAGE_TOOLS_html_gz_len);
-        break;
-    case API_PAGE_ABOUT:
-        // handleAbout();
-        sendGzip(contTypeTextHtml, PAGE_ABOUT_html_gz, PAGE_ABOUT_html_gz_len);
         break;
     case API_PAGE_MQTT:
         handleMqtt();

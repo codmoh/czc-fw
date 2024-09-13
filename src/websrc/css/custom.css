@@ -620,25 +620,25 @@ main {
 
 @media (min-width: 768px) {
   .fixed-credits {
-    top: calc(100vh - 62px);
+    top: calc(100vh - 86px);
   }
 }
 
 @media (min-width: 836px) {
   .fixed-credits {
-    top: calc(100vh - 62px);
+    top: calc(100vh - 74px);
   }
 }
 
 @media (min-width: 992px) {
   .fixed-credits {
-    top: calc(100vh - 62px);
+    top: calc(100vh - 91px);
   }
 }
 
 @media (min-width: 1200px) {
   .fixed-credits {
-    top: calc(100vh - 45px);
+    top: calc(100vh - 71px);
   }
 }
 
@@ -651,13 +651,6 @@ a {
   }
 }
 
-.about_icon {
-  width: 1.75em;
-  height: 1.75em;
-  fill: var(--nav-link-color-active);
-  margin-right: 1rem !important;
-}
-
 .navbar-brand span {
   display: inline-block;
   position: relative;
@@ -668,4 +661,11 @@ a {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.icon-links {
+  width: 1.75em;
+  height: 1.75em;
+  fill: var(--nav-link-color-active);
+  margin-right: 10px;
 }
