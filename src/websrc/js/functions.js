@@ -1916,7 +1916,7 @@ function getWifiList() {
 				} else {
 					if (data.wifi.length > 0) {
 						data.wifi.forEach((elem) => {
-							let $row = $("<tr class='ssidSelector' id='" + elem.ssid + "' >").appendTo("#wifiTable");
+							let $row = $("<tr class='ssidSelector cursor-pointer' id='" + elem.ssid + "' >").appendTo("#wifiTable");
 							$("<td>" + elem.ssid + "</td>").appendTo($row);
 							let encryptType = "";
 							switch (elem.secure) {
