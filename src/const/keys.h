@@ -2,6 +2,7 @@
 #ifndef XZG_KEYS_H
 #define XZG_KEYS_H
 
+extern const char *targetKey;
 extern const char *networkConfigKey;
 extern const char *wifiEnblKey;
 extern const char *wifiSsidKey;

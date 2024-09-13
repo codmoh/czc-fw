@@ -34,8 +34,7 @@ const pages = {
 	API_PAGE_SECURITY: { num: 4, str: "/security" },
 	API_PAGE_TOOLS: { num: 5, str: "/tools" },
 	API_PAGE_ABOUT: { num: 6, str: "/about" },
-	API_PAGE_MQTT: { num: 7, str: "/mqtt" },
-	API_PAGE_VPN: { num: 8, str: "/vpn" }
+	API_PAGE_MQTT: { num: 7, str: "/mqtt" }
 }
 
 const commands = {
@@ -329,16 +328,6 @@ function loadPage(url) {
 				}
 			});
 			break;
-		case api.pages.API_PAGE_VPN.str:
-			apiGetPage(api.pages.API_PAGE_VPN, () => {
-				if ($("#wgEnable").prop(chck) == false) {
-					WgInputDsbl(true);
-				}
-				if ($("#hnEnable").prop(chck) == false) {
-					HnInputDsbl(true);
-				}
-			});
-			break;
 		case api.pages.API_PAGE_NETWORK.str:
 			apiGetPage(api.pages.API_PAGE_NETWORK, () => {
 
@@ -378,6 +367,13 @@ function loadPage(url) {
 					WifiDhcpDsbl(true);
 				} else {
 					WifiDhcpDsbl(false);
+				}
+
+				if ($("#wgEnable").prop(chck) == false) {
+					WgInputDsbl(true);
+				}
+				if ($("#hnEnable").prop(chck) == false) {
+					HnInputDsbl(true);
 				}
 			});
 			break;
@@ -446,9 +442,6 @@ function localizeTitle(url) {
 		case api.pages.API_PAGE_MQTT.str:
 			page_title = i18next.t('l.mq');
 			break;
-		case api.pages.API_PAGE_VPN.str:
-			page_title = i18next.t('l.vp');
-			break;
 		case api.pages.API_PAGE_SECURITY.str:
 			page_title = i18next.t('l.se');
 			break;
@@ -480,6 +473,7 @@ function apiGetPage(page, doneCall, loader = true) {
 			$("#pageContent").fadeIn(animDuration);
 
 			$("form.saveParams").on("submit", function (e) {
+				const $target = $(e.currentTarget);
 				e.preventDefault();
 				showWifiCreds();
 				if (this.id === "netCfg") {
@@ -494,20 +488,27 @@ function apiGetPage(page, doneCall, loader = true) {
 					}
 				}
 
-				const btn = $("form.saveParams button[type='submit']");
+				const btn = $target.find("button[type='submit']");
 				$(':disabled').each(function (e) {
 					$(this).removeAttr('disabled');
 				});
 				spiner.appendTo(btn);
 				spiner2.appendTo(btn);
 				btn.prop("disabled", true);
-				const data = $(this).serialize() + "&pageId=" + page.num;//add page num
+				let data = $(this).serialize() + "&pageId=" + page.num;//add page num
+				const target = $target.data('target');
+				if(target) {
+					data += "&target=" + target
+				}
+
 				$.ajax({
 					type: "POST",
 					url: e.currentTarget.action,
 					data: data,
 					success: function () {
-						modalConstructor("saveOk");
+						if(target == "network") {
+							modalConstructor("saveOk");
+						}
 					},
 					error: function () {
 						alert(i18next.t('c.erss'));
