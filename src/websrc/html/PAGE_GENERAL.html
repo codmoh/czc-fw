@@ -127,24 +127,28 @@
             <div class='card'>
                 <div class="card-header fw-bold" data-i18n="p.ge.ntp.desc"></div>
                 <div class="card-body">
-                    <div class='mb-2'>
-                        <label for='timezone' data-i18n="p.ge.ntp.zone"></label>
-                        <select data-r2v="timeZones" id="timeZoneId" class='form-control' name="timeZoneName">
-                        </select>
-                    </div>
-                    <div class='mb-2'>
-                        <label for="ntpServ1"><span data-i18n="p.ge.ntp.server.n"></span> 1</label>
-                        <input data-r2v="ntpServ1" class="form-control" id="ntpServ1" type="text" name="ntpServ1"
-                            pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                            data-i18n="p.ge.ntp.server.ph[placeholder];p.ge.ntp.server.tt[title]" maxlength="50"
-                            required>
-                    </div>
-                    <div class='mb-2'>
-                        <label for="ntpServ2"><span data-i18n="p.ge.ntp.server.n"></span> 2</label>
-                        <input data-r2v="ntpServ2" class="form-control" id="ntpServ2" type="text" name="ntpServ2"
-                            pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                            data-i18n="p.ge.ntp.server.ph[placeholder];p.ge.ntp.server.tt[title]" maxlength="50"
-                            required>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for='timezone' data-i18n="p.ge.ntp.zone"></label>
+                            <select data-r2v="timeZones" id="timeZoneId" class='form-control' name="timeZoneName">
+                            </select>
+                        </div>
+                    </diV>
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="ntpServ1"><span data-i18n="p.ge.ntp.server.n"></span> 1</label>
+                            <input data-r2v="ntpServ1" class="form-control" id="ntpServ1" type="text" name="ntpServ1"
+                                pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                                data-i18n="p.ge.ntp.server.ph[placeholder];p.ge.ntp.server.tt[title]" maxlength="50"
+                                required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="ntpServ2"><span data-i18n="p.ge.ntp.server.n"></span> 2</label>
+                            <input data-r2v="ntpServ2" class="form-control" id="ntpServ2" type="text" name="ntpServ2"
+                                pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                                data-i18n="p.ge.ntp.server.ph[placeholder];p.ge.ntp.server.tt[title]" maxlength="50"
+                                required>
+                        </div>
                     </div>
                 </div>
             </div>
