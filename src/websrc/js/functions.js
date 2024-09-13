@@ -135,9 +135,6 @@ function identifyLed(event, element, led) {
 	const offLed = '💡';
 	const onLed = '⭕';
 	let count = 0;
-	let blinkingText = element.nextElementSibling;
-
-	blinkingText.textContent = i18next.t('p.to.ls');
 
 	function toggleEmoji() {
 		element.innerHTML = element.innerHTML === offLed ? onLed : offLed;
@@ -145,15 +142,13 @@ function identifyLed(event, element, led) {
 
 		if (count < 11) { // Needed changes x 2 + 1
 			setTimeout(toggleEmoji, 500);
+			return
 		}
-		else {
-			element.innerHTML = offLed;
-			blinkingText.textContent = '';
-		}
+
+		element.innerHTML = offLed;
 	}
 
 	$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_LED_ACT + "&act=3&led=" + led, function (data) {
-		blinkingText.textContent = i18next.t('p.to.lb');
 		toggleEmoji();
 	}).fail(function () {
 		alert(i18next.t('c.ercn'));
@@ -233,7 +228,7 @@ advanced:
 	transmit_power: 20`;
 	const ip = window.location.host;
 	const port = $("#port").val();
-	if (ip == "192.168.1.1") $("#apAlert").removeClass(classHide);
+	if (ip == "192.168.1.1") $(".ap-alert").removeClass(classHide);
 	switch (params) {
 		case "zha":
 			result = "socket://" + ip + ":" + port;
