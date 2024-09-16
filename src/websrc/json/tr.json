@@ -49,7 +49,7 @@
         "lfm": "Yerel dosyadan güncelleniyor.",
         "lgds": "En son GitHub sürümü indiriliyor...",
         "prgs": "Güncelleme: %{{per}}",
-        "tt": "XZG YAZILIM GÜNCELLEMESİ",
+        "tt": "CZC YAZILIM GÜNCELLEMESİ",
         "ucr": "Güncelleme tamamlandı! \nYeniden başlatılıyor!",
         "vgds": "GitHub'dan {{ver}} sürümü indiriliyor...",
         "wdm": "Cihaz için bekliyor...",
@@ -176,7 +176,7 @@
     "lo": {
       "btn": "Şarkı söyle",
       "lbl": "Lütfen giriş yapın",
-      "pt": "Giriş - XZG",
+      "pt": "Giriş - CZC",
       "mlo": "Başarıyla çıkış yapıldı",
       "mnl": "Giriş yapmanız gerekiyor",
       "mwc": "Yanlış kimlik bilgileri"
@@ -375,12 +375,12 @@
     },
     "zi": {
       "cfg": {
-        "alarm": "Görünüşe göre XZG erişim noktası modunda çalışıyor (IP 192.168.1.1). \nEthernet veya Wi-Fi'ye bağlandıktan sonra IP adresi değişecektir, bundan sonra yapılandırmanın yeniden oluşturulması gerekir.",
+        "alarm": "Görünüşe göre CZC erişim noktası modunda çalışıyor (IP 192.168.1.1). \nEthernet veya Wi-Fi'ye bağlandıktan sonra IP adresi değişecektir, bundan sonra yapılandırmanın yeniden oluşturulması gerekir.",
         "dp": "INSERT_DEVICE_PATCH_HERE",
         "dzl": "Zigbee LED'i devre dışı bırakılsın mı?",
         "ha": "Ev Asistanı için: \"Ayarlar\" → \"Sistem\" → \"Donanım\" seçeneğine gidin → Sağ üst köşedeki 3 noktalı menüyü seçin → \"Tüm Donanım\" → ttyUSB'ye gidin ve adaptörünüzü bulun → \"/dev/ gibi Cihaz yolunu kopyalayın \nttyUSB0\"",
         "lin": "Linux'ta USB cihazlarını listeleyin: ls /dev/ttyUSB*",
-        "lxzg": "XZG'nin konumu",
+        "lxzg": "CZC'nin konumu",
         "sel": "Şunun için yapılandırma oluştur",
         "sopm": "Çıkış gücünü maksimum 20'ye ayarlayın",
         "ss": "Seri yapılandırma",
@@ -411,9 +411,9 @@
         "m": "Herhangi bir fikriniz, öneriniz varsa veya başka şekillerde yardım etmek istiyorsanız lütfen çekinmeyin: 📬",
         "t": "Geri bildirim"
       },
-      "l1": "XZG Firmware, en iyi yenilikleri bir araya getiriyor",
+      "l1": "CZC Firmware, en iyi yenilikleri bir araya getiriyor",
       "l2": "önceki Zigbee ağ geçidi projelerini tek ve kapsamlı bir çözüme dönüştürüyor.",
-      "l3": "XZG, topluluğun çabalarını tek bir ürünü geliştirmeye odaklayarak geliştirmeyi kolaylaştırmayı ve böylece Zigbee Ağ Geçitlerinizin yeteneklerini ve verimliliğini artırmayı amaçlamaktadır. \n🌍",
+      "l3": "CZC, topluluğun çabalarını tek bir ürünü geliştirmeye odaklayarak geliştirmeyi kolaylaştırmayı ve böylece Zigbee Ağ Geçitlerinizin yeteneklerini ve verimliliğini artırmayı amaçlamaktadır. \n🌍",
       "r": {
         "l": "Bir Sorun Aç",
         "m": "Bir hatayı bildirmek veya bir özellik istemek için lütfen: 🐞",
@@ -425,7 +425,7 @@
       },
       "w": {
         "l": "Resmi Wiki",
-        "m": "XZG ürün yazılımı projesi hakkında daha fazla bilgi edinmek için şu adresimizi ziyaret edin: 📘",
+        "m": "CZC ürün yazılımı projesi hakkında daha fazla bilgi edinmek için şu adresimizi ziyaret edin: 📘",
         "t": "Viki"
       }
     }
