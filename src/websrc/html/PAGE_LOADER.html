@@ -133,8 +133,8 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="/zigbee">
-                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#activity" />
+                                    <svg class="small-icon" fill="currentColor" viewBox="0 0 16 16">
+                                        <use xlink:href="icons.svg#zigbee" />
                                     </svg>
                                     <span class='ms-1 d-inline' data-i18n="l.zi"></span>
                                 </a>
@@ -148,22 +148,6 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="/vpn">
-                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#vpn" />
-                                    </svg>
-                                    <span class='ms-1 d-inline' data-i18n="l.vp"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="/security">
-                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#lock" />
-                                    </svg>
-                                    <span class='ms-1 d-inline' data-i18n="l.se"></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2" href="/tools">
                                     <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
                                         <use xlink:href="icons.svg#cpu" />
@@ -171,31 +155,26 @@
                                     <span class='ms-1 d-inline' data-i18n="l.to"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="/about">
-                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">
-                                        <use xlink:href="icons.svg#info-square" />
-                                    </svg>
-                                    <span class='ms-1 d-inline' data-i18n="l.ab"></span>
-                                </a>
-                            </li>
-<!--                            <li class="nav-item">-->
-<!--                                <a class="nav-link d-flex align-items-center gap-2" href="/logout">-->
-<!--                                    <svg width="25" height="25" fill="currentColor" viewBox="0 0 16 16">-->
-<!--                                        <use xlink:href="icons.svg#door-open" />-->
-<!--                                    </svg>-->
-<!--                                    <span class='ms-1 d-inline' data-i18n="l.lo"></span>-->
-<!--                                </a>-->
-<!--                            </li>-->
                             <li class="nav-item d-flex justify-content-center">
-                                <select class="form-select rounded-pill lang_select" id="langSel" aria-label="Language"></select>
+                                <select class="form-select rounded-pill lang_select text-white" id="langSel" aria-label="Language"></select>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="fixed-credits d-none d-md-block">
+                    <div class="mb-2">
+                        <a target="_blank" href="https://docs.codm.de/zigbee/coordinator/" data-i18n="cl.d[title]">
+                            <svg class="icon-links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                        </a>
+                        <a target="_blank" href="https://github.com/codm/czc-firmware" data-i18n="cl.g[title]">
+                            <svg class="icon-links" viewBox="0 0 16 16"><use xlink:href="icons.svg#github"></use></svg>
+                        </a>
+                        <a target="_blank" href="https://www.codm.de/kontakt" data-i18n="cl.c[title]">
+                            <svg class="icon-links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M215.4 96L144 96l-36.2 0L96 96l0 8.8L96 144l0 40.4 0 89L.2 202.5c1.6-18.1 10.9-34.9 25.7-45.8L48 140.3 48 96c0-26.5 21.5-48 48-48l76.6 0 49.9-36.9C232.2 3.9 243.9 0 256 0s23.8 3.9 33.5 11L339.4 48 416 48c26.5 0 48 21.5 48 48l0 44.3 22.1 16.4c14.8 10.9 24.1 27.7 25.7 45.8L416 273.4l0-89 0-40.4 0-39.2 0-8.8-11.8 0L368 96l-71.4 0-81.3 0zM0 448L0 242.1 217.6 403.3c11.1 8.2 24.6 12.7 38.4 12.7s27.3-4.4 38.4-12.7L512 242.1 512 448s0 0 0 0c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64c0 0 0 0 0 0zM176 160l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                        </a>
+                    </div>
                     <span data-i18n="c.proj"></span> <a href="https://www.codm.de/"
-                        target="_blank">cod.m Gmbh</a> © 2024 <br> <span data-i18n="c.projb"></span> <a href="https://github.com/xyzroe/xzg"
+                        target="_blank">cod.m GmbH</a> © 2024 <br> <span data-i18n="c.projb"></span> <a href="https://github.com/xyzroe/xzg"
                     target="_blank">xzg-fw</a>
                 </div>
             </div>

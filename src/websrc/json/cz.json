@@ -8,7 +8,7 @@
     "vp": "VPN",
     "se": "Zabezpečení",
     "to": "Nástroje",
-    "ab": "O XZG",
+    "ab": "O CZC",
     "lo": "Odhlásit se"
   },
   "p": {
@@ -150,9 +150,9 @@
       "cfg": {
         "tt": "Generátor konfigurace",
         "sel": "Vygenerovat pro",
-        "alarm": "Zdá se, že XZG je v režimu přístupového bodu (IP 192.168.1.1). IP adresa se změní po připojení k ethernetu nebo Wi-Fi, poté je třeba znovu vygenerovat konfiguraci.",
+        "alarm": "Zdá se, že CZC je v režimu přístupového bodu (IP 192.168.1.1). IP adresa se změní po připojení k ethernetu nebo Wi-Fi, poté je třeba znovu vygenerovat konfiguraci.",
         "ss": "Sériová linka",
-        "lxzg": "Umístění XZG",
+        "lxzg": "Umístění CZC",
         "dzl": "Zakázat Zigbee led?",
         "sopm": "Nastavit výstupní výkon na max 20",
         "ha": "Pro Home Assistant: Přejděte na \"Nastavení\"→\"Systém\"→\"Hardware\"→V pravém horním rohu vyberte nabídku se třemi tečkami→\"Veškerý hardware\"→Přejděte na ttyUSB a najděte svůj adaptér→Kopírovat cestu zařízení jako \"/dev/ttyUSB0\"",
@@ -278,7 +278,7 @@
       "eznr": "Vymazat NVRAM"
     },
     "lo": {
-      "pt": "Přihlášení - XZG",
+      "pt": "Přihlášení - CZC",
       "lbl": "Prosím přihlaste se",
       "btn": "Přihlásit se",
       "mnl": "Je potřeba se přihlásit",
@@ -286,12 +286,12 @@
       "mlo": "Úspěšné odhlášení"
     },
     "ab": {
-      "l1": "Firmware XZG sjednocuje nejlepší inovace z oblasti",
+      "l1": "Firmware CZC sjednocuje nejlepší inovace z oblasti",
       "l2": "předchozích projektů bran Zigbee do jediného komplexního řešení.",
-      "l3": "Zaměřením úsilí komunity na vylepšení jednoho produktu se XZG snaží zefektivnit vývoj a tím zlepšit schopnosti a efektivitu vašich bran Zigbee. 🌍",
+      "l3": "Zaměřením úsilí komunity na vylepšení jednoho produktu se CZC snaží zefektivnit vývoj a tím zlepšit schopnosti a efektivitu vašich bran Zigbee. 🌍",
       "w": {
         "t": "Wiki",
-        "m": "Chcete-li se dozvědět více o projektu firmwaru XZG, navštivte naše: 📘",
+        "m": "Chcete-li se dozvědět více o projektu firmwaru CZC, navštivte naše: 📘",
         "l": "Oficiální Wiki"
       },
       "f": {
@@ -369,7 +369,7 @@
         "msg": "Tímto se vymažou VŠECHNA nastavení."
       },
       "fu": {
-        "tt": "AKTUALIZACE FIRMWARU XZG",
+        "tt": "AKTUALIZACE FIRMWARU CZC",
         "lfm": "Aktualizace z místního souboru.",
         "gvm": "Aktualizace na {{ver}} vydání z GitHubu.",
         "glm": "Aktualizovat na nejnovější verzi z GitHubu.",

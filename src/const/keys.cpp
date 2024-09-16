@@ -1,5 +1,7 @@
 #include "const/keys.h"
 
+const char *targetKey = "target";
+
 const char *networkConfigKey = "network-config";
 const char *wifiEnblKey = "wifiEnbl";
 const char *wifiSsidKey = "wifiSsid";

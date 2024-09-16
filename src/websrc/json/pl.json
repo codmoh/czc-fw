@@ -49,7 +49,7 @@
         "lfm": "Aktualizacja z pliku lokalnego.",
         "lgds": "Pobieram najnowszą wersję GitHub...",
         "prgs": "Aktualizacja: {{per}}%",
-        "tt": "AKTUALIZACJA OPROGRAMOWANIA XZG",
+        "tt": "AKTUALIZACJA OPROGRAMOWANIA CZC",
         "ucr": "Aktualizacja zakończona! \nPonowne uruchamianie!",
         "vgds": "Pobieram wersję {{ver}} z GitHub...",
         "wdm": "Oczekiwanie na urządzenie...",
@@ -176,7 +176,7 @@
     "lo": {
       "btn": "Witać śpiewem",
       "lbl": "proszę, zaloguj się",
-      "pt": "Zaloguj się - XZG",
+      "pt": "Zaloguj się - CZC",
       "mlo": "Wylogowanie zakończone sukcesem",
       "mnl": "Musisz się zalogować",
       "mwc": "Błędne dane uwierzytelniające"
@@ -375,12 +375,12 @@
     },
     "zi": {
       "cfg": {
-        "alarm": "Wygląda na to, że XZG działa w trybie punktu dostępowego (IP 192.168.1.1). \nAdres IP zmieni się po podłączeniu do sieci Ethernet lub Wi-Fi, po czym należy ponownie wygenerować konfigurację.",
+        "alarm": "Wygląda na to, że CZC działa w trybie punktu dostępowego (IP 192.168.1.1). \nAdres IP zmieni się po podłączeniu do sieci Ethernet lub Wi-Fi, po czym należy ponownie wygenerować konfigurację.",
         "dp": "INSERT_DEVICE_PATCH_HERE",
         "dzl": "Wyłączyć diodę Zigbee?",
         "ha": "W przypadku Home Assistant: Przejdź do „Ustawienia” → „System” → „Sprzęt” → Wybierz menu z trzema kropkami w prawym górnym rogu → „Cały sprzęt” → Przewiń do ttyUSB i znajdź swój adapter → Skopiuj ścieżkę urządzenia, np. „/dev/ \nttyUSB0\"",
         "lin": "Lista urządzeń USB w systemie Linux: ls /dev/ttyUSB*",
-        "lxzg": "Lokalizacja XZG",
+        "lxzg": "Lokalizacja CZC",
         "sel": "Wygeneruj konfigurację dla",
         "sopm": "Ustaw moc wyjściową na maksymalnie 20",
         "ss": "Konfiguracja szeregowa",
@@ -411,9 +411,9 @@
         "m": "Jeśli masz jakieś pomysły, sugestie lub chcesz pomóc w inny sposób, nie wahaj się: 📬",
         "t": "Informacja zwrotna"
       },
-      "l1": "XZG Firmware łączy najlepsze innowacje z",
+      "l1": "CZC Firmware łączy najlepsze innowacje z",
       "l2": "poprzednie projekty bramek Zigbee w jedno, kompleksowe rozwiązanie.",
-      "l3": "Koncentrując wysiłki społeczności na udoskonalaniu jednego produktu, XZG ma na celu usprawnienie rozwoju, poprawiając w ten sposób możliwości i wydajność bramek Zigbee. \n🌍",
+      "l3": "Koncentrując wysiłki społeczności na udoskonalaniu jednego produktu, CZC ma na celu usprawnienie rozwoju, poprawiając w ten sposób możliwości i wydajność bramek Zigbee. \n🌍",
       "r": {
         "l": "Otwórz problem",
         "m": "Aby zgłosić błąd lub poprosić o funkcję, prosimy: 🐞",
@@ -425,7 +425,7 @@
       },
       "w": {
         "l": "Oficjalna Wiki",
-        "m": "Aby dowiedzieć się więcej o projekcie oprogramowania sprzętowego XZG, odwiedź naszą stronę: 📘",
+        "m": "Aby dowiedzieć się więcej o projekcie oprogramowania sprzętowego CZC, odwiedź naszą stronę: 📘",
         "t": "Wiki"
       }
     }

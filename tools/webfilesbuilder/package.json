@@ -1,5 +1,5 @@
 {
-  "description": "Combine, minify all css, html and js files into single and gzip them for the XZG project",
+  "description": "Combine, minify all css, html and js files into single and gzip them for the CZC project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp"

@@ -364,7 +364,6 @@ enum API_PAGE_t : uint8_t
     API_PAGE_TOOLS,
     API_PAGE_ABOUT,
     API_PAGE_MQTT,
-    API_PAGE_VPN
 };
 */
 
@@ -464,100 +463,173 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
         break;
         case API_PAGE_NETWORK:
         {
-            configNet.ethEnable = serverWeb.hasArg(ethEnblKey) == true;
-
-            configNet.ethDhcp = serverWeb.hasArg(ethDhcpKey) == true;
-
-            if (serverWeb.hasArg(ethIpKey))
+            if (serverWeb.arg(targetKey) == "network")
             {
-                configNet.ethIp.fromString(serverWeb.arg(ethIpKey));
-            }
+                configNet.ethEnable = serverWeb.hasArg(ethEnblKey) == true;
 
-            if (serverWeb.hasArg(ethMaskKey))
-            {
-                configNet.ethMask.fromString(serverWeb.arg(ethMaskKey));
-            }
+                configNet.ethDhcp = serverWeb.hasArg(ethDhcpKey) == true;
 
-            if (serverWeb.hasArg(ethGateKey))
-            {
-                configNet.ethGate.fromString(serverWeb.arg(ethGateKey));
-            }
-
-            if (serverWeb.hasArg(ethDns1Key))
-            {
-                configNet.ethDns1.fromString(serverWeb.arg(ethDns1Key));
-            }
-
-            if (serverWeb.hasArg(ethDns2Key))
-            {
-                configNet.ethDns2.fromString(serverWeb.arg(ethDns2Key));
-            }
-
-            configNet.wifiEnable = serverWeb.hasArg(wifiEnblKey) == true;
-
-            configNet.wifiDhcp = serverWeb.hasArg(wifiDhcpKey) == true;
-
-            if (serverWeb.hasArg(wifiModeKey))
-            {
-                configNet.wifiMode = serverWeb.arg(wifiModeKey).toInt();
-            }
-            if (serverWeb.hasArg(wifiPwrKey))
-            {
-                const uint8_t pwr = serverWeb.arg(wifiPwrKey).toInt();
-                configNet.wifiPower = static_cast<wifi_power_t>(pwr);
-            }
-
-            if (serverWeb.arg(wifiSsidKey))
-            {
-                strncpy(configNet.wifiSsid, serverWeb.arg(wifiSsidKey).c_str(), sizeof(configNet.wifiSsid) - 1);
-                configNet.wifiSsid[sizeof(configNet.wifiSsid) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            if (serverWeb.arg(wifiPassKey))
-            {
-                strncpy(configNet.wifiPass, serverWeb.arg(wifiPassKey).c_str(), sizeof(configNet.wifiPass) - 1);
-                configNet.wifiPass[sizeof(configNet.wifiPass) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            if (serverWeb.hasArg(wifiIpKey))
-            {
-                configNet.wifiIp.fromString(serverWeb.arg(wifiIpKey));
-            }
-
-            if (serverWeb.hasArg(wifiMaskKey))
-            {
-                configNet.wifiMask.fromString(serverWeb.arg(wifiMaskKey));
-            }
-
-            if (serverWeb.hasArg(wifiGateKey))
-            {
-                configNet.wifiGate.fromString(serverWeb.arg(wifiGateKey));
-            }
-
-            if (serverWeb.hasArg(wifiDns1Key))
-            {
-                configNet.wifiDns1.fromString(serverWeb.arg(wifiDns1Key));
-            }
-
-            if (serverWeb.hasArg(wifiDns2Key))
-            {
-                configNet.wifiDns2.fromString(serverWeb.arg(wifiDns2Key));
-            }
-
-            saveNetworkConfig(configNet);
-
-            if (configNet.wifiEnable)
-            {
-                WiFi.persistent(false);
-                if (vars.apStarted)
+                if (serverWeb.hasArg(ethIpKey))
                 {
-                    WiFi.mode(WIFI_AP_STA);
+                    configNet.ethIp.fromString(serverWeb.arg(ethIpKey));
                 }
-                else
+
+                if (serverWeb.hasArg(ethMaskKey))
                 {
-                    WiFi.mode(WIFI_STA);
+                    configNet.ethMask.fromString(serverWeb.arg(ethMaskKey));
                 }
-                WiFi.begin(configNet.wifiSsid, configNet.wifiPass);
+
+                if (serverWeb.hasArg(ethGateKey))
+                {
+                    configNet.ethGate.fromString(serverWeb.arg(ethGateKey));
+                }
+
+                if (serverWeb.hasArg(ethDns1Key))
+                {
+                    configNet.ethDns1.fromString(serverWeb.arg(ethDns1Key));
+                }
+
+                if (serverWeb.hasArg(ethDns2Key))
+                {
+                    configNet.ethDns2.fromString(serverWeb.arg(ethDns2Key));
+                }
+
+                configNet.wifiEnable = serverWeb.hasArg(wifiEnblKey) == true;
+
+                configNet.wifiDhcp = serverWeb.hasArg(wifiDhcpKey) == true;
+
+                if (serverWeb.hasArg(wifiModeKey))
+                {
+                    configNet.wifiMode = serverWeb.arg(wifiModeKey).toInt();
+                }
+                if (serverWeb.hasArg(wifiPwrKey))
+                {
+                    const uint8_t pwr = serverWeb.arg(wifiPwrKey).toInt();
+                    configNet.wifiPower = static_cast<wifi_power_t>(pwr);
+                }
+
+                if (serverWeb.arg(wifiSsidKey))
+                {
+                    strncpy(configNet.wifiSsid, serverWeb.arg(wifiSsidKey).c_str(), sizeof(configNet.wifiSsid) - 1);
+                    configNet.wifiSsid[sizeof(configNet.wifiSsid) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                if (serverWeb.arg(wifiPassKey))
+                {
+                    strncpy(configNet.wifiPass, serverWeb.arg(wifiPassKey).c_str(), sizeof(configNet.wifiPass) - 1);
+                    configNet.wifiPass[sizeof(configNet.wifiPass) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                if (serverWeb.hasArg(wifiIpKey))
+                {
+                    configNet.wifiIp.fromString(serverWeb.arg(wifiIpKey));
+                }
+
+                if (serverWeb.hasArg(wifiMaskKey))
+                {
+                    configNet.wifiMask.fromString(serverWeb.arg(wifiMaskKey));
+                }
+
+                if (serverWeb.hasArg(wifiGateKey))
+                {
+                    configNet.wifiGate.fromString(serverWeb.arg(wifiGateKey));
+                }
+
+                if (serverWeb.hasArg(wifiDns1Key))
+                {
+                    configNet.wifiDns1.fromString(serverWeb.arg(wifiDns1Key));
+                }
+
+                if (serverWeb.hasArg(wifiDns2Key))
+                {
+                    configNet.wifiDns2.fromString(serverWeb.arg(wifiDns2Key));
+                }
+
+                saveNetworkConfig(configNet);
+
+                if (configNet.wifiEnable)
+                {
+                    WiFi.persistent(false);
+                    if (vars.apStarted)
+                    {
+                        WiFi.mode(WIFI_AP_STA);
+                    }
+                    else
+                    {
+                        WiFi.mode(WIFI_STA);
+                    }
+                    WiFi.begin(configNet.wifiSsid, configNet.wifiPass);
+                }
+            } else {
+                configVpn.wgEnable = serverWeb.hasArg(wgEnableKey) == true;
+                if (serverWeb.hasArg(wgLocalIPKey))
+                {
+                    configVpn.wgLocalIP.fromString(serverWeb.arg(wgLocalIPKey));
+                }
+                if (serverWeb.hasArg(wgLocalSubnetKey))
+                {
+                    configVpn.wgLocalSubnet.fromString(serverWeb.arg(wgLocalSubnetKey));
+                }
+                if (serverWeb.hasArg(wgLocalPortKey))
+                {
+                    configVpn.wgLocalPort = serverWeb.arg(wgLocalPortKey).toInt();
+                }
+                if (serverWeb.hasArg(wgLocalGatewayKey))
+                {
+                    configVpn.wgLocalGateway.fromString(serverWeb.arg(wgLocalGatewayKey));
+                }
+                if (serverWeb.hasArg(wgLocalPrivKeyKey))
+                {
+                    strncpy(configVpn.wgLocalPrivKey, serverWeb.arg(wgLocalPrivKeyKey).c_str(), sizeof(configVpn.wgLocalPrivKey) - 1);
+                    configVpn.wgLocalPrivKey[sizeof(configVpn.wgLocalPrivKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndAddrKey))
+                {
+                    strncpy(configVpn.wgEndAddr, serverWeb.arg(wgEndAddrKey).c_str(), sizeof(configVpn.wgEndAddr) - 1);
+                    configVpn.wgEndAddr[sizeof(configVpn.wgEndAddr) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndPubKeyKey))
+                {
+                    strncpy(configVpn.wgEndPubKey, serverWeb.arg(wgEndPubKeyKey).c_str(), sizeof(configVpn.wgEndPubKey) - 1);
+                    configVpn.wgEndPubKey[sizeof(configVpn.wgEndPubKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndPortKey))
+                {
+                    configVpn.wgEndPort = serverWeb.arg(wgEndPortKey).toInt();
+                }
+                if (serverWeb.hasArg(wgAllowedIPKey))
+                {
+                    configVpn.wgAllowedIP.fromString(serverWeb.arg(wgAllowedIPKey));
+                }
+                if (serverWeb.hasArg(wgAllowedMaskKey))
+                {
+                    configVpn.wgAllowedMask.fromString(serverWeb.arg(wgAllowedMaskKey));
+                }
+                configVpn.wgMakeDefault = serverWeb.hasArg(wgMakeDefaultKey) == true;
+                if (serverWeb.hasArg(wgPreSharedKeyKey))
+                {
+                    strncpy(configVpn.wgPreSharedKey, serverWeb.arg(wgPreSharedKeyKey).c_str(), sizeof(configVpn.wgPreSharedKey) - 1);
+                    configVpn.wgPreSharedKey[sizeof(configVpn.wgPreSharedKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                configVpn.hnEnable = serverWeb.hasArg(hnEnableKey) == true;
+                if (serverWeb.hasArg(hnJoinCodeKey))
+                {
+                    strncpy(configVpn.hnJoinCode, serverWeb.arg(hnJoinCodeKey).c_str(), sizeof(configVpn.hnJoinCode) - 1);
+                    configVpn.hnJoinCode[sizeof(configVpn.hnJoinCode) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(hnHostNameKey))
+                {
+                    strncpy(configVpn.hnHostName, serverWeb.arg(hnHostNameKey).c_str(), sizeof(configVpn.hnHostName) - 1);
+                    configVpn.hnHostName[sizeof(configVpn.hnHostName) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(hnDashUrlKey))
+                {
+                    strncpy(configVpn.hnDashUrl, serverWeb.arg(hnDashUrlKey).c_str(), sizeof(configVpn.hnDashUrl) - 1);
+                    configVpn.hnDashUrl[sizeof(configVpn.hnDashUrl) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                saveVpnConfig(configVpn);
             }
         }
         break;
@@ -586,7 +658,7 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             saveSystemConfig(configSys);
         }
         break;
-        case API_PAGE_SECURITY:
+        case API_PAGE_TOOLS:
         {
             configSys.disableWeb = serverWeb.hasArg(disableWebKey) == true;
 
@@ -669,79 +741,6 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             configMqtt.discovery = serverWeb.hasArg(MqttDiscoveryKey) == true;
 
             saveMqttConfig(configMqtt);
-        }
-        break;
-        case API_PAGE_VPN:
-        {
-            configVpn.wgEnable = serverWeb.hasArg(wgEnableKey) == true;
-            if (serverWeb.hasArg(wgLocalIPKey))
-            {
-                configVpn.wgLocalIP.fromString(serverWeb.arg(wgLocalIPKey));
-            }
-            if (serverWeb.hasArg(wgLocalSubnetKey))
-            {
-                configVpn.wgLocalSubnet.fromString(serverWeb.arg(wgLocalSubnetKey));
-            }
-            if (serverWeb.hasArg(wgLocalPortKey))
-            {
-                configVpn.wgLocalPort = serverWeb.arg(wgLocalPortKey).toInt();
-            }
-            if (serverWeb.hasArg(wgLocalGatewayKey))
-            {
-                configVpn.wgLocalGateway.fromString(serverWeb.arg(wgLocalGatewayKey));
-            }
-            if (serverWeb.hasArg(wgLocalPrivKeyKey))
-            {
-                strncpy(configVpn.wgLocalPrivKey, serverWeb.arg(wgLocalPrivKeyKey).c_str(), sizeof(configVpn.wgLocalPrivKey) - 1);
-                configVpn.wgLocalPrivKey[sizeof(configVpn.wgLocalPrivKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndAddrKey))
-            {
-                strncpy(configVpn.wgEndAddr, serverWeb.arg(wgEndAddrKey).c_str(), sizeof(configVpn.wgEndAddr) - 1);
-                configVpn.wgEndAddr[sizeof(configVpn.wgEndAddr) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndPubKeyKey))
-            {
-                strncpy(configVpn.wgEndPubKey, serverWeb.arg(wgEndPubKeyKey).c_str(), sizeof(configVpn.wgEndPubKey) - 1);
-                configVpn.wgEndPubKey[sizeof(configVpn.wgEndPubKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndPortKey))
-            {
-                configVpn.wgEndPort = serverWeb.arg(wgEndPortKey).toInt();
-            }
-            if (serverWeb.hasArg(wgAllowedIPKey))
-            {
-                configVpn.wgAllowedIP.fromString(serverWeb.arg(wgAllowedIPKey));
-            }
-            if (serverWeb.hasArg(wgAllowedMaskKey))
-            {
-                configVpn.wgAllowedMask.fromString(serverWeb.arg(wgAllowedMaskKey));
-            }
-            configVpn.wgMakeDefault = serverWeb.hasArg(wgMakeDefaultKey) == true;
-            if (serverWeb.hasArg(wgPreSharedKeyKey))
-            {
-                strncpy(configVpn.wgPreSharedKey, serverWeb.arg(wgPreSharedKeyKey).c_str(), sizeof(configVpn.wgPreSharedKey) - 1);
-                configVpn.wgPreSharedKey[sizeof(configVpn.wgPreSharedKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            configVpn.hnEnable = serverWeb.hasArg(hnEnableKey) == true;
-            if (serverWeb.hasArg(hnJoinCodeKey))
-            {
-                strncpy(configVpn.hnJoinCode, serverWeb.arg(hnJoinCodeKey).c_str(), sizeof(configVpn.hnJoinCode) - 1);
-                configVpn.hnJoinCode[sizeof(configVpn.hnJoinCode) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(hnHostNameKey))
-            {
-                strncpy(configVpn.hnHostName, serverWeb.arg(hnHostNameKey).c_str(), sizeof(configVpn.hnHostName) - 1);
-                configVpn.hnHostName[sizeof(configVpn.hnHostName) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(hnDashUrlKey))
-            {
-                strncpy(configVpn.hnDashUrl, serverWeb.arg(hnDashUrlKey).c_str(), sizeof(configVpn.hnDashUrl) - 1);
-                configVpn.hnDashUrl[sizeof(configVpn.hnDashUrl) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            saveVpnConfig(configVpn);
         }
         break;
         }

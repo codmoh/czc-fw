@@ -7,7 +7,7 @@
     "mq": "MQTT",
     "vp": "VPN",
     "se": "Security",
-    "to": "Tools",
+    "to": "System",
     "ab": "About",
     "lo": "Logout"
   },
@@ -155,9 +155,9 @@
       "cfg": {
         "tt": "Configuration generator",
         "sel": "Generate for",
-        "alarm": "XZG is operating in access point mode (IP 192.168.1.1). The IP address will change after connecting to Ethernet or Wi-Fi, after which you will need to regenerate the configuration.",
+        "alarm": "CZC is operating in access point mode (IP 192.168.1.1). The IP address will change after connecting to Ethernet or Wi-Fi, after which you will need to regenerate the configuration.",
         "ss": "Serial settings",
-        "lxzg": "Location of XZG",
+        "lxzg": "Location of CZC",
         "dzl": "Disable Zigbee led?",
         "sopm": "Set output power to max 20",
         "ha": "For Home Assistant: Go to \"Settings\"→\"System\"→\"Hardware\"→Select the 3 dot menu in the upper right corner→\"All Hardware\"→Scroll to ttyUSB and find your adapter→Copy Device path like \"/dev/ttyUSB0\"",
@@ -283,7 +283,7 @@
       "eznr": "Erase NVRAM"
     },
     "lo": {
-      "pt": "Login - XZG",
+      "pt": "Login - CZC",
       "lbl": "Please sign in",
       "btn": "Sign in",
       "mnl": "Need to login",
@@ -291,12 +291,12 @@
       "mlo": "Logged out success"
     },
     "ab": {
-      "l1": "XZG Firmware unifies the best innovations from",
+      "l1": "CZC Firmware unifies the best innovations from",
       "l2": "previous Zigbee gateway projects into a single, comprehensive solution.",
-      "l3": "By focusing the community's efforts on enhancing one product, XZG aims to streamline development, thereby improving the capabilities and efficiency of your Zigbee Gateways. 🌍",
+      "l3": "By focusing the community's efforts on enhancing one product, CZC aims to streamline development, thereby improving the capabilities and efficiency of your Zigbee Gateways. 🌍",
       "w": {
         "t": "Wiki",
-        "m": "To learn more about the XZG firmware project, visit our: 📘",
+        "m": "To learn more about the CZC firmware project, visit our: 📘",
         "l": "Official Wiki"
       },
       "f": {
@@ -375,7 +375,7 @@
         "msg": "This will erase ALL settings."
       },
       "fu": {
-        "tt": "XZG FIRMWARE UPDATE",
+        "tt": "CZC FIRMWARE UPDATE",
         "lfm": "Updating from local file.",
         "gvm": "Updating to {{ver}} GitHub release.",
         "glm": "Updating to latest GitHub release.",
@@ -457,5 +457,10 @@
         "tt": "New Zigbee firmware found 🌟"
       }
     }
+  },
+  "cl": {
+    "d": "Documentation",
+    "g": "Github",
+    "c": "Contact"
   }
 }

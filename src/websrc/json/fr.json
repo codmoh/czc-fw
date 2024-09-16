@@ -49,7 +49,7 @@
         "lfm": "Mise à jour à partir d'un fichier local.",
         "lgds": "Téléchargement de la dernière version de GitHub...",
         "prgs": "Mise à jour : {{per}} %",
-        "tt": "MISE À JOUR DU MICROLOGDCIEL XZG",
+        "tt": "MISE À JOUR DU MICROLOGDCIEL CZC",
         "ucr": "Mise à jour terminée! \nRedémarrage !",
         "vgds": "Téléchargement de la version {{ver}} depuis GitHub...",
         "wdm": "En attente de l'appareil...",
@@ -176,7 +176,7 @@
     "lo": {
       "btn": "Chantez",
       "lbl": "Veuillez vous connecter",
-      "pt": "Connexion - XZG",
+      "pt": "Connexion - CZC",
       "mlo": "Déconnexion réussie",
       "mnl": "Besoin de se connecter",
       "mwc": "Mauvaises informations d'identification"
@@ -375,12 +375,12 @@
     },
     "zi": {
       "cfg": {
-        "alarm": "Il semble que XZG fonctionne en mode point d'accès (IP 192.168.1.1). \nL'adresse IP changera après la connexion à Ethernet ou au Wi-Fi, après quoi la configuration devra être à nouveau générée.",
+        "alarm": "Il semble que CZC fonctionne en mode point d'accès (IP 192.168.1.1). \nL'adresse IP changera après la connexion à Ethernet ou au Wi-Fi, après quoi la configuration devra être à nouveau générée.",
         "dp": "INSERT_DEVICE_PATCH_HERE",
         "dzl": "Désactiver la LED Zigbee ?",
         "ha": "Pour Home Assistant : allez dans \"Paramètres\" → \"Système\" → \"Matériel\" → Sélectionnez le menu à 3 points dans le coin supérieur droit → \"Tout le matériel\" → Faites défiler jusqu'à ttyUSB et trouvez votre adaptateur → Copiez le chemin du périphérique comme \"/dev/ \nttyUSB0\"",
         "lin": "Liste des périphériques USB sous Linux : ls /dev/ttyUSB*",
-        "lxzg": "Localisation de XZG",
+        "lxzg": "Localisation de CZC",
         "sel": "Générer une configuration pour",
         "sopm": "Réglez la puissance de sortie sur 20 maximum",
         "ss": "Configuration série",
@@ -411,9 +411,9 @@
         "m": "Si vous avez des idées, des suggestions ou souhaitez aider d'une autre manière, n'hésitez pas à : 📬",
         "t": "Retour"
       },
-      "l1": "Le micrologiciel XZG unifie les meilleures innovations de",
+      "l1": "Le micrologiciel CZC unifie les meilleures innovations de",
       "l2": "les précédents projets de passerelle Zigbee en une solution unique et complète.",
-      "l3": "En concentrant les efforts de la communauté sur l'amélioration d'un produit, XZG vise à rationaliser le développement, améliorant ainsi les capacités et l'efficacité de vos passerelles Zigbee. \n🌍",
+      "l3": "En concentrant les efforts de la communauté sur l'amélioration d'un produit, CZC vise à rationaliser le développement, améliorant ainsi les capacités et l'efficacité de vos passerelles Zigbee. \n🌍",
       "r": {
         "l": "Ouvrir un problème",
         "m": "Pour signaler un bug ou demander une fonctionnalité, veuillez : 🐞",
@@ -425,7 +425,7 @@
       },
       "w": {
         "l": "Wiki officiel",
-        "m": "Pour en savoir plus sur le projet de firmware XZG, visitez notre : 📘",
+        "m": "Pour en savoir plus sur le projet de firmware CZC, visitez notre : 📘",
         "t": "Wikia"
       }
     }

@@ -20,13 +20,10 @@
 #include "const/keys.h"
 // #include "const/hw.h"
 
-#include "webh/html/PAGE_VPN.html.gz.h"
 #include "webh/html/PAGE_MQTT.html.gz.h"
-#include "webh/html/PAGE_ABOUT.html.gz.h"
 #include "webh/html/PAGE_GENERAL.html.gz.h"
 #include "webh/html/PAGE_LOADER.html.gz.h"
 #include "webh/html/PAGE_ROOT.html.gz.h"
-#include "webh/html/PAGE_SECURITY.html.gz.h"
 #include "webh/html/PAGE_ZIGBEE.html.gz.h"
 #include "webh/html/PAGE_TOOLS.html.gz.h"
 #include "webh/html/PAGE_NETWORK.html.gz.h"
@@ -267,14 +264,11 @@ void initWebServer()
     serverWeb.on("/", handleLoader);
     serverWeb.on("/generate_204", handleLoader);
     serverWeb.on("/general", handleLoader);
-    serverWeb.on("/security", handleLoader);
     serverWeb.on("/network", handleLoader);
     serverWeb.on("/ethernet", handleLoader);
     serverWeb.on("/zigbee", handleLoader);
-    serverWeb.on("/about", handleLoader);
     serverWeb.on("/tools", handleLoader);
     serverWeb.on("/mqtt", handleLoader);
-    serverWeb.on("/vpn", handleLoader);
     serverWeb.on("/login", []()
                  { if (serverWeb.method() == HTTP_GET) {
                         handleLoginGet();
@@ -910,25 +904,13 @@ static void apiGetPage()
         handleSerial();
         sendGzip(contTypeTextHtml, PAGE_ZIGBEE_html_gz, PAGE_ZIGBEE_html_gz_len);
         break;
-    case API_PAGE_SECURITY:
-        handleSecurity();
-        sendGzip(contTypeTextHtml, PAGE_SECURITY_html_gz, PAGE_SECURITY_html_gz_len);
-        break;
     case API_PAGE_TOOLS:
         handleTools();
         sendGzip(contTypeTextHtml, PAGE_TOOLS_html_gz, PAGE_TOOLS_html_gz_len);
         break;
-    case API_PAGE_ABOUT:
-        // handleAbout();
-        sendGzip(contTypeTextHtml, PAGE_ABOUT_html_gz, PAGE_ABOUT_html_gz_len);
-        break;
     case API_PAGE_MQTT:
         handleMqtt();
         sendGzip(contTypeTextHtml, PAGE_MQTT_html_gz, PAGE_MQTT_html_gz_len);
-        break;
-    case API_PAGE_VPN:
-        handleVpn();
-        sendGzip(contTypeTextHtml, PAGE_VPN_html_gz, PAGE_VPN_html_gz_len);
         break;
     default:
         break;
@@ -1221,32 +1203,6 @@ void handleGeneral()
     serverWeb.sendHeader(respTimeZonesName, results);
 }
 
-void handleSecurity()
-{
-    String result;
-    DynamicJsonDocument doc(1024);
-
-    if (systemCfg.disableWeb)
-    {
-        doc[disableWebKey] = checked;
-    }
-
-    if (systemCfg.webAuth)
-    {
-        doc[webAuthKey] = checked;
-    }
-    doc[webUserKey] = (String)systemCfg.webUser;
-    doc[webPassKey] = (String)systemCfg.webPass;
-    if (systemCfg.fwEnabled)
-    {
-        doc[fwEnabledKey] = checked;
-    }
-    doc[fwIpKey] = systemCfg.fwIp; //.toString();
-
-    serializeJson(doc, result);
-    serverWeb.sendHeader(respHeaderName, result);
-}
-
 void handleNetwork()
 {
     String result;
@@ -1347,6 +1303,34 @@ void handleNetwork()
         doc["no_eth"] = 1;
     }
 
+    if (vpnCfg.wgEnable)
+    {
+        doc[wgEnableKey] = checked;
+    }
+    doc[wgLocalIPKey]      = vpnCfg.wgLocalIP.toString();
+    doc[wgLocalSubnetKey]  = vpnCfg.wgLocalSubnet.toString();
+    doc[wgLocalPortKey]    = vpnCfg.wgLocalPort;
+    doc[wgLocalGatewayKey] = vpnCfg.wgLocalGateway.toString();
+    doc[wgLocalPrivKeyKey] = vpnCfg.wgLocalPrivKey;
+    doc[wgEndAddrKey]      = vpnCfg.wgEndAddr;
+    doc[wgEndPubKeyKey]    = vpnCfg.wgEndPubKey;
+    doc[wgEndPortKey]      = vpnCfg.wgEndPort;
+    doc[wgAllowedIPKey]    = vpnCfg.wgAllowedIP.toString();
+    doc[wgAllowedMaskKey]  = vpnCfg.wgAllowedMask.toString();
+    if (vpnCfg.wgMakeDefault)
+    {
+        doc[wgMakeDefaultKey] = checked;
+    }
+    doc[wgPreSharedKeyKey] = vpnCfg.wgPreSharedKey;
+
+    if (vpnCfg.hnEnable)
+    {
+        doc[hnEnableKey] = checked;
+    }
+    doc[hnJoinCodeKey] = vpnCfg.hnJoinCode;
+    doc[hnHostNameKey] = vpnCfg.hnHostName;
+    doc[hnDashUrlKey]  = vpnCfg.hnDashUrl;
+
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);
 }
@@ -1424,43 +1408,6 @@ void handleMqtt()
     {
         doc["discoveryMqtt"] = checked;
     }
-
-    serializeJson(doc, result);
-    serverWeb.sendHeader(respHeaderName, result);
-}
-
-void handleVpn()
-{
-    String result;
-    DynamicJsonDocument doc(1024);
-
-    if (vpnCfg.wgEnable)
-    {
-        doc[wgEnableKey] = checked;
-    }
-    doc[wgLocalIPKey]      = vpnCfg.wgLocalIP.toString();
-    doc[wgLocalSubnetKey]  = vpnCfg.wgLocalSubnet.toString();
-    doc[wgLocalPortKey]    = vpnCfg.wgLocalPort;
-    doc[wgLocalGatewayKey] = vpnCfg.wgLocalGateway.toString();
-    doc[wgLocalPrivKeyKey] = vpnCfg.wgLocalPrivKey;
-    doc[wgEndAddrKey]      = vpnCfg.wgEndAddr;
-    doc[wgEndPubKeyKey]    = vpnCfg.wgEndPubKey;
-    doc[wgEndPortKey]      = vpnCfg.wgEndPort;
-    doc[wgAllowedIPKey]    = vpnCfg.wgAllowedIP.toString();
-    doc[wgAllowedMaskKey]  = vpnCfg.wgAllowedMask.toString();
-    if (vpnCfg.wgMakeDefault)
-    {
-        doc[wgMakeDefaultKey] = checked;
-    }
-    doc[wgPreSharedKeyKey] = vpnCfg.wgPreSharedKey;
-
-    if (vpnCfg.hnEnable)
-    {
-        doc[hnEnableKey] = checked;
-    }
-    doc[hnJoinCodeKey] = vpnCfg.hnJoinCode;
-    doc[hnHostNameKey] = vpnCfg.hnHostName;
-    doc[hnDashUrlKey]  = vpnCfg.hnDashUrl;
 
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);
@@ -1801,6 +1748,24 @@ void handleTools()
     // doc[hwUartSelIsKey] = vars.hwUartSelIs;
     // doc["hostname"]     = systemCfg.hostname;
     // doc["refreshLogs"]  = systemCfg.refreshLogs;
+
+    // handle security stuff
+    if (systemCfg.disableWeb)
+    {
+        doc[disableWebKey] = checked;
+    }
+
+    if (systemCfg.webAuth)
+    {
+        doc[webAuthKey] = checked;
+    }
+    doc[webUserKey] = (String)systemCfg.webUser;
+    doc[webPassKey] = (String)systemCfg.webPass;
+    if (systemCfg.fwEnabled)
+    {
+        doc[fwEnabledKey] = checked;
+    }
+    doc[fwIpKey] = systemCfg.fwIp;
 
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);

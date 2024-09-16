@@ -31,11 +31,8 @@ const pages = {
 		// API_PAGE_ETHERNET: { num: 2, str: "/ethernet" },
 	API_PAGE_NETWORK: { num: 2, str: "/network" },
 	API_PAGE_ZIGBEE: { num: 3, str: "/zigbee" },
-	API_PAGE_SECURITY: { num: 4, str: "/security" },
 	API_PAGE_TOOLS: { num: 5, str: "/tools" },
-	API_PAGE_ABOUT: { num: 6, str: "/about" },
-	API_PAGE_MQTT: { num: 7, str: "/mqtt" },
-	API_PAGE_VPN: { num: 8, str: "/vpn" }
+	API_PAGE_MQTT: { num: 7, str: "/mqtt" }
 }
 
 const commands = {
@@ -135,9 +132,6 @@ function identifyLed(event, element, led) {
 	const offLed = '💡';
 	const onLed = '⭕';
 	let count = 0;
-	let blinkingText = element.nextElementSibling;
-
-	blinkingText.textContent = i18next.t('p.to.ls');
 
 	function toggleEmoji() {
 		element.innerHTML = element.innerHTML === offLed ? onLed : offLed;
@@ -145,15 +139,13 @@ function identifyLed(event, element, led) {
 
 		if (count < 11) { // Needed changes x 2 + 1
 			setTimeout(toggleEmoji, 500);
+			return
 		}
-		else {
-			element.innerHTML = offLed;
-			blinkingText.textContent = '';
-		}
+
+		element.innerHTML = offLed;
 	}
 
 	$.get(apiLink + api.actions.API_CMD + "&cmd=" + api.commands.CMD_LED_ACT + "&act=3&led=" + led, function (data) {
-		blinkingText.textContent = i18next.t('p.to.lb');
 		toggleEmoji();
 	}).fail(function () {
 		alert(i18next.t('c.ercn'));
@@ -233,7 +225,7 @@ advanced:
 	transmit_power: 20`;
 	const ip = window.location.host;
 	const port = $("#port").val();
-	if (ip == "192.168.1.1") $("#apAlert").removeClass(classHide);
+	if (ip == "192.168.1.1") $(".ap-alert").removeClass(classHide);
 	switch (params) {
 		case "zha":
 			result = "socket://" + ip + ":" + port;
@@ -334,16 +326,6 @@ function loadPage(url) {
 				}
 			});
 			break;
-		case api.pages.API_PAGE_VPN.str:
-			apiGetPage(api.pages.API_PAGE_VPN, () => {
-				if ($("#wgEnable").prop(chck) == false) {
-					WgInputDsbl(true);
-				}
-				if ($("#hnEnable").prop(chck) == false) {
-					HnInputDsbl(true);
-				}
-			});
-			break;
 		case api.pages.API_PAGE_NETWORK.str:
 			apiGetPage(api.pages.API_PAGE_NETWORK, () => {
 
@@ -384,6 +366,13 @@ function loadPage(url) {
 				} else {
 					WifiDhcpDsbl(false);
 				}
+
+				if ($("#wgEnable").prop(chck) == false) {
+					WgInputDsbl(true);
+				}
+				if ($("#hnEnable").prop(chck) == false) {
+					HnInputDsbl(true);
+				}
 			});
 			break;
 		case api.pages.API_PAGE_ZIGBEE.str:
@@ -391,18 +380,15 @@ function loadPage(url) {
 				generateConfig("z2m");
 			});
 			break;
-		case api.pages.API_PAGE_SECURITY.str:
-			apiGetPage(api.pages.API_PAGE_SECURITY, () => {
+		case api.pages.API_PAGE_TOOLS.str:
+			apiGetPage(api.pages.API_PAGE_TOOLS, () => {
 				if ($("#webAuth").prop(chck)) {
 					SeqInputDsbl(false);
 				}
 				if ($("#fwEnabled").prop(chck)) {
 					SeqInputDsblFw(false);
 				}
-			});
-			break;
-		case api.pages.API_PAGE_TOOLS.str:
-			apiGetPage(api.pages.API_PAGE_TOOLS, () => {
+
 				$.get(apiLink + api.actions.API_GET_FILELIST, function (data) {
 					fillFileTable(data.files);
 				});
@@ -414,9 +400,6 @@ function loadPage(url) {
 					}
 				});
 			});
-			break;
-		case api.pages.API_PAGE_ABOUT.str:
-			apiGetPage(api.pages.API_PAGE_ABOUT);
 			break;
 		default:
 			apiGetPage(api.pages.API_PAGE_ROOT);
@@ -451,21 +434,12 @@ function localizeTitle(url) {
 		case api.pages.API_PAGE_MQTT.str:
 			page_title = i18next.t('l.mq');
 			break;
-		case api.pages.API_PAGE_VPN.str:
-			page_title = i18next.t('l.vp');
-			break;
-		case api.pages.API_PAGE_SECURITY.str:
-			page_title = i18next.t('l.se');
-			break;
 		case api.pages.API_PAGE_TOOLS.str:
 			page_title = i18next.t('l.to');
 			break;
-		case api.pages.API_PAGE_ABOUT.str:
-			page_title = i18next.t('l.ab');
-			break;
 	}
 	$("[data-r2v='pageName']").text(page_title);//update page name
-	$("title[data-r2v='pageName']").text(page_title + " - XZG");//update page title
+	$("title[data-r2v='pageName']").text(page_title + " - CZC");//update page title
 }
 
 function apiGetPage(page, doneCall, loader = true) {
@@ -485,6 +459,7 @@ function apiGetPage(page, doneCall, loader = true) {
 			$("#pageContent").fadeIn(animDuration);
 
 			$("form.saveParams").on("submit", function (e) {
+				const $target = $(e.currentTarget);
 				e.preventDefault();
 				showWifiCreds();
 				if (this.id === "netCfg") {
@@ -499,20 +474,27 @@ function apiGetPage(page, doneCall, loader = true) {
 					}
 				}
 
-				const btn = $("form.saveParams button[type='submit']");
+				const btn = $target.find("button[type='submit']");
 				$(':disabled').each(function (e) {
 					$(this).removeAttr('disabled');
 				});
 				spiner.appendTo(btn);
 				spiner2.appendTo(btn);
 				btn.prop("disabled", true);
-				const data = $(this).serialize() + "&pageId=" + page.num;//add page num
+				let data = $(this).serialize() + "&pageId=" + page.num;//add page num
+				const target = $target.data('target');
+				if(target) {
+					data += "&target=" + target
+				}
+
 				$.ajax({
 					type: "POST",
 					url: e.currentTarget.action,
 					data: data,
 					success: function () {
-						modalConstructor("saveOk");
+						if(target == "network") {
+							modalConstructor("saveOk");
+						}
 					},
 					error: function () {
 						alert(i18next.t('c.erss'));
@@ -1916,7 +1898,7 @@ function getWifiList() {
 				} else {
 					if (data.wifi.length > 0) {
 						data.wifi.forEach((elem) => {
-							let $row = $("<tr class='ssidSelector' id='" + elem.ssid + "' >").appendTo("#wifiTable");
+							let $row = $("<tr class='ssidSelector cursor-pointer' id='" + elem.ssid + "' >").appendTo("#wifiTable");
 							$("<td>" + elem.ssid + "</td>").appendTo($row);
 							let encryptType = "";
 							switch (elem.secure) {
