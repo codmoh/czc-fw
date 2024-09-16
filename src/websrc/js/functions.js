@@ -439,7 +439,7 @@ function localizeTitle(url) {
 			break;
 	}
 	$("[data-r2v='pageName']").text(page_title);//update page name
-	$("title[data-r2v='pageName']").text(page_title + " - XZG");//update page title
+	$("title[data-r2v='pageName']").text(page_title + " - CZC");//update page title
 }
 
 function apiGetPage(page, doneCall, loader = true) {
