@@ -298,6 +298,7 @@ void saveSystemConfig(const SystemConfigStruct &config)
     preferences.putBool(updAutoInstKey, config.updAutoInst);
 
     preferences.end();
+    setLedsDisable();
 }
 
 static String defaultHostname()
@@ -394,7 +395,6 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             configSys.keepWeb = serverWeb.hasArg(keepWebKey) == true;*/
 
             configSys.disableLedPwr = serverWeb.hasArg(disableLedPwrKey) == true;
-
             configSys.disableLedUSB = serverWeb.hasArg(disableLedUSBKey) == true;
 
             if (serverWeb.hasArg(refreshLogsKey))
