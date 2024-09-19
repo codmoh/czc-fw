@@ -20,7 +20,7 @@ extern struct NetworkConfigStruct networkCfg;
 extern struct MqttConfigStruct mqttCfg;
 
 extern struct SysVarsStruct vars;
-extern struct ThisConfigStruct hwConfig;
+extern struct HwConfigStruct hwConfig;
 
 #include <AsyncMqttClient.h>
 AsyncMqttClient mqttClient;

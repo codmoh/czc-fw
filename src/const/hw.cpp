@@ -3,7 +3,7 @@
 const char *czc_board_name = "CZC-01";
 // Ethernet configurations
 // Don't forget to edit ETH_CFG_CNT !
-EthConfig ethConfigs[] = {
+HwEthConfig ethConfigs[] = {
     {.addr = 0, .pwrPin = 12, .mdcPin = 23, .mdiPin = 18, .phyType = ETH_PHY_LAN8720, .clkMode = ETH_CLOCK_GPIO17_OUT}, // .pwrAltPin = -1},  // 0 Olimex-ESP32-POE
     {.addr = 1, .pwrPin = 16, .mdcPin = 23, .mdiPin = 18, .phyType = ETH_PHY_LAN8720, .clkMode = ETH_CLOCK_GPIO0_IN},   // .pwrAltPin = -1},  // 1 WT32-ETH01 / SLZB-06
     {.addr = 0, .pwrPin = 5, .mdcPin = 23, .mdiPin = 18, .phyType = ETH_PHY_LAN8720, .clkMode = ETH_CLOCK_GPIO17_OUT},  // .pwrAltPin = -1},  // 2 T-Internet-POE / UZG-01 / HamGeek POE Plus
@@ -11,7 +11,7 @@ EthConfig ethConfigs[] = {
 
 // ZigBee configurations
 // Don't forget to edit ZB_CFG_CNT !
-ZbConfig zbConfigs[] = {
+HwZbConfig zbConfigs[] = {
     {.txPin = 4, .rxPin = 36, .rstPin = 16, .bslPin = 32},  // 0 UZG-01 / LilyZig / Olizig
     {.txPin = 17, .rxPin = 5, .rstPin = 33, .bslPin = 32},  // 1 ZigStar LAN / SLZB-06 / TubesZB-eth
     {.txPin = 33, .rxPin = 32, .rstPin = 12, .bslPin = 14}, // 2 No name China-GW
@@ -24,7 +24,7 @@ ZbConfig zbConfigs[] = {
 
 // Mist configurations
 // Don't forget to edit MIST_CFG_CNT !
-MistConfig mistConfigs[] = {
+HwMistConfig mistConfigs[] = {
     {.btnPin = -1, .btnPlr = 0, .uartSelPin = -1, .uartSelPlr = 0, .ledModePin = -1, .ledModePlr = 0, .ledPwrPin = -1, .ledPwrPlr = 0}, // 0 No mist cfg
     {.btnPin = 35, .btnPlr = 1, .uartSelPin = 33, .uartSelPlr = 1, .ledModePin = 12, .ledModePlr = 1, .ledPwrPin = 14, .ledPwrPlr = 1}, // 1 UZG-01 / CZC-1.0
     {.btnPin = 35, .btnPlr = 1, .uartSelPin = 4, .uartSelPlr = 1, .ledModePin = 12, .ledModePlr = 1, .ledPwrPin = 14, .ledPwrPlr = 1},  // 2 SLZB-06
@@ -34,7 +34,7 @@ MistConfig mistConfigs[] = {
 
 // Board configurations
 // Don't forget to edit BOARD_CFG_CNT !
-BrdConfigStruct brdConfigs[] = {
+HwBrdConfigStruct brdConfigs[] = {
     {"SLS-classic", .ethConfigIndex = -1, .zbConfigIndex = 7, .mistConfigIndex = 3},     // 0
     {"UZG-01", .ethConfigIndex = 2, .zbConfigIndex = 0, .mistConfigIndex = 1},           // 1
     {"SLZB-06", .ethConfigIndex = 1, .zbConfigIndex = 1, .mistConfigIndex = 2},          // 2

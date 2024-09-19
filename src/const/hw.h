@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ETH.h>
 
 #define CZC_1_ETH_CONFIG 2
@@ -7,7 +9,7 @@
 extern const char *czc_board_name;
 
 // Ethernet settings structure
-struct EthConfig
+struct HwEthConfig
 {
     int addr;
     int pwrPin;
@@ -19,7 +21,7 @@ struct EthConfig
 };
 
 // ZigBee settings structure
-struct ZbConfig
+struct HwZbConfig
 {
     int txPin;
     int rxPin;
@@ -28,7 +30,7 @@ struct ZbConfig
 };
 
 // Miscellaneous settings structure
-struct MistConfig
+struct HwMistConfig
 {
     int btnPin;
     int btnPlr;
@@ -41,7 +43,7 @@ struct MistConfig
 };
 
 // Root configuration structure that includes only configuration indices
-struct BrdConfigStruct
+struct HwBrdConfigStruct
 {
     char board[50];
     int ethConfigIndex;
@@ -54,10 +56,10 @@ struct BrdConfigStruct
 #define MIST_CFG_CNT 5
 #define BOARD_CFG_CNT 14
 
-struct ThisConfigStruct
+struct HwConfigStruct
 {
     char board[50];
-    EthConfig eth;
-    ZbConfig zb;
-    MistConfig mist;
+    HwEthConfig eth;
+    HwZbConfig zb;
+    HwMistConfig mist;
 };

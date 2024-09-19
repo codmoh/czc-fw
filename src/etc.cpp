@@ -20,12 +20,12 @@
 #include <WireGuard-ESP32.h>
 static WireGuard wg;
 
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
-extern EthConfig ethConfigs[ETH_CFG_CNT];
-extern ZbConfig zbConfigs[ZB_CFG_CNT];
-extern MistConfig mistConfigs[MIST_CFG_CNT];
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern HwEthConfig ethConfigs[ETH_CFG_CNT];
+extern HwZbConfig zbConfigs[ZB_CFG_CNT];
+extern HwMistConfig mistConfigs[MIST_CFG_CNT];
 
-extern struct ThisConfigStruct hwConfig;
+extern struct HwConfigStruct hwConfig;
 
 extern struct SystemConfigStruct systemCfg;
 extern struct NetworkConfigStruct networkCfg;
@@ -282,31 +282,20 @@ void usbModeSet(usbMode mode)
   //}
 }
 
-uint64_t getMacLastBytes()
-{
-    const size_t mac_size = 6;
-    uint64_t mac = ESP.getEfuseMac();
-    uint64_t ret_mac = 0;
-    size_t loop_count = ((8*(mac_size-1))+1);
-    for (int i = 0; i < loop_count; i = i + 8) {
-        ret_mac |= ((mac >> (40 - i)) & 0xff) << i;
-    }
-    return ret_mac;
-}
-
-void getDeviceID(char *arr)
+void writeDefaultDeviceID(char *arr)
 {
     char id_str[MAX_DEV_ID_LONG] = "CZC-";
     const size_t id_str_len = strlen(id_str);
-
+    uint8_t mac[6] = {};
+    ETH.macAddress(mac);
     snprintf(&id_str[id_str_len],
              MAX_DEV_ID_LONG - id_str_len,
-             "%04X",
-             (uint16_t)getMacLastBytes()); // Output the reversed bytes in hex
+             "%02X%02X",
+             mac[4], mac[5]);
     memcpy(arr, id_str, MAX_DEV_ID_LONG);
 }
 
-void writeDefaultConfig(const char *path, DynamicJsonDocument &doc)
+void writeJsonToFile(const char *path, DynamicJsonDocument &doc)
 {
   LOGD("Write defaults to %s", path);
   serializeJsonPretty(doc, Serial);
@@ -676,13 +665,13 @@ char *convertTimeToCron(const String &time)
   return formattedTime;
 }
 
-ThisConfigStruct *getBrdConfig()
+HwConfigStruct *getBrdConfig()
 {
   bool ethOk = false;
   bool btnOk = false;
   bool zbOk = false;
 
-  static ThisConfigStruct bestConfig = {};
+  static HwConfigStruct bestConfig = {};
   bestConfig.eth = ethConfigs[CZC_1_ETH_CONFIG];
   bestConfig.zb = zbConfigs[CZC_1_ZB_CONFIG];
   bestConfig.mist = mistConfigs[CZC_1_MIST_CONFIG];

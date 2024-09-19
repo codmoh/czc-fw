@@ -9,6 +9,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
+#include "const/hw.h"
+
 #define DEBOUNCE_TIME 70
 #define MAX_DEV_ID_LONG 32
 #define MAX_CONF_STR_LEN 64
@@ -240,6 +242,9 @@ struct SystemConfigStruct
 
 // Function prototypes for SystemConfigStruct
 void saveSystemConfig(const SystemConfigStruct &config);
+// Saves everything except the hostname
+void saveSystemConfigNoHostname(const SystemConfigStruct &config);
+
 void loadSystemConfig(SystemConfigStruct &config);
 
 // Serialization function declarations
@@ -258,13 +263,15 @@ void getNvsStats(int *total, int *used);
 void printNVSFreeSpace();
 void eraseNVS();
 
+void writeDeviceId(SystemConfigStruct &sysConfig, VpnConfigStruct &config, MqttConfigStruct &mqttConfig);
+
 String makeJsonConfig(const NetworkConfigStruct *networkCfg = nullptr,
                       const VpnConfigStruct *vpnCfg = nullptr,
                       const MqttConfigStruct *mqttCfg = nullptr,
                       const SystemConfigStruct *systemCfg = nullptr,
                       const SysVarsStruct *systemVars = nullptr);
 
-bool loadFileConfigHW();
+bool loadFileConfigHW(HwConfigStruct &config);
 
 /* Previous firmware read config support. start */
 bool loadFileSystemVar();

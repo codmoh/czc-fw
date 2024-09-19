@@ -10,9 +10,9 @@ int check1wire();
 void setup1wire(int pin);
 float get1wire();
 
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
-ThisConfigStruct *getBrdConfig();
+HwConfigStruct *getBrdConfig();
 
 float getCPUtemp(bool clear = false);
 
@@ -22,9 +22,8 @@ void zigbeeRestart();
 
 void usbModeSet(usbMode mode);
 
-void getDeviceID(char *arr);
-uint64_t getMacLastBytes();
-void writeDefaultConfig(const char *path, DynamicJsonDocument &doc);
+void writeDefaultDeviceID(char *arr);
+void writeJsonToFile(const char *path, DynamicJsonDocument &doc);
 
 #define TIMEOUT_FACTORY_RESET 3
 

@@ -15,15 +15,13 @@
 Preferences preferences;
 
 extern struct SysVarsStruct vars;
-extern struct ThisConfigStruct hwConfig;
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern struct HwConfigStruct hwConfig;
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
 extern struct SystemConfigStruct systemCfg;
 extern struct NetworkConfigStruct networkCfg;
 extern struct VpnConfigStruct vpnCfg;
 extern struct MqttConfigStruct mqttCfg;
-
-static String defaultHostname();
 
 void getNvsStats(int *total, int *used)
 {
@@ -195,6 +193,20 @@ void saveVpnConfig(const VpnConfigStruct &config)
     preferences.end();
 }
 
+void writeDeviceId(SystemConfigStruct &sysConfig, VpnConfigStruct &vpnConfig, MqttConfigStruct &mqttConfig)
+{
+    preferences.begin(systemConfigKey, true);
+    strlcpy(sysConfig.hostname, preferences.getString(hostnameKey, String(vars.deviceId)).c_str(), sizeof(sysConfig.hostname));
+    preferences.end();
+    preferences.begin(vpnConfigKey, true);
+    strlcpy(vpnConfig.hnHostName, preferences.getString(hnHostNameKey, String(vars.deviceId)).c_str(), sizeof(vpnConfig.hnHostName));
+    preferences.end();
+    preferences.begin(mqttConfigKey, true);
+    strlcpy(mqttConfig.topic, preferences.getString(topicKey, String(vars.deviceId)).c_str(), sizeof(mqttConfig.topic));
+    preferences.end();
+    LOGD("Sysconfig hostname: %s", sysConfig.hostname);
+}
+
 void loadVpnConfig(VpnConfigStruct &config)
 {
     preferences.begin(vpnConfigKey, true);
@@ -215,7 +227,6 @@ void loadVpnConfig(VpnConfigStruct &config)
 
     config.hnEnable = preferences.getBool(hnEnableKey, false);
     strlcpy(config.hnJoinCode, preferences.getString(hnJoinCodeKey).c_str(), sizeof(config.hnJoinCode));
-    strlcpy(config.hnHostName, preferences.getString(hnHostNameKey, String(vars.deviceId)).c_str(), sizeof(config.hnHostName));
     strlcpy(config.hnDashUrl, preferences.getString(hnDashUrlKey, "default").c_str(), sizeof(config.hnDashUrl));
 
     preferences.end();
@@ -253,7 +264,6 @@ void loadMqttConfig(MqttConfigStruct &config)
     config.port = preferences.getInt(portKey, 1883);
     strlcpy(config.user, preferences.getString(userKey, "").c_str(), sizeof(config.user));
     strlcpy(config.pass, preferences.getString(passKey, "").c_str(), sizeof(config.pass));
-    strlcpy(config.topic, preferences.getString(topicKey, String(vars.deviceId)).c_str(), sizeof(config.topic));
     // config.retain = preferences.getBool(retain, false); // If needed
     config.updateInt = preferences.getInt(updateIntKey, 60);
     config.discovery = preferences.getBool(discoveryKey, true);
@@ -263,6 +273,43 @@ void loadMqttConfig(MqttConfigStruct &config)
     preferences.end();
 }
 
+// Identical saveSystemConfig() except
+// doesn't write to hostnameKey
+void saveSystemConfigNoHostname(const SystemConfigStruct &config)
+{
+    preferences.begin(systemConfigKey, false);
+
+    // preferences.putBool(keepWebKey, config.keepWeb);
+    preferences.putBool(disableWebKey, config.disableWeb);
+    preferences.putBool(webAuthKey, config.webAuth);
+    preferences.putString(webUserKey, config.webUser);
+    preferences.putString(webPassKey, config.webPass);
+    preferences.putBool(fwEnabledKey, config.fwEnabled);
+    preferences.putString(fwIpKey, config.fwIp.toString());
+    preferences.putInt(serialSpeedKey, config.serialSpeed);
+    preferences.putInt(socketPortKey, config.socketPort);
+    preferences.putInt(tempOffsetKey, config.tempOffset);
+    preferences.putBool(disableLedUSBKey, config.disableLedUSB);
+    preferences.putBool(disableLedPwrKey, config.disableLedPwr);
+    preferences.putInt(refreshLogsKey, config.refreshLogs);
+    preferences.putString(timeZoneKey, config.timeZone);
+    preferences.putString(ntpServ1Key, config.ntpServ1);
+    preferences.putString(ntpServ2Key, config.ntpServ2);
+    preferences.putBool(nmEnableKey, config.nmEnable);
+    preferences.putString(nmStartHourKey, config.nmStart);
+    preferences.putString(nmEndHourKey, config.nmEnd);
+    // preferences.putInt(prevWorkModeKey, static_cast<int>(config.prevWorkMode));
+    preferences.putInt(workModeKey, static_cast<int>(config.workMode));
+
+    preferences.putInt(zbRoleKey, static_cast<int>(config.zbRole));
+    preferences.putString(zbFwKey, config.zbFw);
+
+    preferences.putString(updCheckTimeKey, config.updCheckTime);
+    preferences.putString(updCheckDayKey, config.updCheckDay);
+    preferences.putBool(updAutoInstKey, config.updAutoInst);
+
+    preferences.end();
+}
 void saveSystemConfig(const SystemConfigStruct &config)
 {
     preferences.begin(systemConfigKey, false);
@@ -301,19 +348,6 @@ void saveSystemConfig(const SystemConfigStruct &config)
     setLedsDisable();
 }
 
-static String defaultHostname()
-{
-    char id_str[MAX_DEV_ID_LONG] = "CZC-";
-    const size_t id_str_len = strlen(id_str);
-
-    snprintf(&id_str[id_str_len],
-             MAX_DEV_ID_LONG - id_str_len,
-             "%04X",
-             (uint16_t)getMacLastBytes()); // Output the reversed bytes in hex
-
-    return String(id_str);
-}
-
 void loadSystemConfig(SystemConfigStruct &config)
 {
     preferences.begin(systemConfigKey, true);
@@ -331,7 +365,6 @@ void loadSystemConfig(SystemConfigStruct &config)
     config.disableLedUSB = preferences.getBool(disableLedUSBKey, false);
     config.disableLedPwr = preferences.getBool(disableLedPwrKey, false);
     config.refreshLogs = preferences.getInt(refreshLogsKey, 1);
-    strlcpy(config.hostname, preferences.getString(hostnameKey, defaultHostname()).c_str(), sizeof(config.hostname)); /// to do add def host name!!
     strlcpy(config.timeZone, preferences.getString(timeZoneKey, NTP_TIME_ZONE).c_str(), sizeof(config.timeZone));
     strlcpy(config.ntpServ1, preferences.getString(ntpServ1Key, NTP_SERV_1).c_str(), sizeof(config.ntpServ1));
     strlcpy(config.ntpServ2, preferences.getString(ntpServ2Key, NTP_SERV_2).c_str(), sizeof(config.ntpServ2));
@@ -886,7 +919,7 @@ void serializeSysVarsToJson(const SysVarsStruct &vars, JsonObject obj)
     obj[zbUpdAvailKey] = vars.updateZbAvail;
 }
 
-bool loadFileConfigHW()
+bool loadFileConfigHW(HwConfigStruct &config)
 {
     const char *board = "board";
     const char *addr = "addr";
@@ -917,43 +950,43 @@ bool loadFileConfigHW()
         {
             LOGD("Error with LITTLEFS");
         }
-        DynamicJsonDocument config(300);
-        config[board] = "";
-        writeDefaultConfig(configFileHw, config);
+        DynamicJsonDocument deserializedConfig(300);
+        deserializedConfig[board] = "";
+        writeJsonToFile(configFileHw, deserializedConfig);
         configFile = LittleFS.open(configFileHw, FILE_READ);
     }
 
-    DynamicJsonDocument config(1024);
-    deserializeJson(config, configFile);
+    DynamicJsonDocument deserializedConfig(1024);
+    deserializeJson(deserializedConfig, configFile);
 
     configFile.close();
 
-    strlcpy(hwConfig.board, config[board] | "", sizeof(hwConfig.board));
-    hwConfig.eth.addr = config[addr];
-    hwConfig.eth.pwrPin = config[pwrPin];
-    hwConfig.eth.mdcPin = config[mdcPin];
-    hwConfig.eth.mdiPin = config[mdiPin];
-    hwConfig.eth.phyType = config[phyType];
-    hwConfig.eth.clkMode = config[clkMode];
-    if (hwConfig.eth.pwrPin == -1)
+    strlcpy(config.board, deserializedConfig[board] | "", sizeof(config.board));
+    config.eth.addr = deserializedConfig[addr];
+    config.eth.pwrPin = deserializedConfig[pwrPin];
+    config.eth.mdcPin = deserializedConfig[mdcPin];
+    config.eth.mdiPin = deserializedConfig[mdiPin];
+    config.eth.phyType = deserializedConfig[phyType];
+    config.eth.clkMode = deserializedConfig[clkMode];
+    if (config.eth.pwrPin == -1)
     {
-        hwConfig.eth.pwrPin = config[pwrAltPin];
+        config.eth.pwrPin = deserializedConfig[pwrAltPin];
     }
-    // hwConfig.eth.pwrAltPin = config[pwrAltPin];
-    hwConfig.mist.btnPin = config[btnPin];
-    hwConfig.mist.btnPlr = config[btnPlr];
-    hwConfig.mist.uartSelPin = config[uartSelPin];
-    hwConfig.mist.uartSelPlr = config[uartSelPlr];
-    hwConfig.mist.ledModePin = config[ledModePin];
-    hwConfig.mist.ledModePlr = config[ledModePlr];
-    hwConfig.mist.ledPwrPin = config[ledPwrPin];
-    hwConfig.mist.ledPwrPlr = config[ledPwrPlr];
-    hwConfig.zb.txPin = config[zbTxPin];
-    hwConfig.zb.rxPin = config[zbRxPin];
-    hwConfig.zb.rstPin = config[zbRstPin];
-    hwConfig.zb.bslPin = config[zbBslPin];
+    // config.eth.pwrAltPin = deserializedConfig[pwrAltPin];
+    config.mist.btnPin = deserializedConfig[btnPin];
+    config.mist.btnPlr = deserializedConfig[btnPlr];
+    config.mist.uartSelPin = deserializedConfig[uartSelPin];
+    config.mist.uartSelPlr = deserializedConfig[uartSelPlr];
+    config.mist.ledModePin = deserializedConfig[ledModePin];
+    config.mist.ledModePlr = deserializedConfig[ledModePlr];
+    config.mist.ledPwrPin = deserializedConfig[ledPwrPin];
+    config.mist.ledPwrPlr = deserializedConfig[ledPwrPlr];
+    config.zb.txPin = deserializedConfig[zbTxPin];
+    config.zb.rxPin = deserializedConfig[zbRxPin];
+    config.zb.rstPin = deserializedConfig[zbRstPin];
+    config.zb.bslPin = deserializedConfig[zbBslPin];
 
-    if (hwConfig.board[0] != '\0' && strlen(hwConfig.board) > 0)
+    if (config.board[0] != '\0' && strlen(config.board) > 0)
     {
         LOGD("Load HW - OK");
         return true;
@@ -967,39 +1000,39 @@ bool loadFileConfigHW()
         //{
         //    searchId = 12;
         //}
-        ThisConfigStruct *newConfig = getBrdConfig();
+        HwConfigStruct *newConfig = getBrdConfig();
         if (newConfig)
         {
-            LOGD("Find. Saving config");
+            LOGD("Find. Saving deserializedConfig");
 
-            DynamicJsonDocument config(512);
-            config[board] = newConfig->board;
-            config[addr] = newConfig->eth.addr;
-            config[pwrPin] = newConfig->eth.pwrPin;
-            config[mdcPin] = newConfig->eth.mdcPin;
-            config[mdiPin] = newConfig->eth.mdiPin;
-            config[phyType] = newConfig->eth.phyType;
-            config[clkMode] = newConfig->eth.clkMode;
-            // config[pwrAltPin] = newConfig->eth.pwrAltPin;
-            config[btnPin] = newConfig->mist.btnPin;
-            config[btnPlr] = newConfig->mist.btnPlr;
-            config[uartSelPin] = newConfig->mist.uartSelPin;
-            config[uartSelPlr] = newConfig->mist.uartSelPlr;
-            config[ledModePin] = newConfig->mist.ledModePin;
-            config[ledModePlr] = newConfig->mist.ledModePlr;
-            config[ledPwrPin] = newConfig->mist.ledPwrPin;
-            config[ledPwrPlr] = newConfig->mist.ledPwrPlr;
-            config[zbTxPin] = newConfig->zb.txPin;
-            config[zbRxPin] = newConfig->zb.rxPin;
-            config[zbRstPin] = newConfig->zb.rstPin;
-            config[zbBslPin] = newConfig->zb.bslPin;
-            writeDefaultConfig(configFileHw, config);
+            DynamicJsonDocument deserializedConfig(512);
+            deserializedConfig[board] = newConfig->board;
+            deserializedConfig[addr] = newConfig->eth.addr;
+            deserializedConfig[pwrPin] = newConfig->eth.pwrPin;
+            deserializedConfig[mdcPin] = newConfig->eth.mdcPin;
+            deserializedConfig[mdiPin] = newConfig->eth.mdiPin;
+            deserializedConfig[phyType] = newConfig->eth.phyType;
+            deserializedConfig[clkMode] = newConfig->eth.clkMode;
+            // deserializedConfig[pwrAltPin] = newConfig->eth.pwrAltPin;
+            deserializedConfig[btnPin] = newConfig->mist.btnPin;
+            deserializedConfig[btnPlr] = newConfig->mist.btnPlr;
+            deserializedConfig[uartSelPin] = newConfig->mist.uartSelPin;
+            deserializedConfig[uartSelPlr] = newConfig->mist.uartSelPlr;
+            deserializedConfig[ledModePin] = newConfig->mist.ledModePin;
+            deserializedConfig[ledModePlr] = newConfig->mist.ledModePlr;
+            deserializedConfig[ledPwrPin] = newConfig->mist.ledPwrPin;
+            deserializedConfig[ledPwrPlr] = newConfig->mist.ledPwrPlr;
+            deserializedConfig[zbTxPin] = newConfig->zb.txPin;
+            deserializedConfig[zbRxPin] = newConfig->zb.rxPin;
+            deserializedConfig[zbRstPin] = newConfig->zb.rstPin;
+            deserializedConfig[zbBslPin] = newConfig->zb.bslPin;
+            writeJsonToFile(configFileHw, deserializedConfig);
 
             LOGD("Calc and save temp offset");
             float CPUtemp = getCPUtemp(true);
             int offset = CPUtemp - 30;
             systemCfg.tempOffset = int(offset);
-            saveSystemConfig(systemCfg);
+            saveSystemConfigNoHostname(systemCfg);
 
             LOGD("Restarting...");
             ESP.restart();
