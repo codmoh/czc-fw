@@ -542,6 +542,7 @@ void setup()
   Serial.begin(115200); // todo ifdef DEBUG
   String tag = "SETUP";
   initNVS();
+  // New Arduino Preferences Lib configuration
   loadSystemConfig  (systemCfg);
   loadNetworkConfig (networkCfg);
   loadVpnConfig     (vpnCfg);
@@ -552,17 +553,21 @@ void setup()
     LOGD("Error with LITTLEFS");
     return;
   }
-  // We don't need this shit
-  // Just for loading config from old ass FW
-  //loadFileSystemVar();
-  //loadFileConfigSerial();
-  //loadFileConfigWifi();
-  //loadFileConfigEther();
-  //loadFileConfigGeneral();
-  //loadFileConfigSecurity();
-  //loadFileConfigMqtt();
-  //loadFileConfigWg();
+  // THIS group of functions is purely for loading
+  // legacy UZG configuration IF it exists.
+  // Overwrites configuration from loadXConfig()
+  loadFileSystemVar();
+  loadFileConfigSerial();
+  loadFileConfigWifi();
+  loadFileConfigEther();
+  loadFileConfigGeneral();
+  loadFileConfigSecurity();
+  loadFileConfigMqtt();
+  loadFileConfigWg();
 
+  // This still uses the old UZG
+  // configuration style, but has
+  // no "new" (Preferences Lib) equivalent
   loadFileConfigHW(hwConfig);
   if (hwConfig.eth.mdcPin == -1 || hwConfig.eth.mdiPin == -1)
   {
