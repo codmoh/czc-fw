@@ -669,3 +669,10 @@ a {
   fill: var(--nav-link-color-active);
   margin-right: 10px;
 }
+
+@media (min-width: 768px) {
+  .sidebar > #sidebarMenu {
+    position: sticky;
+    top: 58px;
+  }
+}
