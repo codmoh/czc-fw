@@ -1996,7 +1996,8 @@ String fetchLatestZbFw()
 {
     checkDNS();
     HTTPClient http;
-    http.begin("https://raw.githubusercontent.com/codm/XZG/zb_fws/ti/manifest.json");
+
+    http.begin("https://git.codm.de/codm/czc-firmware/-/raw/zb_fws/ti/manifest.json?ref_type=heads");
     int httpCode = http.GET();
 
     String browser_download_url = "";
