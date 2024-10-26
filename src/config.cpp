@@ -1286,7 +1286,7 @@ bool loadFileConfigMqtt()
     File configFile = LittleFS.open(configFileMqtt, FILE_READ);
     if (!configFile)
     {
-        // LOGD("%s %s", configFileMqtt, msg_open_f);
+        LOGD("%s %s", configFileMqtt, msg_open_f);
         return false;
     }
 
