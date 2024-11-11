@@ -457,6 +457,7 @@
         "tt": "Keine neue Firmware gefunden"
       },
       "upd": {
+        "msg": "Es wurde eine neuere Firmware-Version für das Zigbee-Modul gefunden.",
         "tt": "Neue Zigbee-Firmware gefunden 🌟"
       }
     }

@@ -1083,7 +1083,7 @@ function toastConstructor(params, text) {
 			break;
 		case "zbUpdAvail":
 			$("#toastHeaderText").text(i18next.t("ts.zb.upd.tt"));
-			$("#toastBody").text("ZB UPD text");
+			$("#toastBody").text(i18next.t("ts.zb.upd.msg"));
 			$('<button>', {
 				type: "button",
 				"class": "btn btn-warning",

@@ -454,7 +454,8 @@
         "tt": "No firmware found"
       },
       "upd": {
-        "tt": "New Zigbee firmware found 🌟"
+        "tt": "New Zigbee firmware found 🌟",
+        "msg": "A newer version of firmware for the Zigbee module has been found."
       }
     }
   },
