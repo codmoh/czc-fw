@@ -49,7 +49,7 @@
         "lfm": "Atualizando do arquivo local.",
         "lgds": "Baixando a versão mais recente do GitHub...",
         "prgs": "Atualização: {{per}}%",
-        "tt": "ATUALIZAÇÃO DE FIRMWARE XZG",
+        "tt": "ATUALIZAÇÃO DE FIRMWARE CZC",
         "ucr": "Atualização completa! \nReiniciando!",
         "vgds": "Baixando a versão {{ver}} do GitHub...",
         "wdm": "Aguardando dispositivo...",
@@ -176,7 +176,7 @@
     "lo": {
       "btn": "Cante",
       "lbl": "Por favor, inscreva-se",
-      "pt": "Entrar - XZG",
+      "pt": "Entrar - CZC",
       "mlo": "Desconectado com sucesso",
       "mnl": "Precisa fazer login",
       "mwc": "Credenciais erradas"
@@ -375,12 +375,12 @@
     },
     "zi": {
       "cfg": {
-        "alarm": "Parece que o XZG funciona em modo ponto de acesso (IP 192.168.1.1). \nO endereço IP mudará após a conexão com Ethernet ou Wi-Fi, após isso a configuração precisará ser gerada novamente.",
+        "alarm": "Parece que o CZC funciona em modo ponto de acesso (IP 192.168.1.1). \nO endereço IP mudará após a conexão com Ethernet ou Wi-Fi, após isso a configuração precisará ser gerada novamente.",
         "dp": "INSERT_DEVICE_PATCH_HERE",
         "dzl": "Desativar led Zigbee?",
         "ha": "Para Home Assistant: Vá para \"Configurações\"→\"Sistema\"→\"Hardware\"→Selecione o menu de 3 pontos no canto superior direito→\"Todo o Hardware\"→Role até ttyUSB e encontre seu adaptador→Copiar caminho do dispositivo como \"/dev/ \nttyUSB0\"",
         "lin": "Listar dispositivos USB no Linux: ls /dev/ttyUSB*",
-        "lxzg": "Localização do XZG",
+        "lxzg": "Localização do CZC",
         "sel": "Gerar configuração para",
         "sopm": "Defina a potência de saída para no máximo 20",
         "ss": "Configuração serial",
@@ -411,9 +411,9 @@
         "m": "Se você tiver alguma ideia, sugestão ou quiser ajudar de outra forma, não hesite em: 📬",
         "t": "Opinião"
       },
-      "l1": "Firmware XZG unifica as melhores inovações de",
+      "l1": "Firmware CZC unifica as melhores inovações de",
       "l2": "projetos anteriores de gateway Zigbee em uma solução única e abrangente.",
-      "l3": "Ao concentrar os esforços da comunidade no aprimoramento de um produto, a XZG visa agilizar o desenvolvimento, melhorando assim as capacidades e a eficiência dos seus Zigbee Gateways. \n🌍",
+      "l3": "Ao concentrar os esforços da comunidade no aprimoramento de um produto, a CZC visa agilizar o desenvolvimento, melhorando assim as capacidades e a eficiência dos seus Zigbee Gateways. \n🌍",
       "r": {
         "l": "Abra um problema",
         "m": "Para relatar um bug ou solicitar um recurso, por favor: 🐞",
@@ -425,7 +425,7 @@
       },
       "w": {
         "l": "Wiki Oficial",
-        "m": "Para saber mais sobre o projeto de firmware XZG, visite nosso: 📘",
+        "m": "Para saber mais sobre o projeto de firmware CZC, visite nosso: 📘",
         "t": "Wikipédia"
       }
     }

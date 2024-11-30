@@ -4,8 +4,8 @@
         <div class="col-sm-12 col-md-6 mb-4">
             <div class="card">
                 <div class="card-header fw-bold">
-                    <svg viewBox="0 0 16 16" class="card_icon">
-                        <use xlink:href="icons.svg#activity"></use>
+                    <svg class="card-icon" fill="currentColor" viewBox="0 0 16 16">
+                        <use xlink:href="icons.svg#zigbee" />
                     </svg><span data-i18n="l.zi"></span>
                 </div>
                 <div class="card-body">
@@ -67,19 +67,19 @@
                                 <td data-r2v="hwRev"></td>
                             </tr>
                             <tr>
-                                <td data-i18n="p.st.c.fv"></td>
-                                <td data-r2v="VERSION"></td>
+                                <td data-i18n="p.ge.host.n"></td>
+                                <td data-r2v="hostname"></td>
                             </tr>
                             <tr>
-                                <td data-i18n="p.st.c.hv"></td>
-                                <td data-r2v="espModel"></td>
+                                <td data-i18n="p.st.c.fv"></td>
+                                <td data-r2v="VERSION"></td>
                             </tr>
                             <tr>
                                 <td data-i18n="p.st.dic.et"></td>
                                 <td>
                                     <div class="progress progress-div">
                                         <div id="prgTemp"
-                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            class="progress-bar progress-bar-striped"
                                             role="progressbar"></div>
                                         <div class="progress-text">
                                             <span data-r2v="deviceTemp"></span> °C
@@ -88,24 +88,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td data-i18n="p.st.dic.ef"></td>
-                                <td><span data-r2v="espCores"></span> <span data-i18n="p.st.dic.cs"></span> @
+                                <td data-i18n="p.st.c.hv"></td>
+                                <td>
+                                    <div data-r2v="espModel"></div>
+                                    <span data-r2v="espCores"></span> <span data-i18n="p.st.dic.cs"></span> @
                                     <span data-r2v="espFreq"></span>
                                     <span data-i18n="p.st.dic.mhz"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-i18n="p.st.dic.ehs"></td>
-                                <td>
-                                    <div class="progress progress-div">
-                                        <div id="prgHeap"
-                                            class="progress-bar progress-bar-striped progress-bar-animated"
-                                            role="progressbar"></div>
-                                        <div class="progress-text">
-                                            <span data-r2v="espHeapUsed"></span> / <span data-r2v="espHeapSize"></span>
-                                            <span data-i18n="p.st.dic.kb"></span>
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -118,7 +106,7 @@
                                 <td data-i18n="p.st.dic.ens"></td>
                                 <td>
                                     <div class="progress progress-div">
-                                        <div id="prgNvs" class="progress-bar progress-bar-striped progress-bar-animated"
+                                        <div id="prgNvs" class="progress-bar progress-bar-striped"
                                             role="progressbar"></div>
                                         <div class="progress-text">
                                             <span data-r2v="espNvsUsed"></span> / <span data-r2v="espNvsSize"></span>
@@ -131,7 +119,7 @@
                                 <td data-i18n="p.st.dic.efss"></td>
                                 <td>
                                     <div class="progress progress-div">
-                                        <div id="prgFs" class="progress-bar progress-bar-striped progress-bar-animated"
+                                        <div id="prgFs" class="progress-bar progress-bar-striped"
                                             role="progressbar"></div>
                                         <div class="progress-text">
                                             <span data-r2v="espFsUsed"></span> / <span data-r2v="espFsSize"></span>
@@ -144,16 +132,12 @@
                                 <td data-i18n="p.st.dic.du"></td>
                                 <td data-r2v="uptime"></td>
                             </tr>
-                            <tr>
-                                <td data-i18n="p.st.dic.lt"></td>
-                                <td data-r2v="localTime"></td>
-                            </tr>
                             <tr id="1wBar" hidden>
                                 <td data-i18n="p.st.dic.et1"></td>
                                 <td>
                                     <div class="progress progress-div">
                                         <div id="prgTemp1w"
-                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            class="progress-bar progress-bar-striped"
                                             role="progressbar"></div>
                                         <div class="progress-text">
                                             <span data-r2v="1wTemp"></span> °C
@@ -256,7 +240,7 @@
                                 <td>
                                     <div class="progress progress-div">
                                         <div id="prgRssi"
-                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            class="progress-bar progress-bar-striped"
                                             role="progressbar"></div>
                                         <div class="progress-text">
                                             <span data-r2v="wifiRssi"></span>

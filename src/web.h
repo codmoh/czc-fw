@@ -11,7 +11,6 @@ void handleSecurity();
 void handleRoot();
 void handleNetwork();
 void handleMqtt();
-void handleVpn();
 void handleZigbeeBSL();
 void handleZigbeeRestart();
 void handleSerial();
@@ -53,6 +52,5 @@ enum API_PAGE_t : uint8_t
     API_PAGE_TOOLS,
     API_PAGE_ABOUT,
     API_PAGE_MQTT,
-    API_PAGE_VPN,
 
 };

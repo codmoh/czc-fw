@@ -18,8 +18,8 @@
 #include "const/keys.h"
 
 extern struct SysVarsStruct vars;
-extern struct ThisConfigStruct hwConfig;
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern struct HwConfigStruct hwConfig;
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
 extern struct SystemConfigStruct systemCfg;
 extern struct NetworkConfigStruct networkCfg;

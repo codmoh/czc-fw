@@ -20,13 +20,10 @@
 #include "const/keys.h"
 // #include "const/hw.h"
 
-#include "webh/html/PAGE_VPN.html.gz.h"
 #include "webh/html/PAGE_MQTT.html.gz.h"
-#include "webh/html/PAGE_ABOUT.html.gz.h"
 #include "webh/html/PAGE_GENERAL.html.gz.h"
 #include "webh/html/PAGE_LOADER.html.gz.h"
 #include "webh/html/PAGE_ROOT.html.gz.h"
-#include "webh/html/PAGE_SECURITY.html.gz.h"
 #include "webh/html/PAGE_ZIGBEE.html.gz.h"
 #include "webh/html/PAGE_TOOLS.html.gz.h"
 #include "webh/html/PAGE_NETWORK.html.gz.h"
@@ -42,6 +39,7 @@
 #include "webh/css/style.css.gz.h"
 #include "webh/img/icons.svg.gz.h"
 #include "webh/img/logo.svg.gz.h"
+#include "webh/img/logo-dark.svg.gz.h"
 
 #include "webh/json/en.json.gz.h"
 #include "webh/json/uk.json.gz.h"
@@ -69,8 +67,8 @@
 extern CCTools CCTool;
 
 extern struct SysVarsStruct       vars;
-extern struct ThisConfigStruct    hwConfig;
-extern        BrdConfigStruct     brdConfigs[BOARD_CFG_CNT];
+extern struct HwConfigStruct    hwConfig;
+extern        HwBrdConfigStruct     brdConfigs[BOARD_CFG_CNT];
 extern struct SystemConfigStruct  systemCfg;
 extern struct NetworkConfigStruct networkCfg;
 extern struct VpnConfigStruct     vpnCfg;
@@ -153,7 +151,6 @@ static void apiCmdZbCheckFirmware (String &result);
 static void apiCmdZbLedToggle     (String &result);
 static void apiCmdFactoryReset    (String &result);
 static void apiCmdDnsCheck        (String &result);
-static void apiCmdBoardName       (String &result);
 
 // functions called exactly once each
 // from getRootData():
@@ -170,7 +167,6 @@ static inline void getRootVpnHusarnet  (DynamicJsonDocument &doc);
 static inline void getRootUptime       (DynamicJsonDocument &doc);
 static inline void getRootCpuTemp      (DynamicJsonDocument &doc);
 static inline void getRootOneWireTemp  (DynamicJsonDocument &doc);
-static inline void getRootHeapsize     (DynamicJsonDocument &doc);
 static inline void getRootNvsStats     (DynamicJsonDocument &doc);
 static inline void getRootSockets      (DynamicJsonDocument &doc);
 static inline void getRootTime         (DynamicJsonDocument &doc);
@@ -256,6 +252,8 @@ void initWebServer()
     /* ----- SVG FILES | START -----*/
     serverWeb.on("/logo.svg", []()
                  { sendGzip(contTypeTextSvg, logo_svg_gz, logo_svg_gz_len); });
+    serverWeb.on("/logo-dark.svg", []()
+                 { sendGzip(contTypeTextSvg, logo_dark_svg_gz, logo_dark_svg_gz_len); });
     serverWeb.on("/icons.svg", []()
                  { sendGzip(contTypeTextSvg, icons_svg_gz, icons_svg_gz_len); });
 
@@ -266,14 +264,11 @@ void initWebServer()
     serverWeb.on("/", handleLoader);
     serverWeb.on("/generate_204", handleLoader);
     serverWeb.on("/general", handleLoader);
-    serverWeb.on("/security", handleLoader);
     serverWeb.on("/network", handleLoader);
     serverWeb.on("/ethernet", handleLoader);
     serverWeb.on("/zigbee", handleLoader);
-    serverWeb.on("/about", handleLoader);
     serverWeb.on("/tools", handleLoader);
     serverWeb.on("/mqtt", handleLoader);
-    serverWeb.on("/vpn", handleLoader);
     serverWeb.on("/login", []()
                  { if (serverWeb.method() == HTTP_GET) {
                         handleLoginGet();
@@ -622,41 +617,6 @@ static void apiCmdZbFlash(String &result)
     }
 }
 
-static void apiCmdBoardName(String &result)
-{
-    if (serverWeb.hasArg("board"))
-    {
-        String brdName = serverWeb.arg("board");
-        brdName.toCharArray(hwConfig.board, sizeof(hwConfig.board));
-
-        File configFile = LittleFS.open(configFileHw, FILE_READ);
-        if (!configFile)
-        {
-            Serial.println("Failed to open config file for reading");
-            return;
-        }
-
-        DynamicJsonDocument config(1024);
-        DeserializationError error = deserializeJson(config, configFile);
-        if (error)
-        {
-            Serial.println("Failed to parse config file");
-            configFile.close();
-            return;
-        }
-
-        configFile.close();
-        config["board"] = hwConfig.board;
-
-        writeDefaultConfig(configFileHw, config);
-        serverWeb.send(HTTP_CODE_OK, contTypeText, result);
-    }
-    else
-    {
-        serverWeb.send(HTTP_CODE_BAD_REQUEST, contTypeText, result);
-    }
-}
-
 static void apiCmdDefault(String &result)
 {
     serverWeb.send(HTTP_CODE_BAD_REQUEST, contTypeText, result);
@@ -734,8 +694,7 @@ static void apiCmd()
         apiCmdZbLedToggle,
         apiCmdFactoryReset,
         apiCmdEraseNvram,
-        apiCmdDnsCheck,
-        apiCmdBoardName
+        apiCmdDnsCheck
     };
     constexpr int numFunctions = sizeof(apiCmdFunctions) / sizeof(apiCmdFunctions[0]);
     String result = apiWrongArgs;
@@ -945,25 +904,13 @@ static void apiGetPage()
         handleSerial();
         sendGzip(contTypeTextHtml, PAGE_ZIGBEE_html_gz, PAGE_ZIGBEE_html_gz_len);
         break;
-    case API_PAGE_SECURITY:
-        handleSecurity();
-        sendGzip(contTypeTextHtml, PAGE_SECURITY_html_gz, PAGE_SECURITY_html_gz_len);
-        break;
     case API_PAGE_TOOLS:
         handleTools();
         sendGzip(contTypeTextHtml, PAGE_TOOLS_html_gz, PAGE_TOOLS_html_gz_len);
         break;
-    case API_PAGE_ABOUT:
-        // handleAbout();
-        sendGzip(contTypeTextHtml, PAGE_ABOUT_html_gz, PAGE_ABOUT_html_gz_len);
-        break;
     case API_PAGE_MQTT:
         handleMqtt();
         sendGzip(contTypeTextHtml, PAGE_MQTT_html_gz, PAGE_MQTT_html_gz_len);
-        break;
-    case API_PAGE_VPN:
-        handleVpn();
-        sendGzip(contTypeTextHtml, PAGE_VPN_html_gz, PAGE_VPN_html_gz_len);
         break;
     default:
         break;
@@ -1256,32 +1203,6 @@ void handleGeneral()
     serverWeb.sendHeader(respTimeZonesName, results);
 }
 
-void handleSecurity()
-{
-    String result;
-    DynamicJsonDocument doc(1024);
-
-    if (systemCfg.disableWeb)
-    {
-        doc[disableWebKey] = checked;
-    }
-
-    if (systemCfg.webAuth)
-    {
-        doc[webAuthKey] = checked;
-    }
-    doc[webUserKey] = (String)systemCfg.webUser;
-    doc[webPassKey] = (String)systemCfg.webPass;
-    if (systemCfg.fwEnabled)
-    {
-        doc[fwEnabledKey] = checked;
-    }
-    doc[fwIpKey] = systemCfg.fwIp; //.toString();
-
-    serializeJson(doc, result);
-    serverWeb.sendHeader(respHeaderName, result);
-}
-
 void handleNetwork()
 {
     String result;
@@ -1382,6 +1303,34 @@ void handleNetwork()
         doc["no_eth"] = 1;
     }
 
+    if (vpnCfg.wgEnable)
+    {
+        doc[wgEnableKey] = checked;
+    }
+    doc[wgLocalIPKey]      = vpnCfg.wgLocalIP.toString();
+    doc[wgLocalSubnetKey]  = vpnCfg.wgLocalSubnet.toString();
+    doc[wgLocalPortKey]    = vpnCfg.wgLocalPort;
+    doc[wgLocalGatewayKey] = vpnCfg.wgLocalGateway.toString();
+    doc[wgLocalPrivKeyKey] = vpnCfg.wgLocalPrivKey;
+    doc[wgEndAddrKey]      = vpnCfg.wgEndAddr;
+    doc[wgEndPubKeyKey]    = vpnCfg.wgEndPubKey;
+    doc[wgEndPortKey]      = vpnCfg.wgEndPort;
+    doc[wgAllowedIPKey]    = vpnCfg.wgAllowedIP.toString();
+    doc[wgAllowedMaskKey]  = vpnCfg.wgAllowedMask.toString();
+    if (vpnCfg.wgMakeDefault)
+    {
+        doc[wgMakeDefaultKey] = checked;
+    }
+    doc[wgPreSharedKeyKey] = vpnCfg.wgPreSharedKey;
+
+    if (vpnCfg.hnEnable)
+    {
+        doc[hnEnableKey] = checked;
+    }
+    doc[hnJoinCodeKey] = vpnCfg.hnJoinCode;
+    doc[hnHostNameKey] = vpnCfg.hnHostName;
+    doc[hnDashUrlKey]  = vpnCfg.hnDashUrl;
+
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);
 }
@@ -1459,43 +1408,6 @@ void handleMqtt()
     {
         doc["discoveryMqtt"] = checked;
     }
-
-    serializeJson(doc, result);
-    serverWeb.sendHeader(respHeaderName, result);
-}
-
-void handleVpn()
-{
-    String result;
-    DynamicJsonDocument doc(1024);
-
-    if (vpnCfg.wgEnable)
-    {
-        doc[wgEnableKey] = checked;
-    }
-    doc[wgLocalIPKey]      = vpnCfg.wgLocalIP.toString();
-    doc[wgLocalSubnetKey]  = vpnCfg.wgLocalSubnet.toString();
-    doc[wgLocalPortKey]    = vpnCfg.wgLocalPort;
-    doc[wgLocalGatewayKey] = vpnCfg.wgLocalGateway.toString();
-    doc[wgLocalPrivKeyKey] = vpnCfg.wgLocalPrivKey;
-    doc[wgEndAddrKey]      = vpnCfg.wgEndAddr;
-    doc[wgEndPubKeyKey]    = vpnCfg.wgEndPubKey;
-    doc[wgEndPortKey]      = vpnCfg.wgEndPort;
-    doc[wgAllowedIPKey]    = vpnCfg.wgAllowedIP.toString();
-    doc[wgAllowedMaskKey]  = vpnCfg.wgAllowedMask.toString();
-    if (vpnCfg.wgMakeDefault)
-    {
-        doc[wgMakeDefaultKey] = checked;
-    }
-    doc[wgPreSharedKeyKey] = vpnCfg.wgPreSharedKey;
-
-    if (vpnCfg.hnEnable)
-    {
-        doc[hnEnableKey] = checked;
-    }
-    doc[hnJoinCodeKey] = vpnCfg.hnJoinCode;
-    doc[hnHostNameKey] = vpnCfg.hnHostName;
-    doc[hnDashUrlKey]  = vpnCfg.hnDashUrl;
 
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);
@@ -1725,6 +1637,7 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc[espUpdAvailKey] = vars.updateEspAvail;
     doc[zbUpdAvailKey]  = vars.updateZbAvail;
 
+    doc[hostnameKey] = systemCfg.hostname;
     doc["hwRev"]    = hwConfig.board;
     doc["espModel"] = String(ESP.getChipModel());
     doc["espCores"] = ESP.getChipCores();
@@ -1769,15 +1682,6 @@ static inline void getRootHwMisc(DynamicJsonDocument &doc, bool update)
     doc["zigbeeFwSaved"] = systemCfg.zbFw;
 }
 
-static inline void getRootHeapsize(DynamicJsonDocument &doc)
-{
-    int heapSize = ESP.getHeapSize() / 1024;
-    int heapFree = ESP.getFreeHeap() / 1024;
-
-    doc["espHeapSize"] = heapSize;
-    doc["espHeapUsed"] = heapSize - heapFree;
-}
-
 static inline void getRootNvsStats(DynamicJsonDocument &doc)
 {
     int total, used;
@@ -1816,7 +1720,6 @@ String getRootData(bool update)
     getRootUptime       (doc);
     getRootCpuTemp      (doc);
     getRootOneWireTemp  (doc);
-    getRootHeapsize     (doc);
     getRootNvsStats     (doc);
     getRootMqtt         (doc);
     getRootVpnWireGuard (doc);
@@ -1845,6 +1748,24 @@ void handleTools()
     // doc[hwUartSelIsKey] = vars.hwUartSelIs;
     // doc["hostname"]     = systemCfg.hostname;
     // doc["refreshLogs"]  = systemCfg.refreshLogs;
+
+    // handle security stuff
+    if (systemCfg.disableWeb)
+    {
+        doc[disableWebKey] = checked;
+    }
+
+    if (systemCfg.webAuth)
+    {
+        doc[webAuthKey] = checked;
+    }
+    doc[webUserKey] = (String)systemCfg.webUser;
+    doc[webPassKey] = (String)systemCfg.webPass;
+    if (systemCfg.fwEnabled)
+    {
+        doc[fwEnabledKey] = checked;
+    }
+    doc[fwIpKey] = systemCfg.fwIp;
 
     serializeJson(doc, result);
     serverWeb.sendHeader(respHeaderName, result);
@@ -2043,7 +1964,7 @@ String fetchLatestEspFw()
 {
     checkDNS();
     HTTPClient http;
-    http.begin("https://api.github.com/repos/xyzroe/XZG/releases");
+    http.begin("https://api.github.com/repos/codm/XZG/releases");
     int httpCode = http.GET();
 
     String browser_download_url = "";
@@ -2075,7 +1996,8 @@ String fetchLatestZbFw()
 {
     checkDNS();
     HTTPClient http;
-    http.begin("https://raw.githubusercontent.com/xyzroe/XZG/zb_fws/ti/manifest.json");
+
+    http.begin("https://raw.githubusercontent.com/codm/CZC/refs/heads/zb_fws/ti/manifest.json");
     int httpCode = http.GET();
 
     String browser_download_url = "";

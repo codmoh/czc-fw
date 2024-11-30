@@ -7,7 +7,7 @@
     "mq": "MQTT",
     "vp": "VPN",
     "se": "Security",
-    "to": "Tools",
+    "to": "System",
     "ab": "About",
     "lo": "Logout"
   },
@@ -141,6 +141,11 @@
         "nnf": "WiFi networks not found",
         "mode": "Mode",
         "power": "Tx Power"
+      },
+      "wvi": {
+        "title": "Attention",
+        "1": "We strongly advise against using Wi-Fi in ZigBee operation. Serial communication over Wi-Fi is not robust enough and does not contain any error correction mechanisms to compensate for fluctuating connections or packet loss. The same applies to WAN and VPN connections. See also:",
+        "2": "When used as a Thread Border Router (currently under development), this problem does not occur."
       }
     },
     "zi": {
@@ -150,9 +155,9 @@
       "cfg": {
         "tt": "Configuration generator",
         "sel": "Generate for",
-        "alarm": "XZG is operating in access point mode (IP 192.168.1.1). The IP address will change after connecting to Ethernet or Wi-Fi, after which you will need to regenerate the configuration.",
+        "alarm": "CZC is operating in access point mode (IP 192.168.1.1). The IP address will change after connecting to Ethernet or Wi-Fi, after which you will need to regenerate the configuration.",
         "ss": "Serial settings",
-        "lxzg": "Location of XZG",
+        "lxzg": "Location of CZC",
         "dzl": "Disable Zigbee led?",
         "sopm": "Set output power to max 20",
         "ha": "For Home Assistant: Go to \"Settings\"→\"System\"→\"Hardware\"→Select the 3 dot menu in the upper right corner→\"All Hardware\"→Scroll to ttyUSB and find your adapter→Copy Device path like \"/dev/ttyUSB0\"",
@@ -278,7 +283,7 @@
       "eznr": "Erase NVRAM"
     },
     "lo": {
-      "pt": "Login - XZG",
+      "pt": "Login - CZC",
       "lbl": "Please sign in",
       "btn": "Sign in",
       "mnl": "Need to login",
@@ -286,12 +291,12 @@
       "mlo": "Logged out success"
     },
     "ab": {
-      "l1": "XZG Firmware unifies the best innovations from",
+      "l1": "CZC Firmware unifies the best innovations from",
       "l2": "previous Zigbee gateway projects into a single, comprehensive solution.",
-      "l3": "By focusing the community's efforts on enhancing one product, XZG aims to streamline development, thereby improving the capabilities and efficiency of your Zigbee Gateways. 🌍",
+      "l3": "By focusing the community's efforts on enhancing one product, CZC aims to streamline development, thereby improving the capabilities and efficiency of your Zigbee Gateways. 🌍",
       "w": {
         "t": "Wiki",
-        "m": "To learn more about the XZG firmware project, visit our: 📘",
+        "m": "To learn more about the CZC firmware project, visit our: 📘",
         "l": "Official Wiki"
       },
       "f": {
@@ -349,6 +354,7 @@
     "erss": "Error saving settings. Check your network",
     "ercn": "Error. Check your network",
     "proj": "Created with ❤️ by",
+    "projb": "based on",
     "nc": "No connection",
     "cl": "Close",
     "t": {
@@ -369,7 +375,7 @@
         "msg": "This will erase ALL settings."
       },
       "fu": {
-        "tt": "XZG FIRMWARE UPDATE",
+        "tt": "CZC FIRMWARE UPDATE",
         "lfm": "Updating from local file.",
         "gvm": "Updating to {{ver}} GitHub release.",
         "glm": "Updating to latest GitHub release.",
@@ -448,8 +454,14 @@
         "tt": "No firmware found"
       },
       "upd": {
-        "tt": "New Zigbee firmware found 🌟"
+        "tt": "New Zigbee firmware found 🌟",
+        "msg": "A newer version of firmware for the Zigbee module has been found."
       }
     }
+  },
+  "cl": {
+    "d": "Documentation",
+    "g": "Github",
+    "c": "Contact"
   }
 }

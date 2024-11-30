@@ -18,6 +18,7 @@
     "now": "Jetzt installieren",
     "pass": "Passwort",
     "proj": "Erstellt mit ❤️",
+    "projb": "basierend auf",
     "save": "Speichern",
     "sure": "Ich bin sicher",
     "user": "Nutzername",
@@ -49,7 +50,7 @@
         "lfm": "Aktualisierung von lokaler Datei.",
         "lgds": "Laden Sie die neueste GitHub-Version herunter...",
         "prgs": "Aktualisierung: {{per}} %",
-        "tt": "XZG-Firmware-Update",
+        "tt": "CZC-Firmware-Update",
         "ucr": "Aktualisierung abgeschlossen! \nNeustart!",
         "vgds": "Veröffentlichung {{ver}} wird von GitHub heruntergeladen...",
         "wdm": "Warten auf Gerät...",
@@ -116,7 +117,7 @@
     "ne": "Netzwerk",
     "se": "Sicherheit",
     "st": "Status",
-    "to": "Werkzeuge",
+    "to": "System",
     "vp": "VPN",
     "zi": "Zigbee"
   },
@@ -176,7 +177,7 @@
     "lo": {
       "btn": "Einloggen",
       "lbl": "Bitte einloggen",
-      "pt": "Anmelden - XZG",
+      "pt": "Anmelden - CZC",
       "mlo": "Erfolgreich abgemeldet",
       "mnl": "Anmeldung erforderlich",
       "mwc": "Falsche Anmeldeinformationen"
@@ -243,6 +244,11 @@
         "nnf": "WLAN-Netzwerke nicht gefunden",
         "mode": "Modus",
         "power": "Sendeleistung"
+      },
+      "wvi": {
+        "title": "Achtung",
+        "1": "Im ZigBee-Betrieb raten wir dringend von der WLAN-Nutzung ab. Die serielle Kommunikation über WLAN ist nicht robust genug und enthält keine Fehlerkorrekturmechanismen um schwankende Verbindungen oder Packetverluste ausgleichen zu können. Gleiches gilt für WAN- und VPN-Verbindungen. Siehe auch:",
+        "2": "Bei der Nutzung als Thread Border Router (aktuell in Entwicklung) kommt dieses Problem nicht zum Tragen."
       }
     },
     "st": {
@@ -375,12 +381,12 @@
     },
     "zi": {
       "cfg": {
-        "alarm": "Es scheint, dass XZG im Access Point-Modus (IP 192.168.1.1) funktioniert. \nDie IP-Adresse ändert sich nach der Verbindung mit Ethernet oder WLAN. Danach muss die Konfiguration erneut generiert werden.",
+        "alarm": "Es scheint, dass CZC im Access Point-Modus (IP 192.168.1.1) funktioniert. \nDie IP-Adresse ändert sich nach der Verbindung mit Ethernet oder WLAN. Danach muss die Konfiguration erneut generiert werden.",
         "dp": "INSERT_DEVICE_PATCH_HERE",
         "dzl": "Zigbee-LED deaktivieren?",
         "ha": "Für Home Assistant: Gehen Sie zu „Einstellungen“ → „System“ → „Hardware“ → Wählen Sie das 3-Punkte-Menü in der oberen rechten Ecke → „Alle Hardware“ → Scrollen Sie zu ttyUSB und suchen Sie Ihren Adapter → Kopieren Sie den Gerätepfad wie „/dev/“ \nttyUSB0\"",
         "lin": "USB-Geräte unter Linux auflisten: ls /dev/ttyUSB*",
-        "lxzg": "Standort von XZG",
+        "lxzg": "Standort von CZC",
         "sel": "Konfiguration generieren für",
         "sopm": "Ausgangsleistung auf maximum 20 dBm einstellen",
         "ss": "Serielle Konfiguration",
@@ -411,9 +417,9 @@
         "m": "Wenn Sie Ideen oder Vorschläge haben oder auf andere Weise helfen möchten, zögern Sie bitte nicht: 📬",
         "t": "Rückmeldung"
       },
-      "l1": "Die XZG-Firmware vereint die besten Teile der Entwicklung von",
+      "l1": "Die CZC-Firmware vereint die besten Teile der Entwicklung von",
       "l2": "früheren Zigbee-Gateway-Projekten in einer einzigen umfassende Lösung.",
-      "l3": "Indem XZG die Bemühungen der Community auf die Verbesserung eines Produkts konzentriert, zielt es darauf ab, die Entwicklung zu rationalisieren und dadurch die Fähigkeiten und Effizienz Ihrer Zigbee-Gateways zu verbessern. \n🌍",
+      "l3": "Indem CZC die Bemühungen der Community auf die Verbesserung eines Produkts konzentriert, zielt es darauf ab, die Entwicklung zu rationalisieren und dadurch die Fähigkeiten und Effizienz Ihrer Zigbee-Gateways zu verbessern. \n🌍",
       "r": {
         "l": "Melden Sie ein Problem",
         "m": "Um einen Fehler zu melden oder eine Funktion anzufordern, gehen Sie bitte wie folgt vor: 🐞",
@@ -425,7 +431,7 @@
       },
       "w": {
         "l": "Offizielles Wiki",
-        "m": "Um mehr über das XZG-Firmware-Projekt zu erfahren, besuchen Sie unsere: 📘",
+        "m": "Um mehr über das CZC-Firmware-Projekt zu erfahren, besuchen Sie unsere: 📘",
         "t": "Wiki"
       }
     }
@@ -451,8 +457,14 @@
         "tt": "Keine neue Firmware gefunden"
       },
       "upd": {
+        "msg": "Es wurde eine neuere Firmware-Version für das Zigbee-Modul gefunden.",
         "tt": "Neue Zigbee-Firmware gefunden 🌟"
       }
     }
+  },
+  "cl": {
+    "d": "Dokumentation",
+    "g": "Github",
+    "c": "Kontakt"
   }
 }

@@ -41,7 +41,7 @@ def after_build(source, target, env):
     
     VERSION_NUMBER = extract_version_from_file(VERSION_FILE)
     
-    NEW_NAME_BASE = "bin/XZG_" + VERSION_NUMBER
+    NEW_NAME_BASE = "bin/czc_fw_" + VERSION_NUMBER
     
     build_env = env['PIOENV']
     if "debug" in build_env:

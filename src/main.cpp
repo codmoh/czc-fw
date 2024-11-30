@@ -19,6 +19,7 @@
 // #define ASYNC_TCP_SSL_ENABLED 1
 
 #include "config.h"
+#include "esp_eth_mac.h"
 #include "web.h"
 #include "log.h"
 #include "etc.h"
@@ -37,11 +38,11 @@
 #endif
 */
 
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
 LEDControl ledControl;
 
-ThisConfigStruct hwConfig;
+HwConfigStruct hwConfig;
 
 SystemConfigStruct systemCfg;
 NetworkConfigStruct networkCfg;
@@ -461,7 +462,7 @@ void connectWifi()
 
 void mDNS_start()
 {
-  const char *host = "_xzg";
+  const char *host = "_czc";
   const char *http = "_http";
   const char *tcp = "_tcp";
   if (!mDNS.begin(systemCfg.hostname))
@@ -507,6 +508,9 @@ void setupCoordinatorMode()
     connectWifi();
   //}
 
+  writeDefaultDeviceID (vars.deviceId); // need for mqtt, vpn, mdns, wifi ap and so on
+  writeDeviceId        (systemCfg, vpnCfg, mqttCfg);
+
   switch (systemCfg.workMode)
   {
   case WORK_MODE_USB:
@@ -536,28 +540,22 @@ void setupCoordinatorMode()
 void setup()
 {
   Serial.begin(115200); // todo ifdef DEBUG
-
   String tag = "SETUP";
-
   initNVS();
+  // New Arduino Preferences Lib configuration
+  loadSystemConfig  (systemCfg);
+  loadNetworkConfig (networkCfg);
+  loadVpnConfig     (vpnCfg);
+  loadMqttConfig    (mqttCfg);
 
-  getDeviceID(vars.deviceId); // need for mqtt, vpn, mdns, wifi ap and so on
-
-  loadSystemConfig(systemCfg);
-  loadNetworkConfig(networkCfg);
-  loadVpnConfig(vpnCfg);
-  loadMqttConfig(mqttCfg);
-
-  // LOAD System vars and create FS / start
   if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED, "/lfs2", 10))
   {
     LOGD("Error with LITTLEFS");
     return;
   }
-
-  // LOAD System vars and create FS / end
-
-  // READ file to support migrate from old firmware
+  // THIS group of functions is purely for loading
+  // legacy UZG configuration IF it exists.
+  // Overwrites configuration from loadXConfig()
   loadFileSystemVar();
   loadFileConfigSerial();
   loadFileConfigWifi();
@@ -566,13 +564,11 @@ void setup()
   loadFileConfigSecurity();
   loadFileConfigMqtt();
   loadFileConfigWg();
-  // READ file to support migrate from old firmware
 
-  // String cfg = makeJsonConfig(&networkCfg, &vpnCfg, &mqttCfg, &systemCfg, &vars);
-  // LOGD("After READ OLD config\n %s", cfg.c_str());
-
-  loadFileConfigHW();
-
+  // This still uses the old UZG
+  // configuration style, but has
+  // no "new" (Preferences Lib) equivalent
+  loadFileConfigHW(hwConfig);
   if (hwConfig.eth.mdcPin == -1 || hwConfig.eth.mdiPin == -1)
   {
     if (networkCfg.ethEnable)
@@ -632,7 +628,10 @@ void setup()
 
   setLedsDisable(); // with setup ?? // move to vars ?
 
+  // ETH is initialized in here
   setupCoordinatorMode();
+
+
   vars.connectedClients = 0;
 
   xTaskCreate(updateWebTask, "update Web Task", 2048, NULL, 8, NULL);

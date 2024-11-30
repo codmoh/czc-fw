@@ -20,7 +20,7 @@ extern struct NetworkConfigStruct networkCfg;
 extern struct MqttConfigStruct mqttCfg;
 
 extern struct SysVarsStruct vars;
-extern struct ThisConfigStruct hwConfig;
+extern struct HwConfigStruct hwConfig;
 
 #include <AsyncMqttClient.h>
 AsyncMqttClient mqttClient;
@@ -504,7 +504,7 @@ void mqttPublishDiscovery()
     DynamicJsonDocument devInfo(256);
     devInfo["ids"] = vars.deviceId;
     devInfo["name"] = systemCfg.hostname;
-    devInfo["mf"] = "XZG";
+    devInfo["mf"] = "CZC";
     devInfo["mdl"] = hwConfig.board;
     char verArr[25];
     const char *env = STRINGIFY(BUILD_ENV_NAME);

@@ -15,8 +15,8 @@
 Preferences preferences;
 
 extern struct SysVarsStruct vars;
-extern struct ThisConfigStruct hwConfig;
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern struct HwConfigStruct hwConfig;
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
 extern struct SystemConfigStruct systemCfg;
 extern struct NetworkConfigStruct networkCfg;
@@ -193,6 +193,20 @@ void saveVpnConfig(const VpnConfigStruct &config)
     preferences.end();
 }
 
+void writeDeviceId(SystemConfigStruct &sysConfig, VpnConfigStruct &vpnConfig, MqttConfigStruct &mqttConfig)
+{
+    preferences.begin(systemConfigKey, true);
+    strlcpy(sysConfig.hostname, preferences.getString(hostnameKey, String(vars.deviceId)).c_str(), sizeof(sysConfig.hostname));
+    preferences.end();
+    preferences.begin(vpnConfigKey, true);
+    strlcpy(vpnConfig.hnHostName, preferences.getString(hnHostNameKey, String(vars.deviceId)).c_str(), sizeof(vpnConfig.hnHostName));
+    preferences.end();
+    preferences.begin(mqttConfigKey, true);
+    strlcpy(mqttConfig.topic, preferences.getString(topicKey, String(vars.deviceId)).c_str(), sizeof(mqttConfig.topic));
+    preferences.end();
+    LOGD("Sysconfig hostname: %s", sysConfig.hostname);
+}
+
 void loadVpnConfig(VpnConfigStruct &config)
 {
     preferences.begin(vpnConfigKey, true);
@@ -213,7 +227,6 @@ void loadVpnConfig(VpnConfigStruct &config)
 
     config.hnEnable = preferences.getBool(hnEnableKey, false);
     strlcpy(config.hnJoinCode, preferences.getString(hnJoinCodeKey).c_str(), sizeof(config.hnJoinCode));
-    strlcpy(config.hnHostName, preferences.getString(hnHostNameKey, String(vars.deviceId)).c_str(), sizeof(config.hnHostName));
     strlcpy(config.hnDashUrl, preferences.getString(hnDashUrlKey, "default").c_str(), sizeof(config.hnDashUrl));
 
     preferences.end();
@@ -251,7 +264,6 @@ void loadMqttConfig(MqttConfigStruct &config)
     config.port = preferences.getInt(portKey, 1883);
     strlcpy(config.user, preferences.getString(userKey, "").c_str(), sizeof(config.user));
     strlcpy(config.pass, preferences.getString(passKey, "").c_str(), sizeof(config.pass));
-    strlcpy(config.topic, preferences.getString(topicKey, String(vars.deviceId)).c_str(), sizeof(config.topic));
     // config.retain = preferences.getBool(retain, false); // If needed
     config.updateInt = preferences.getInt(updateIntKey, 60);
     config.discovery = preferences.getBool(discoveryKey, true);
@@ -261,6 +273,43 @@ void loadMqttConfig(MqttConfigStruct &config)
     preferences.end();
 }
 
+// Identical saveSystemConfig() except
+// doesn't write to hostnameKey
+void saveSystemConfigNoHostname(const SystemConfigStruct &config)
+{
+    preferences.begin(systemConfigKey, false);
+
+    // preferences.putBool(keepWebKey, config.keepWeb);
+    preferences.putBool(disableWebKey, config.disableWeb);
+    preferences.putBool(webAuthKey, config.webAuth);
+    preferences.putString(webUserKey, config.webUser);
+    preferences.putString(webPassKey, config.webPass);
+    preferences.putBool(fwEnabledKey, config.fwEnabled);
+    preferences.putString(fwIpKey, config.fwIp.toString());
+    preferences.putInt(serialSpeedKey, config.serialSpeed);
+    preferences.putInt(socketPortKey, config.socketPort);
+    preferences.putInt(tempOffsetKey, config.tempOffset);
+    preferences.putBool(disableLedUSBKey, config.disableLedUSB);
+    preferences.putBool(disableLedPwrKey, config.disableLedPwr);
+    preferences.putInt(refreshLogsKey, config.refreshLogs);
+    preferences.putString(timeZoneKey, config.timeZone);
+    preferences.putString(ntpServ1Key, config.ntpServ1);
+    preferences.putString(ntpServ2Key, config.ntpServ2);
+    preferences.putBool(nmEnableKey, config.nmEnable);
+    preferences.putString(nmStartHourKey, config.nmStart);
+    preferences.putString(nmEndHourKey, config.nmEnd);
+    // preferences.putInt(prevWorkModeKey, static_cast<int>(config.prevWorkMode));
+    preferences.putInt(workModeKey, static_cast<int>(config.workMode));
+
+    preferences.putInt(zbRoleKey, static_cast<int>(config.zbRole));
+    preferences.putString(zbFwKey, config.zbFw);
+
+    preferences.putString(updCheckTimeKey, config.updCheckTime);
+    preferences.putString(updCheckDayKey, config.updCheckDay);
+    preferences.putBool(updAutoInstKey, config.updAutoInst);
+
+    preferences.end();
+}
 void saveSystemConfig(const SystemConfigStruct &config)
 {
     preferences.begin(systemConfigKey, false);
@@ -296,6 +345,7 @@ void saveSystemConfig(const SystemConfigStruct &config)
     preferences.putBool(updAutoInstKey, config.updAutoInst);
 
     preferences.end();
+    setLedsDisable();
 }
 
 void loadSystemConfig(SystemConfigStruct &config)
@@ -315,7 +365,6 @@ void loadSystemConfig(SystemConfigStruct &config)
     config.disableLedUSB = preferences.getBool(disableLedUSBKey, false);
     config.disableLedPwr = preferences.getBool(disableLedPwrKey, false);
     config.refreshLogs = preferences.getInt(refreshLogsKey, 1);
-    strlcpy(config.hostname, preferences.getString(hostnameKey, "XZG").c_str(), sizeof(config.hostname)); /// to do add def host name!!
     strlcpy(config.timeZone, preferences.getString(timeZoneKey, NTP_TIME_ZONE).c_str(), sizeof(config.timeZone));
     strlcpy(config.ntpServ1, preferences.getString(ntpServ1Key, NTP_SERV_1).c_str(), sizeof(config.ntpServ1));
     strlcpy(config.ntpServ2, preferences.getString(ntpServ2Key, NTP_SERV_2).c_str(), sizeof(config.ntpServ2));
@@ -349,7 +398,6 @@ enum API_PAGE_t : uint8_t
     API_PAGE_TOOLS,
     API_PAGE_ABOUT,
     API_PAGE_MQTT,
-    API_PAGE_VPN
 };
 */
 
@@ -380,7 +428,6 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             configSys.keepWeb = serverWeb.hasArg(keepWebKey) == true;*/
 
             configSys.disableLedPwr = serverWeb.hasArg(disableLedPwrKey) == true;
-
             configSys.disableLedUSB = serverWeb.hasArg(disableLedUSBKey) == true;
 
             if (serverWeb.hasArg(refreshLogsKey))
@@ -449,100 +496,173 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
         break;
         case API_PAGE_NETWORK:
         {
-            configNet.ethEnable = serverWeb.hasArg(ethEnblKey) == true;
-
-            configNet.ethDhcp = serverWeb.hasArg(ethDhcpKey) == true;
-
-            if (serverWeb.hasArg(ethIpKey))
+            if (serverWeb.arg(targetKey) == "network")
             {
-                configNet.ethIp.fromString(serverWeb.arg(ethIpKey));
-            }
+                configNet.ethEnable = serverWeb.hasArg(ethEnblKey) == true;
 
-            if (serverWeb.hasArg(ethMaskKey))
-            {
-                configNet.ethMask.fromString(serverWeb.arg(ethMaskKey));
-            }
+                configNet.ethDhcp = serverWeb.hasArg(ethDhcpKey) == true;
 
-            if (serverWeb.hasArg(ethGateKey))
-            {
-                configNet.ethGate.fromString(serverWeb.arg(ethGateKey));
-            }
-
-            if (serverWeb.hasArg(ethDns1Key))
-            {
-                configNet.ethDns1.fromString(serverWeb.arg(ethDns1Key));
-            }
-
-            if (serverWeb.hasArg(ethDns2Key))
-            {
-                configNet.ethDns2.fromString(serverWeb.arg(ethDns2Key));
-            }
-
-            configNet.wifiEnable = serverWeb.hasArg(wifiEnblKey) == true;
-
-            configNet.wifiDhcp = serverWeb.hasArg(wifiDhcpKey) == true;
-
-            if (serverWeb.hasArg(wifiModeKey))
-            {
-                configNet.wifiMode = serverWeb.arg(wifiModeKey).toInt();
-            }
-            if (serverWeb.hasArg(wifiPwrKey))
-            {
-                const uint8_t pwr = serverWeb.arg(wifiPwrKey).toInt();
-                configNet.wifiPower = static_cast<wifi_power_t>(pwr);
-            }
-
-            if (serverWeb.arg(wifiSsidKey))
-            {
-                strncpy(configNet.wifiSsid, serverWeb.arg(wifiSsidKey).c_str(), sizeof(configNet.wifiSsid) - 1);
-                configNet.wifiSsid[sizeof(configNet.wifiSsid) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            if (serverWeb.arg(wifiPassKey))
-            {
-                strncpy(configNet.wifiPass, serverWeb.arg(wifiPassKey).c_str(), sizeof(configNet.wifiPass) - 1);
-                configNet.wifiPass[sizeof(configNet.wifiPass) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            if (serverWeb.hasArg(wifiIpKey))
-            {
-                configNet.wifiIp.fromString(serverWeb.arg(wifiIpKey));
-            }
-
-            if (serverWeb.hasArg(wifiMaskKey))
-            {
-                configNet.wifiMask.fromString(serverWeb.arg(wifiMaskKey));
-            }
-
-            if (serverWeb.hasArg(wifiGateKey))
-            {
-                configNet.wifiGate.fromString(serverWeb.arg(wifiGateKey));
-            }
-
-            if (serverWeb.hasArg(wifiDns1Key))
-            {
-                configNet.wifiDns1.fromString(serverWeb.arg(wifiDns1Key));
-            }
-
-            if (serverWeb.hasArg(wifiDns2Key))
-            {
-                configNet.wifiDns2.fromString(serverWeb.arg(wifiDns2Key));
-            }
-
-            saveNetworkConfig(configNet);
-
-            if (configNet.wifiEnable)
-            {
-                WiFi.persistent(false);
-                if (vars.apStarted)
+                if (serverWeb.hasArg(ethIpKey))
                 {
-                    WiFi.mode(WIFI_AP_STA);
+                    configNet.ethIp.fromString(serverWeb.arg(ethIpKey));
                 }
-                else
+
+                if (serverWeb.hasArg(ethMaskKey))
                 {
-                    WiFi.mode(WIFI_STA);
+                    configNet.ethMask.fromString(serverWeb.arg(ethMaskKey));
                 }
-                WiFi.begin(configNet.wifiSsid, configNet.wifiPass);
+
+                if (serverWeb.hasArg(ethGateKey))
+                {
+                    configNet.ethGate.fromString(serverWeb.arg(ethGateKey));
+                }
+
+                if (serverWeb.hasArg(ethDns1Key))
+                {
+                    configNet.ethDns1.fromString(serverWeb.arg(ethDns1Key));
+                }
+
+                if (serverWeb.hasArg(ethDns2Key))
+                {
+                    configNet.ethDns2.fromString(serverWeb.arg(ethDns2Key));
+                }
+
+                configNet.wifiEnable = serverWeb.hasArg(wifiEnblKey) == true;
+
+                configNet.wifiDhcp = serverWeb.hasArg(wifiDhcpKey) == true;
+
+                if (serverWeb.hasArg(wifiModeKey))
+                {
+                    configNet.wifiMode = serverWeb.arg(wifiModeKey).toInt();
+                }
+                if (serverWeb.hasArg(wifiPwrKey))
+                {
+                    const uint8_t pwr = serverWeb.arg(wifiPwrKey).toInt();
+                    configNet.wifiPower = static_cast<wifi_power_t>(pwr);
+                }
+
+                if (serverWeb.arg(wifiSsidKey))
+                {
+                    strncpy(configNet.wifiSsid, serverWeb.arg(wifiSsidKey).c_str(), sizeof(configNet.wifiSsid) - 1);
+                    configNet.wifiSsid[sizeof(configNet.wifiSsid) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                if (serverWeb.arg(wifiPassKey))
+                {
+                    strncpy(configNet.wifiPass, serverWeb.arg(wifiPassKey).c_str(), sizeof(configNet.wifiPass) - 1);
+                    configNet.wifiPass[sizeof(configNet.wifiPass) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                if (serverWeb.hasArg(wifiIpKey))
+                {
+                    configNet.wifiIp.fromString(serverWeb.arg(wifiIpKey));
+                }
+
+                if (serverWeb.hasArg(wifiMaskKey))
+                {
+                    configNet.wifiMask.fromString(serverWeb.arg(wifiMaskKey));
+                }
+
+                if (serverWeb.hasArg(wifiGateKey))
+                {
+                    configNet.wifiGate.fromString(serverWeb.arg(wifiGateKey));
+                }
+
+                if (serverWeb.hasArg(wifiDns1Key))
+                {
+                    configNet.wifiDns1.fromString(serverWeb.arg(wifiDns1Key));
+                }
+
+                if (serverWeb.hasArg(wifiDns2Key))
+                {
+                    configNet.wifiDns2.fromString(serverWeb.arg(wifiDns2Key));
+                }
+
+                saveNetworkConfig(configNet);
+
+                if (configNet.wifiEnable)
+                {
+                    WiFi.persistent(false);
+                    if (vars.apStarted)
+                    {
+                        WiFi.mode(WIFI_AP_STA);
+                    }
+                    else
+                    {
+                        WiFi.mode(WIFI_STA);
+                    }
+                    WiFi.begin(configNet.wifiSsid, configNet.wifiPass);
+                }
+            } else {
+                configVpn.wgEnable = serverWeb.hasArg(wgEnableKey) == true;
+                if (serverWeb.hasArg(wgLocalIPKey))
+                {
+                    configVpn.wgLocalIP.fromString(serverWeb.arg(wgLocalIPKey));
+                }
+                if (serverWeb.hasArg(wgLocalSubnetKey))
+                {
+                    configVpn.wgLocalSubnet.fromString(serverWeb.arg(wgLocalSubnetKey));
+                }
+                if (serverWeb.hasArg(wgLocalPortKey))
+                {
+                    configVpn.wgLocalPort = serverWeb.arg(wgLocalPortKey).toInt();
+                }
+                if (serverWeb.hasArg(wgLocalGatewayKey))
+                {
+                    configVpn.wgLocalGateway.fromString(serverWeb.arg(wgLocalGatewayKey));
+                }
+                if (serverWeb.hasArg(wgLocalPrivKeyKey))
+                {
+                    strncpy(configVpn.wgLocalPrivKey, serverWeb.arg(wgLocalPrivKeyKey).c_str(), sizeof(configVpn.wgLocalPrivKey) - 1);
+                    configVpn.wgLocalPrivKey[sizeof(configVpn.wgLocalPrivKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndAddrKey))
+                {
+                    strncpy(configVpn.wgEndAddr, serverWeb.arg(wgEndAddrKey).c_str(), sizeof(configVpn.wgEndAddr) - 1);
+                    configVpn.wgEndAddr[sizeof(configVpn.wgEndAddr) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndPubKeyKey))
+                {
+                    strncpy(configVpn.wgEndPubKey, serverWeb.arg(wgEndPubKeyKey).c_str(), sizeof(configVpn.wgEndPubKey) - 1);
+                    configVpn.wgEndPubKey[sizeof(configVpn.wgEndPubKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(wgEndPortKey))
+                {
+                    configVpn.wgEndPort = serverWeb.arg(wgEndPortKey).toInt();
+                }
+                if (serverWeb.hasArg(wgAllowedIPKey))
+                {
+                    configVpn.wgAllowedIP.fromString(serverWeb.arg(wgAllowedIPKey));
+                }
+                if (serverWeb.hasArg(wgAllowedMaskKey))
+                {
+                    configVpn.wgAllowedMask.fromString(serverWeb.arg(wgAllowedMaskKey));
+                }
+                configVpn.wgMakeDefault = serverWeb.hasArg(wgMakeDefaultKey) == true;
+                if (serverWeb.hasArg(wgPreSharedKeyKey))
+                {
+                    strncpy(configVpn.wgPreSharedKey, serverWeb.arg(wgPreSharedKeyKey).c_str(), sizeof(configVpn.wgPreSharedKey) - 1);
+                    configVpn.wgPreSharedKey[sizeof(configVpn.wgPreSharedKey) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                configVpn.hnEnable = serverWeb.hasArg(hnEnableKey) == true;
+                if (serverWeb.hasArg(hnJoinCodeKey))
+                {
+                    strncpy(configVpn.hnJoinCode, serverWeb.arg(hnJoinCodeKey).c_str(), sizeof(configVpn.hnJoinCode) - 1);
+                    configVpn.hnJoinCode[sizeof(configVpn.hnJoinCode) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(hnHostNameKey))
+                {
+                    strncpy(configVpn.hnHostName, serverWeb.arg(hnHostNameKey).c_str(), sizeof(configVpn.hnHostName) - 1);
+                    configVpn.hnHostName[sizeof(configVpn.hnHostName) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+                if (serverWeb.hasArg(hnDashUrlKey))
+                {
+                    strncpy(configVpn.hnDashUrl, serverWeb.arg(hnDashUrlKey).c_str(), sizeof(configVpn.hnDashUrl) - 1);
+                    configVpn.hnDashUrl[sizeof(configVpn.hnDashUrl) - 1] = '\0'; // Guarantee a null terminator at the end
+                }
+
+                saveVpnConfig(configVpn);
             }
         }
         break;
@@ -571,7 +691,7 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             saveSystemConfig(configSys);
         }
         break;
-        case API_PAGE_SECURITY:
+        case API_PAGE_TOOLS:
         {
             configSys.disableWeb = serverWeb.hasArg(disableWebKey) == true;
 
@@ -654,79 +774,6 @@ void updateConfiguration(WebServer &serverWeb, SystemConfigStruct &configSys, Ne
             configMqtt.discovery = serverWeb.hasArg(MqttDiscoveryKey) == true;
 
             saveMqttConfig(configMqtt);
-        }
-        break;
-        case API_PAGE_VPN:
-        {
-            configVpn.wgEnable = serverWeb.hasArg(wgEnableKey) == true;
-            if (serverWeb.hasArg(wgLocalIPKey))
-            {
-                configVpn.wgLocalIP.fromString(serverWeb.arg(wgLocalIPKey));
-            }
-            if (serverWeb.hasArg(wgLocalSubnetKey))
-            {
-                configVpn.wgLocalSubnet.fromString(serverWeb.arg(wgLocalSubnetKey));
-            }
-            if (serverWeb.hasArg(wgLocalPortKey))
-            {
-                configVpn.wgLocalPort = serverWeb.arg(wgLocalPortKey).toInt();
-            }
-            if (serverWeb.hasArg(wgLocalGatewayKey))
-            {
-                configVpn.wgLocalGateway.fromString(serverWeb.arg(wgLocalGatewayKey));
-            }
-            if (serverWeb.hasArg(wgLocalPrivKeyKey))
-            {
-                strncpy(configVpn.wgLocalPrivKey, serverWeb.arg(wgLocalPrivKeyKey).c_str(), sizeof(configVpn.wgLocalPrivKey) - 1);
-                configVpn.wgLocalPrivKey[sizeof(configVpn.wgLocalPrivKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndAddrKey))
-            {
-                strncpy(configVpn.wgEndAddr, serverWeb.arg(wgEndAddrKey).c_str(), sizeof(configVpn.wgEndAddr) - 1);
-                configVpn.wgEndAddr[sizeof(configVpn.wgEndAddr) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndPubKeyKey))
-            {
-                strncpy(configVpn.wgEndPubKey, serverWeb.arg(wgEndPubKeyKey).c_str(), sizeof(configVpn.wgEndPubKey) - 1);
-                configVpn.wgEndPubKey[sizeof(configVpn.wgEndPubKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(wgEndPortKey))
-            {
-                configVpn.wgEndPort = serverWeb.arg(wgEndPortKey).toInt();
-            }
-            if (serverWeb.hasArg(wgAllowedIPKey))
-            {
-                configVpn.wgAllowedIP.fromString(serverWeb.arg(wgAllowedIPKey));
-            }
-            if (serverWeb.hasArg(wgAllowedMaskKey))
-            {
-                configVpn.wgAllowedMask.fromString(serverWeb.arg(wgAllowedMaskKey));
-            }
-            configVpn.wgMakeDefault = serverWeb.hasArg(wgMakeDefaultKey) == true;
-            if (serverWeb.hasArg(wgPreSharedKeyKey))
-            {
-                strncpy(configVpn.wgPreSharedKey, serverWeb.arg(wgPreSharedKeyKey).c_str(), sizeof(configVpn.wgPreSharedKey) - 1);
-                configVpn.wgPreSharedKey[sizeof(configVpn.wgPreSharedKey) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            configVpn.hnEnable = serverWeb.hasArg(hnEnableKey) == true;
-            if (serverWeb.hasArg(hnJoinCodeKey))
-            {
-                strncpy(configVpn.hnJoinCode, serverWeb.arg(hnJoinCodeKey).c_str(), sizeof(configVpn.hnJoinCode) - 1);
-                configVpn.hnJoinCode[sizeof(configVpn.hnJoinCode) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(hnHostNameKey))
-            {
-                strncpy(configVpn.hnHostName, serverWeb.arg(hnHostNameKey).c_str(), sizeof(configVpn.hnHostName) - 1);
-                configVpn.hnHostName[sizeof(configVpn.hnHostName) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-            if (serverWeb.hasArg(hnDashUrlKey))
-            {
-                strncpy(configVpn.hnDashUrl, serverWeb.arg(hnDashUrlKey).c_str(), sizeof(configVpn.hnDashUrl) - 1);
-                configVpn.hnDashUrl[sizeof(configVpn.hnDashUrl) - 1] = '\0'; // Guarantee a null terminator at the end
-            }
-
-            saveVpnConfig(configVpn);
         }
         break;
         }
@@ -872,7 +919,7 @@ void serializeSysVarsToJson(const SysVarsStruct &vars, JsonObject obj)
     obj[zbUpdAvailKey] = vars.updateZbAvail;
 }
 
-bool loadFileConfigHW()
+bool loadFileConfigHW(HwConfigStruct &config)
 {
     const char *board = "board";
     const char *addr = "addr";
@@ -903,43 +950,43 @@ bool loadFileConfigHW()
         {
             LOGD("Error with LITTLEFS");
         }
-        DynamicJsonDocument config(300);
-        config[board] = "";
-        writeDefaultConfig(configFileHw, config);
+        DynamicJsonDocument deserializedConfig(300);
+        deserializedConfig[board] = "";
+        writeJsonToFile(configFileHw, deserializedConfig);
         configFile = LittleFS.open(configFileHw, FILE_READ);
     }
 
-    DynamicJsonDocument config(1024);
-    deserializeJson(config, configFile);
+    DynamicJsonDocument deserializedConfig(1024);
+    deserializeJson(deserializedConfig, configFile);
 
     configFile.close();
 
-    strlcpy(hwConfig.board, config[board] | "", sizeof(hwConfig.board));
-    hwConfig.eth.addr = config[addr];
-    hwConfig.eth.pwrPin = config[pwrPin];
-    hwConfig.eth.mdcPin = config[mdcPin];
-    hwConfig.eth.mdiPin = config[mdiPin];
-    hwConfig.eth.phyType = config[phyType];
-    hwConfig.eth.clkMode = config[clkMode];
-    if (hwConfig.eth.pwrPin == -1)
+    strlcpy(config.board, deserializedConfig[board] | "", sizeof(config.board));
+    config.eth.addr = deserializedConfig[addr];
+    config.eth.pwrPin = deserializedConfig[pwrPin];
+    config.eth.mdcPin = deserializedConfig[mdcPin];
+    config.eth.mdiPin = deserializedConfig[mdiPin];
+    config.eth.phyType = deserializedConfig[phyType];
+    config.eth.clkMode = deserializedConfig[clkMode];
+    if (config.eth.pwrPin == -1)
     {
-        hwConfig.eth.pwrPin = config[pwrAltPin];
+        config.eth.pwrPin = deserializedConfig[pwrAltPin];
     }
-    // hwConfig.eth.pwrAltPin = config[pwrAltPin];
-    hwConfig.mist.btnPin = config[btnPin];
-    hwConfig.mist.btnPlr = config[btnPlr];
-    hwConfig.mist.uartSelPin = config[uartSelPin];
-    hwConfig.mist.uartSelPlr = config[uartSelPlr];
-    hwConfig.mist.ledModePin = config[ledModePin];
-    hwConfig.mist.ledModePlr = config[ledModePlr];
-    hwConfig.mist.ledPwrPin = config[ledPwrPin];
-    hwConfig.mist.ledPwrPlr = config[ledPwrPlr];
-    hwConfig.zb.txPin = config[zbTxPin];
-    hwConfig.zb.rxPin = config[zbRxPin];
-    hwConfig.zb.rstPin = config[zbRstPin];
-    hwConfig.zb.bslPin = config[zbBslPin];
+    // config.eth.pwrAltPin = deserializedConfig[pwrAltPin];
+    config.mist.btnPin = deserializedConfig[btnPin];
+    config.mist.btnPlr = deserializedConfig[btnPlr];
+    config.mist.uartSelPin = deserializedConfig[uartSelPin];
+    config.mist.uartSelPlr = deserializedConfig[uartSelPlr];
+    config.mist.ledModePin = deserializedConfig[ledModePin];
+    config.mist.ledModePlr = deserializedConfig[ledModePlr];
+    config.mist.ledPwrPin = deserializedConfig[ledPwrPin];
+    config.mist.ledPwrPlr = deserializedConfig[ledPwrPlr];
+    config.zb.txPin = deserializedConfig[zbTxPin];
+    config.zb.rxPin = deserializedConfig[zbRxPin];
+    config.zb.rstPin = deserializedConfig[zbRstPin];
+    config.zb.bslPin = deserializedConfig[zbBslPin];
 
-    if (hwConfig.board[0] != '\0' && strlen(hwConfig.board) > 0)
+    if (config.board[0] != '\0' && strlen(config.board) > 0)
     {
         LOGD("Load HW - OK");
         return true;
@@ -947,51 +994,45 @@ bool loadFileConfigHW()
     else
     {
         LOGI("Load HW - ERROR");
-
-        int searchId = 0;
-        if (config["searchId"])
-        {
-            searchId = config["searchId"];
-        }
         String chipId = ESP.getChipModel();
         LOGW("%s", chipId);
         //if (chipId == "ESP32-D0WDQ6")
         //{
         //    searchId = 12;
         //}
-        ThisConfigStruct *newConfig = findBrdConfig(searchId);
+        HwConfigStruct *newConfig = getBrdConfig();
         if (newConfig)
         {
-            LOGD("Find. Saving config");
+            LOGD("Find. Saving deserializedConfig");
 
-            DynamicJsonDocument config(512);
-            config[board] = newConfig->board;
-            config[addr] = newConfig->eth.addr;
-            config[pwrPin] = newConfig->eth.pwrPin;
-            config[mdcPin] = newConfig->eth.mdcPin;
-            config[mdiPin] = newConfig->eth.mdiPin;
-            config[phyType] = newConfig->eth.phyType;
-            config[clkMode] = newConfig->eth.clkMode;
-            // config[pwrAltPin] = newConfig->eth.pwrAltPin;
-            config[btnPin] = newConfig->mist.btnPin;
-            config[btnPlr] = newConfig->mist.btnPlr;
-            config[uartSelPin] = newConfig->mist.uartSelPin;
-            config[uartSelPlr] = newConfig->mist.uartSelPlr;
-            config[ledModePin] = newConfig->mist.ledModePin;
-            config[ledModePlr] = newConfig->mist.ledModePlr;
-            config[ledPwrPin] = newConfig->mist.ledPwrPin;
-            config[ledPwrPlr] = newConfig->mist.ledPwrPlr;
-            config[zbTxPin] = newConfig->zb.txPin;
-            config[zbRxPin] = newConfig->zb.rxPin;
-            config[zbRstPin] = newConfig->zb.rstPin;
-            config[zbBslPin] = newConfig->zb.bslPin;
-            writeDefaultConfig(configFileHw, config);
+            DynamicJsonDocument deserializedConfig(512);
+            deserializedConfig[board] = newConfig->board;
+            deserializedConfig[addr] = newConfig->eth.addr;
+            deserializedConfig[pwrPin] = newConfig->eth.pwrPin;
+            deserializedConfig[mdcPin] = newConfig->eth.mdcPin;
+            deserializedConfig[mdiPin] = newConfig->eth.mdiPin;
+            deserializedConfig[phyType] = newConfig->eth.phyType;
+            deserializedConfig[clkMode] = newConfig->eth.clkMode;
+            // deserializedConfig[pwrAltPin] = newConfig->eth.pwrAltPin;
+            deserializedConfig[btnPin] = newConfig->mist.btnPin;
+            deserializedConfig[btnPlr] = newConfig->mist.btnPlr;
+            deserializedConfig[uartSelPin] = newConfig->mist.uartSelPin;
+            deserializedConfig[uartSelPlr] = newConfig->mist.uartSelPlr;
+            deserializedConfig[ledModePin] = newConfig->mist.ledModePin;
+            deserializedConfig[ledModePlr] = newConfig->mist.ledModePlr;
+            deserializedConfig[ledPwrPin] = newConfig->mist.ledPwrPin;
+            deserializedConfig[ledPwrPlr] = newConfig->mist.ledPwrPlr;
+            deserializedConfig[zbTxPin] = newConfig->zb.txPin;
+            deserializedConfig[zbRxPin] = newConfig->zb.rxPin;
+            deserializedConfig[zbRstPin] = newConfig->zb.rstPin;
+            deserializedConfig[zbBslPin] = newConfig->zb.bslPin;
+            writeJsonToFile(configFileHw, deserializedConfig);
 
             LOGD("Calc and save temp offset");
             float CPUtemp = getCPUtemp(true);
             int offset = CPUtemp - 30;
             systemCfg.tempOffset = int(offset);
-            saveSystemConfig(systemCfg);
+            saveSystemConfigNoHostname(systemCfg);
 
             LOGD("Restarting...");
             ESP.restart();
@@ -1245,7 +1286,7 @@ bool loadFileConfigMqtt()
     File configFile = LittleFS.open(configFileMqtt, FILE_READ);
     if (!configFile)
     {
-        // LOGD("%s %s", configFileMqtt, msg_open_f);
+        LOGD("%s %s", configFileMqtt, msg_open_f);
         return false;
     }
 

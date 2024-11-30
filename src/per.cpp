@@ -21,9 +21,9 @@
 #include <Ticker.h>
 
 // extern struct ConfigSettingsStruct ConfigSettings;
-extern BrdConfigStruct brdConfigs[BOARD_CFG_CNT];
+extern HwBrdConfigStruct brdConfigs[BOARD_CFG_CNT];
 
-extern struct ThisConfigStruct hwConfig;
+extern struct HwConfigStruct hwConfig;
 // extern struct CurrentModesStruct modes;
 
 extern struct SystemConfigStruct systemCfg;
