@@ -1240,7 +1240,9 @@ function connectEvents() {
 	sourceEvents.addEventListener('zb.nv', function (e) {
 		let currentContent = $("#console").val();
 		let newContent = currentContent + "\n" + e.data;
-		$("#console").val(newContent);
+		const $console = $("#console");
+		$console.val(newContent);
+		$console.scrollTop($console[0].scrollHeight)
 	}, false);
 
 	sourceEvents.addEventListener('zb.fi', function (e) {
