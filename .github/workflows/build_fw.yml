@@ -86,7 +86,7 @@ jobs:
                 "improv": false,
                 "parts": [
                   {
-                    "path": "https://raw.githubusercontent.com/${{ github.repository }}/releases/${{ steps.get_tag.outputs.tag }}/CZC_${{ steps.get_tag.outputs.tag }}.full.bin",
+                    "path": "https://raw.githubusercontent.com/${{ github.repository }}/releases/${{ steps.get_tag.outputs.tag }}/czc_fw_${{ steps.get_tag.outputs.tag }}.full.bin",
                     "offset": 0
                   }
                 ]
@@ -103,8 +103,8 @@ jobs:
           name: "${{ steps.get_tag.outputs.tag }}"
           body: ${{ env.releaseMessage }}
           files: |
-            bin/CZC_${{ steps.get_tag.outputs.tag }}.ota.bin
-            bin/CZC_${{ steps.get_tag.outputs.tag }}.full.bin
+            bin/czc_fw_${{ steps.get_tag.outputs.tag }}.ota.bin
+            bin/czc_fw_${{ steps.get_tag.outputs.tag }}.full.bin
 
       - name: Checkout releases branch
         uses: actions/checkout@v3
@@ -115,7 +115,7 @@ jobs:
       - name: Copy files to releases directory
         run: |
           mkdir -p releases/${{ steps.get_tag.outputs.tag }}
-          cp ./bin/CZC_${{ steps.get_tag.outputs.tag }}.full.bin releases/${{ steps.get_tag.outputs.tag }}/
+          cp ./bin/czc_fw_${{ steps.get_tag.outputs.tag }}.full.bin releases/${{ steps.get_tag.outputs.tag }}/
           cp manifest.json releases/${{ steps.get_tag.outputs.tag }}/
           echo "Files copied to releases directory."
 
