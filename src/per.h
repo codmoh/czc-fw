@@ -1,9 +1,0 @@
-void handleLongBtn();
-void toggleUsbMode();
-void buttonInit();
-void buttonSetup();
-void buttonLoop();
-bool debounce();
-void btnInterrupt();
-void ledModeSetup();
-void ledPwrSetup();
