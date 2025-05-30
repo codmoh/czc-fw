@@ -233,6 +233,7 @@ advanced:
 		case "z2m":
 			result = `# ${i18next.t('p.zi.cfg.ss')}
 serial:
+  adapter: zstack
 # ${i18next.t('p.zi.cfg.lxzg')}
   port: tcp://${ip}:${port}
   ${mist_cfg_txt}`;
@@ -242,6 +243,7 @@ serial:
 # ${i18next.t('p.zi.cfg.lin')}
 # ${i18next.t('p.zi.cfg.ss')}
 serial:
+  adapter: zstack
 # ${i18next.t('p.zi.cfg.lxzg')}
   port: ${i18next.t('p.zi.cfg.dp')}
   ${mist_cfg_txt}`;
