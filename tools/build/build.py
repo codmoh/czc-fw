@@ -39,9 +39,6 @@ def after_build(source, target, env):
     VERSION_NUMBER = str(VERSION_NUMBER, "utf-8")   # Version Number --> String | VN = b"V2..." type Byte
 
     NEW_NAME_BASE = "bin/czc_fw_" + VERSION_NUMBER
-    
-    echo "${VERSION_NUMBER}"
-    echo "${NEW_NAME_BASE}"
 
     build_env = env['PIOENV']
     if "debug" in build_env:
