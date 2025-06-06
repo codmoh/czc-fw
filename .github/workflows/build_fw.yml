@@ -117,6 +117,9 @@ jobs:
           TAG=${{ steps.get_tag.outputs.tag }}
           CLEAN_TAG=${TAG:1} 
 
+          echo "Listing bin directory:"
+          ls -la ./bin
+
           mkdir -p releases/$TAG
           cp ./bin/czc_fw_$CLEAN_TAG.full.bin releases/$TAG/
           cp manifest.json releases/$TAG/
