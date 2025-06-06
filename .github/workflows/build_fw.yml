@@ -113,10 +113,13 @@ jobs:
           path: releases
 
       - name: Copy files to releases directory
-        run: |
-          mkdir -p releases/${{ steps.get_tag.outputs.tag }}
-          cp ./bin/czc_fw_${{ steps.get_tag.outputs.tag }}.full.bin releases/${{ steps.get_tag.outputs.tag }}/
-          cp manifest.json releases/${{ steps.get_tag.outputs.tag }}/
+        run: | 
+          TAG=${{ steps.get_tag.outputs.tag }}
+          CLEAN_TAG=${TAG:1} 
+
+          mkdir -p releases/$TAG
+          cp ./bin/czc_fw_$CLEAN_TAG.full.bin releases/$TAG/
+          cp manifest.json releases/$TAG/
           echo "Files copied to releases directory."
 
       - name: Commit and push files to releases branch
