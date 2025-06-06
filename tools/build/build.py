@@ -36,7 +36,8 @@ def after_build(source, target, env):
     VERSION_FILE = "src/" + VERSION_HEADER
     
     VERSION_NUMBER = get_last_git_tag()
-    
+    VERSION_NUMBER = str(VERSION_NUMBER, "utf-8")   # Version Number --> String | VN = b"V2..." type Byte
+
     NEW_NAME_BASE = "bin/czc_fw_" + VERSION_NUMBER
     
     build_env = env['PIOENV']
