@@ -40,6 +40,9 @@ def after_build(source, target, env):
 
     NEW_NAME_BASE = "bin/czc_fw_" + VERSION_NUMBER
     
+    echo "${VERSION_NUMBER}"
+    echo "${NEW_NAME_BASE}"
+
     build_env = env['PIOENV']
     if "debug" in build_env:
         NEW_NAME_BASE += "_" + build_env
