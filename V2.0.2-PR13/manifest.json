@@ -1,0 +1,16 @@
+{
+  "name": "CZC Firmware",
+  "version": "V2.0.2-PR13",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        {
+          "path": "https://raw.githubusercontent.com/codmoh/czc-fw/releases/V2.0.2-PR13/czc_fw_V2.0.2-PR13.full.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
