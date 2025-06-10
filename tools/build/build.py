@@ -20,7 +20,7 @@ VERSION_HEADER = "version.h"
 def get_last_git_tag():
     command = ['git', 'describe', '--exact-match', '--tags']
     tmp = subprocess.check_output(command)
-    return tmp[1:]
+    return tmp[1:-1]
 
 def after_build(source, target, env):
     time.sleep(2)
